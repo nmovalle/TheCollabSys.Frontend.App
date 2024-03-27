@@ -7,6 +7,7 @@ import { PrimengModule } from './core/modules/primeng.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppLayoutModule } from './shared/layout/app.layout.module';
+import { LoginModule } from './pages/login/login.module';
 
 @NgModule({
     declarations: [AppComponent],
@@ -15,7 +16,8 @@ import { AppLayoutModule } from './shared/layout/app.layout.module';
         BrowserModule,
         PrimengModule, 
         AppLayoutModule,
-        HttpClientModule, 
+        HttpClientModule,
+        LoginModule,
         OAuthModule.forRoot()
     ],
     providers: [

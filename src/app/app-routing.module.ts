@@ -1,19 +1,20 @@
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AppLayoutComponent } from './shared/layout/app.layout/app.layout.component';
+import { LoginComponent } from './pages/login/login.component';
+
+const routes: Routes = [
+    { path: '', component: LoginComponent },
+    { path: 'home', component: AppLayoutComponent },
+    { path: '**', redirectTo: '' } // Manejar rutas no encontradas
+  ];
 
 @NgModule({
     imports: [
-        RouterModule.forRoot([
-            {
-                path: '', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)
-            },
-            {
-                path: 'home', component: AppLayoutComponent,
-            }
-        ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })
+        RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })
     ],
     exports: [RouterModule]
 })
+  
 export class AppRoutingModule {
 }

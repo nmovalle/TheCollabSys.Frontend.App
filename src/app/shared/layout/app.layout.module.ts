@@ -17,6 +17,8 @@ import { AppSidebarComponent } from './app.sidebar/app.sidebar.component';
 import { AppConfigModule } from './config/config.module';
 import { AppMenuitemComponent } from './app.menu/app.menuitem/app.menuitem.component';
 
+// Importa AppLayoutRoutingModule
+import { AppLayoutRoutingModule } from './app-layout-routing.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { AppMenuitemComponent } from './app.menu/app.menuitem/app.menuitem.compo
     InputTextModule,
     PrimengModule,
     RouterModule,
-    AppConfigModule
+    AppConfigModule,
+    AppLayoutRoutingModule
   ],
   exports: [AppLayoutComponent]
 })

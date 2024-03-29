@@ -1,27 +1,49 @@
 import { NgModule } from '@angular/core';
-import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
+
+//components
 import { AppComponent } from './app.component';
+import { NotfoundComponent } from './shared/notfound/notfound.component';
+import { LoginComponent } from './pages/login/login.component';
+
+//modules
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
-import { PrimengModule } from './core/modules/primeng.module';
+import { AppLayoutModule } from './layout/app.layout.module';
+import { ProductService } from './core/service/product.service';
+
+//services
+import { CountryService } from './core/service/country.service';
+import { CustomerService } from './core/service/customer.service';
+import { EventService } from './core/service/event.service';
+import { IconService } from './core/service/icon.service';
+import { NodeService } from './core/service/node.service';
+import { PhotoService } from './core/service/photo.service';
+import { MessageService } from 'primeng/api';
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppLayoutModule } from './shared/layout/app.layout.module';
-import { LoginModule } from './pages/login/login.module';
+import { PrimengModule } from './core/modules/primeng.module';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [
+        AppComponent, 
+        NotfoundComponent, 
+        LoginComponent
+    ],
     imports: [
         AppRoutingModule, 
-        BrowserModule,
-        PrimengModule, 
         AppLayoutModule,
-        HttpClientModule,
-        LoginModule,
+        PrimengModule,
         OAuthModule.forRoot()
     ],
     providers: [
-        { provide: LocationStrategy, useClass: PathLocationStrategy }
+        { provide: LocationStrategy, useClass: PathLocationStrategy },
+        CountryService, 
+        CustomerService, 
+        EventService, 
+        IconService, 
+        NodeService,
+        PhotoService, 
+        ProductService,
+        MessageService,
     ],
     bootstrap: [AppComponent],
 })

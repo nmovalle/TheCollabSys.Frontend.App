@@ -1,7 +1,7 @@
 export const environment = {
   name: "production",
   production: true,
-  apiUrl: "",
+  apiUrl: "http://localhost:83",
   apiUrl_orig: "",
   projectName: "The Collabsys System",
   applicationName: "The Collabsys System",

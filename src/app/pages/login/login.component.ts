@@ -1,18 +1,14 @@
 import { Component } from '@angular/core';
-import { MessageService } from 'primeng/api'
-import { UserInfo } from '@app/core/interfaces/user-info';
-import { GoogleApiService } from '@app/core/services/google-api.service';
+import { MessageService } from 'primeng/api';
+import { GoogleApiService } from './services/google-api.service';
+import { UserInfo } from './user-info';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  valCheck: string[] = ['remember'];
-  password!: string;
   userInfo?: UserInfo;
-
 
   constructor(
     private messageService: MessageService,

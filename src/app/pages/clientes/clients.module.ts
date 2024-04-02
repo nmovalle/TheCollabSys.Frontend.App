@@ -9,6 +9,7 @@ import { EditComponent } from './edit/edit.component';
 import { AddComponent } from './add/add.component';
 import { ListComponent } from './list/list.component';
 import { ReadComponent } from './read/read.component';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ReadComponent } from './read/read.component';
   ],
   imports: [
     CommonModule,
-    ClientsRoutingModule
+    ClientsRoutingModule,
+    PrimengModule
   ]
 })
 export class ClientsModule { }

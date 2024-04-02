@@ -9,9 +9,11 @@ import { LoginComponent } from './pages/login/login.component';
 //modules
 import { AppRoutingModule } from './app-routing.module';
 import { AppLayoutModule } from './layout/app.layout.module';
-import { ProductService } from './core/service/product.service';
+import { OAuthModule } from 'angular-oauth2-oidc';
+import { PrimengModule } from './core/modules/primeng.module';
 
 //services
+import { ProductService } from './core/service/product.service';
 import { CountryService } from './core/service/country.service';
 import { CustomerService } from './core/service/customer.service';
 import { EventService } from './core/service/event.service';
@@ -19,8 +21,7 @@ import { IconService } from './core/service/icon.service';
 import { NodeService } from './core/service/node.service';
 import { PhotoService } from './core/service/photo.service';
 import { MessageService } from 'primeng/api';
-import { OAuthModule } from 'angular-oauth2-oidc';
-import { PrimengModule } from './core/modules/primeng.module';
+
 
 @NgModule({
     declarations: [

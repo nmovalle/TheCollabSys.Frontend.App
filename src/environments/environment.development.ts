@@ -1,10 +1,7 @@
 export const environment = {
-  name: "production",
+  name: "development",
   production: false,
   apiUrl: "http://localhost:83",
-  apiUrl_orig: "",
-  projectName: "The Collabsys System",
-  applicationName: "The Collabsys System",
-  infoVersion: "v1.0.0.0 - Marzo 2024",
+  oAuthRedirectUri: "http://localhost:4200", // Puedes ajustarlo si es necesario para tu entorno local
+  // otros valores de configuración específicos para desarrollo
 };
-  

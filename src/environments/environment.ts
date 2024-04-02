@@ -1,9 +1,7 @@
 export const environment = {
-  name: "production",
-  production: true,
-  apiUrl: "__apiUrl__",
-  apiUrl_orig: "",
-  projectName: "The Collabsys System",
-  applicationName: "The Collabsys System",
-  infoVersion: "v1.0.0.0 - Marzo 2024",
+  name: "development",
+  production: false,
+  apiUrl: "__apiUrl__", // Aquí podrías definir la URL de tu API
+  oAuthRedirectUri: "__oAuthRedirectUri__", // Aquí podrías definir la URL de redirección OAuth
+  // otras variables de entorno comunes
 };

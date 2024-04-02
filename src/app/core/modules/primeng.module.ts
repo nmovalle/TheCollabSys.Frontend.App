@@ -31,6 +31,9 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { SidebarModule } from 'primeng/sidebar';
 import { BadgeModule } from 'primeng/badge';
 import { RippleModule } from 'primeng/ripple';
+import { FileUploadModule } from 'primeng/fileupload';
+import { RatingModule } from 'primeng/rating';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [],
@@ -61,7 +64,11 @@ import { RippleModule } from 'primeng/ripple';
     PanelMenuModule,
     SidebarModule,
     BadgeModule,
-    RippleModule
+    RippleModule,
+    FileUploadModule,
+    RatingModule,
+    InputTextareaModule,
+    
   ],
 
   exports: [
@@ -92,7 +99,11 @@ import { RippleModule } from 'primeng/ripple';
     PanelMenuModule,
     SidebarModule,
     BadgeModule,
-    RippleModule
+    RippleModule,
+    FileUploadModule,
+    RatingModule,
+    InputTextareaModule,
+    
   ],
 
   providers: [ConfirmationService, MessageService]

@@ -16,7 +16,7 @@ export class ListComponent implements OnInit {
 
   clients!: any[];
   client = {} as any;
-  selectedClients!: any[];
+  selectedClients: any[];
 
   submitted: boolean = false;
   cols: any[] = [];
@@ -29,7 +29,14 @@ export class ListComponent implements OnInit {
     private clientService: ClientService,
     private messageService: MessageService
   ) {
-    
+    this.cols = [
+      { field: 'clientID', header: 'ID' },
+      { field: 'clientName', header: 'Name' },
+      { field: 'address', header: 'Address' },
+      { field: 'phone', header: 'Phone' },
+      { field: 'email', header: 'Email' },
+      { field: 'dateCreated', header: 'Date Created' }
+    ];
   }
 
   openNew() {
@@ -69,15 +76,6 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.getClients();
-
-    this.cols = [
-      { field: 'clientID', header: 'ID' },
-      { field: 'clientName', header: 'Name' },
-      { field: 'address', header: 'Address' },
-      { field: 'phone', header: 'Phone' },
-      { field: 'email', header: 'Email' },
-      { field: 'dateCreated', header: 'Date Created' }
-  ];
   }
 
   onGlobalFilter(table: Table, event: Event) {

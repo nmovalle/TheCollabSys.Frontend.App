@@ -75,6 +75,10 @@
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "TheCollabSys.Frontend.App:build",
+                        "proxyConfig": "proxy.conf.json"
+                      },
                     "configurations": {
                         "production": {
                             "buildTarget": "TheCollabSys.Frontend.App:build:production"

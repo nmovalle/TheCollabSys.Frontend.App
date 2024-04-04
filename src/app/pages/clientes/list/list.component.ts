@@ -24,8 +24,6 @@ export class ListComponent implements OnInit {
   statuses: any[] = [];
   rowsPerPageOptions = [5, 10, 20];
 
-
-
   constructor(
     private clientService: ClientService,
     private messageService: MessageService,
@@ -57,27 +55,49 @@ export class ListComponent implements OnInit {
   }
 
   deleteClient(client: Client) {
-      this.deleteClentDialog = true;
+    const { clientID } = client;
+    this.deleteClentDialog = true;
+    this.clientService.deleteClient(clientID).subscribe({
+      next: () => {
+        this.clients = this.clients.filter(c => c.id !== clientID);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'The customer was successfully removed'
+        });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error deleting the customer'
+        });
+      },
+      complete: () => {
+        this.deleteClentDialog = false;
+      }
+    });
+    
   }
 
-
   getClients() {
-    this.clientService.getClients().subscribe((response: any) => {
-      this.clients = response;
-      console.log(this.clients)
-    }),
-    () => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Error al obtener clientes'
-      });
-    }
+    this.clientService.getClients().subscribe({
+      next: (response: any) => {
+        this.clients = response;
+        console.log(this.clients);
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error getting the customer'
+        });
+      }
+    });    
   }
 
   ngOnInit() {
     this.getClients();
-
     const profile = this.googleService.getProfile();
     console.log(profile);
   }

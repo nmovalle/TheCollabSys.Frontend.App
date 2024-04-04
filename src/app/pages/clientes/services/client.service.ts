@@ -17,4 +17,7 @@ export class ClientService {
     return this.http.get<any>(`${environment.apiUrl}/api/Clients/GetAllClientsAsync`);
   }
 
+  deleteClient(id: number): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}/api/Clients/${id}`);
+  }
 }

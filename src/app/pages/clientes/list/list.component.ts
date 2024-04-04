@@ -3,6 +3,7 @@ import { Client } from '../models/client';
 import { ClientService } from '../services/client.service';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { GoogleApiService } from '@app/pages/login/services/google-api.service';
 
 @Component({
   selector: 'app-list',
@@ -27,7 +28,8 @@ export class ListComponent implements OnInit {
 
   constructor(
     private clientService: ClientService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private googleService: GoogleApiService
   ) {
     this.cols = [
       { field: 'clientID', header: 'ID' },
@@ -56,13 +58,6 @@ export class ListComponent implements OnInit {
 
   deleteClient(client: Client) {
       this.deleteClentDialog = true;
-      this.clientService.deleteClient(client.clientID).subscribe(() => {
-        console.log('Cliente eliminado correctamente');
-        // Realiza cualquier acción adicional después de la eliminación
-      }, error => {
-        console.error('Error al eliminar el cliente:', error);
-        // Maneja el error apropiadamente
-      });
   }
 
 
@@ -82,6 +77,9 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.getClients();
+
+    const profile = this.googleService.getProfile();
+    console.log(profile);
   }
 
   onGlobalFilter(table: Table, event: Event) {

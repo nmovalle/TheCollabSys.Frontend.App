@@ -14,18 +14,9 @@ export class LoginComponent {
     private messageService: MessageService,
     private readonly googleApi: GoogleApiService
   ) {
-    googleApi.userProfileSubject.subscribe(info => {
-      this.userInfo = info;
-    })
   }
 
   signInGoogle() {
-    if (!this.isLoggedIn()) {
-      this.googleApi.signIn();
-    }
-  }
-
-  isLoggedIn(): boolean {
-    return this.googleApi.isLoggedIn();
+    this.googleApi.login();
   }
 }

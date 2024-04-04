@@ -84,7 +84,8 @@
                             "buildTarget": "TheCollabSys.Frontend.App:build:production"
                         },
                         "development": {
-                            "buildTarget": "TheCollabSys.Frontend.App:build:development"
+                            "buildTarget": "TheCollabSys.Frontend.App:build:development",
+                            "proxyConfig": "proxy.conf.json"
                         }
                     },
                     "defaultConfiguration": "development"

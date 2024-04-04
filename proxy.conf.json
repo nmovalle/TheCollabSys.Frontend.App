@@ -1,7 +1,9 @@
 {
     "/api": {
-      "target": "https://www.automationmadeeazy.com",
-      "secure": false,
-      "changeOrigin": true
+        "target": "https://www.automationmadeeazy.com/thecollabsys.api",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug",
+        "timeout": 60000
     }
-  }
+}

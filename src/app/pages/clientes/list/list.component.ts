@@ -56,7 +56,13 @@ export class ListComponent implements OnInit {
 
   deleteClient(client: Client) {
       this.deleteClentDialog = true;
-      this.client = { ...client };
+      this.clientService.deleteClient(client.clientID).subscribe(() => {
+        console.log('Cliente eliminado correctamente');
+        // Realiza cualquier acción adicional después de la eliminación
+      }, error => {
+        console.error('Error al eliminar el cliente:', error);
+        // Maneja el error apropiadamente
+      });
   }
 
 

@@ -24,7 +24,7 @@ export class AppTopBarComponent {
         private router: Router) { }
 
     logout() {
-        this.googleService.logout();
-        this.router.navigate(['/']);
+        this.googleService.logout(); //aquí reemplazar por el logout pero del AuthService que se encargue de limpiar cache, tokens, etc y luego cierre google
+        this.router.navigate(['/'], { replaceUrl: true });
     }
 }

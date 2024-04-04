@@ -59,7 +59,7 @@ export class ListComponent implements OnInit {
     this.deleteClentDialog = true;
     this.clientService.deleteClient(clientID).subscribe({
       next: () => {
-        this.clients = this.clients.filter(c => c.id !== clientID);
+        this.clients = this.clients.filter(c => c.clientID !== clientID);
         this.messageService.add({
           severity: 'success',
           summary: 'Success',

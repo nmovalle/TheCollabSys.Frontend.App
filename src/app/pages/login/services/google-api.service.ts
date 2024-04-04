@@ -52,6 +52,7 @@ export class GoogleApiService {
           // Esperar 2000 milisegundos (2 segundos) antes de redirigir
           setTimeout(() => {
             // Redirigir a la página de inicio
+            this.stopLoading();
             self.router.navigate(['/home']);
         }, 500);
       }

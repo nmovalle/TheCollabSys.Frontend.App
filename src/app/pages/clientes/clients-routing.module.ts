@@ -6,14 +6,15 @@ import { EditComponent } from './edit/edit.component';
 import { ReadComponent } from './read/read.component';
 
 const routes: Routes = [
-  { path: '', component: ListComponent },
+  { path: '', component: ListComponent },  
   { path: 'add', component: AddComponent },
-  { path: 'edit/:id', component: EditComponent },
+  { path: 'edit/:id', component: EditComponent },  
   { path: 'read/:id', component: ReadComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes)],  
   exports: [RouterModule]
 })
 export class ClientsRoutingModule { }
+

@@ -4,6 +4,7 @@ import { ClientService } from '../services/client.service';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { GoogleApiService } from '@app/pages/login/services/google-api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -27,7 +28,9 @@ export class ListComponent implements OnInit {
   constructor(
     private clientService: ClientService,
     private messageService: MessageService,
-    private googleService: GoogleApiService
+    private googleService: GoogleApiService,
+    private router: Router
+    
   ) {
     this.cols = [
       { field: 'clientID', header: 'ID' },
@@ -39,67 +42,53 @@ export class ListComponent implements OnInit {
     ];
   }
 
-  openNew() {
-    this.client = {};
-    this.submitted = false;
-    this.clientDialog = true;
-  }
-
-  deleteSelectedClients() {
-    this.deleteClientsDialog = true;
-  }
-
-  editProduct(client: Client) {
-    this.client = { ...client };
-    this.clientDialog = true;
-  }
-
-  deleteClient(client: Client) {
-    const { clientID } = client;
-    this.deleteClentDialog = true;
-    this.clientService.deleteClient(clientID).subscribe({
-      next: () => {
-        this.clients = this.clients.filter(c => c.clientID !== clientID);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'The customer was successfully removed'
-        });
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error deleting the customer'
-        });
-      },
-      complete: () => {
-        this.deleteClentDialog = false;
-      }
-    });
-    
+  ngOnInit() {
+    this.getClients();
+    const profile = this.googleService.getProfile();
+    // console.log(profile);
   }
 
   getClients() {
     this.clientService.getClients().subscribe({
       next: (response: any) => {
-        this.clients = response;
-        console.log(this.clients);
+        this.clients = response;        
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error getting the customer'
+          detail: 'There was an error getting the customers'
         });
       }
-    });    
+    });
   }
 
-  ngOnInit() {
-    this.getClients();
-    const profile = this.googleService.getProfile();
-    console.log(profile);
+  openNew() {
+    this.client = {};
+    this.submitted = false;
+    this.clientDialog = true;
+  }
+  
+  deleteClient(client: Client) {
+    this.deleteClentDialog = true;
+    this.clientService.deleteClient(client.clientID).subscribe({
+      next: () => {
+        this.clients = this.clients.filter(c => c.clientID !== client.clientID);
+        this.deleteClentDialog = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Client deleted successfully'
+        });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error deleting client'
+        });
+      }
+    });
   }
 
   onGlobalFilter(table: Table, event: Event) {

@@ -1,1 +1,26 @@
-<p>edit works!</p>
+
+<div *ngIf="client" class="p-fluid">
+  <h2>Edit Client</h2>
+  <form>
+    <div class="p-field">
+      <label for="id">ID:</label>
+      <input type="text" id="id" [(ngModel)]="client.clientID" name="id" readonly pInputText>
+    </div>
+    <div class="p-field">
+      <label for="name">Name:</label>
+      <input type="text" id="name" [(ngModel)]="client.clientName" name="name" pInputText>
+    </div>
+    <div class="p-field">
+      <label for="address">Address:</label>
+      <input type="text" id="address" [(ngModel)]="client.address" name="address" pInputText>
+    </div>
+    <div class="p-field">
+      <label for="email">Email:</label>
+      <input type="email" id="email" [(ngModel)]="client.email" name="email" pInputText>
+    </div>
+    <div class="p-field button-group">
+      <button type="button" (click)="updateClient()" pButton label="Save Changes" icon="pi pi-check"></button>
+      <button type="button" [routerLink]="['/clients']" pButton label="Cancel" icon="pi pi-times" class="p-button-secondary"></button>
+    </div>
+  </form>
+</div>

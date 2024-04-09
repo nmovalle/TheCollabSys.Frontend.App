@@ -12,6 +12,7 @@ import { AppLayoutModule } from './layout/app.layout.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { PrimengModule } from './core/modules/primeng.module';
 
+
 //services
 import { ProductService } from './core/service/product.service';
 import { CountryService } from './core/service/country.service';
@@ -21,6 +22,7 @@ import { IconService } from './core/service/icon.service';
 import { NodeService } from './core/service/node.service';
 import { PhotoService } from './core/service/photo.service';
 import { MessageService } from 'primeng/api';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @NgModule({
@@ -33,7 +35,8 @@ import { MessageService } from 'primeng/api';
         AppRoutingModule, 
         AppLayoutModule,
         PrimengModule,
-        OAuthModule.forRoot()
+        OAuthModule.forRoot(),       
+        InputTextModule
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

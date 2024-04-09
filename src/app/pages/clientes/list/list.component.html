@@ -82,8 +82,8 @@
                             {{client.dateCreated}}
                         </td>
                         <td>
-                            <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editClient(client)"></button>
+                            <div class="flex">                                
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [routerLink]="'edit/' + client.clientID"></button>                               
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteClient(client)"></button>
                             </div>
                         </td>

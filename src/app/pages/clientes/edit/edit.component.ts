@@ -2,12 +2,15 @@ import { Component, OnInit  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientService } from '../services/client.service';
 import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
+  styleUrls: ['./edit.component.css'],
+  
   providers: [MessageService],
 })
 
@@ -26,7 +29,8 @@ export class EditComponent implements OnInit {
     private route: ActivatedRoute,
     private clientService: ClientService,
     private messageService: MessageService,
-    private router: Router // Inject the Router service
+    private router: Router,
+    private confirmationService: ConfirmationService,
   ) {}
   ngOnInit(): void { 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -35,32 +39,31 @@ export class EditComponent implements OnInit {
     }   
   }
 
-  updateClient() {
+  updateClient(): void {
     this.submitted = true;
-
+  
     if (this.client.clientID) {
-      this.clientService.updateClient(this.client.clientID, this.client).subscribe({
-        next: () => {
-          this.clients = this.clients.map(c => {
-            if (c.clientID === this.client.clientID) {
-              return this.client;
+      this.confirmationService.confirm({
+        message: 'Are you sure you want to update this client?',
+        header: 'Confirm Edit',
+        accept: () => {
+          this.clientService.updateClient(this.client.clientID, this.client).subscribe({
+            next: () => {
+              // Update logic and navigation
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Client updated successfully'
+              });
+              this.router.navigate(['/clients']);
+            },
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error updating client'
+              });
             }
-            return c;
-          });
-          this.clientDialog = false;
-          this.client = {};
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Client updated successfully'
-          });
-          this.router.navigate(['/clients']);
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error updating client'
           });
         }
       });

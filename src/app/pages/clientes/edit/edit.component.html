@@ -15,12 +15,18 @@
       <input type="text" id="address" [(ngModel)]="client.address" name="address" pInputText>
     </div>
     <div class="p-field">
+      <label for="address">Phone:</label>
+      <input type="text" id="Phone" [(ngModel)]="client.phone" name="Phone" pInputText>
+    </div>
+    <div class="p-field">
       <label for="email">Email:</label>
       <input type="email" id="email" [(ngModel)]="client.email" name="email" pInputText>
     </div>
-    <div class="p-field button-group">
+    <div class="p-field button-set">
       <button type="button" (click)="updateClient()" pButton label="Save Changes" icon="pi pi-check"></button>
       <button type="button" [routerLink]="['/clients']" pButton label="Cancel" icon="pi pi-times" class="p-button-secondary"></button>
     </div>
   </form>
 </div>
+
+<p-confirmDialog></p-confirmDialog>

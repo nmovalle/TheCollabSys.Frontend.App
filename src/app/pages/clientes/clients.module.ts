@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 //routing module
 import { ClientsRoutingModule } from './clients-routing.module';
@@ -26,7 +28,8 @@ import { FormsModule } from '@angular/forms';
     ClientsRoutingModule,
     PrimengModule,
     FormsModule,
-    InputTextModule
+    InputTextModule,
+    ConfirmDialogModule
   ]
 })
 export class ClientsModule { }

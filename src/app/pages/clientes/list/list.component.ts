@@ -5,6 +5,9 @@ import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { GoogleApiService } from '@app/pages/login/services/google-api.service';
 import { Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
+
+
 
 @Component({
   selector: 'app-list',
@@ -26,6 +29,7 @@ export class ListComponent implements OnInit {
   rowsPerPageOptions = [5, 10, 20];
 
   constructor(
+    private confirmationService: ConfirmationService,
     private clientService: ClientService,
     private messageService: MessageService,
     private googleService: GoogleApiService,
@@ -51,7 +55,8 @@ export class ListComponent implements OnInit {
   getClients() {
     this.clientService.getClients().subscribe({
       next: (response: any) => {
-        this.clients = response;        
+        this.clients = response;
+        // console.log(this.clients);
       },
       error: () => {
         this.messageService.add({
@@ -68,24 +73,29 @@ export class ListComponent implements OnInit {
     this.submitted = false;
     this.clientDialog = true;
   }
-  
-  deleteClient(client: Client) {
-    this.deleteClentDialog = true;
-    this.clientService.deleteClient(client.clientID).subscribe({
-      next: () => {
-        this.clients = this.clients.filter(c => c.clientID !== client.clientID);
-        this.deleteClentDialog = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Client deleted successfully'
-        });
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error deleting client'
+
+  deleteClient(client: Client): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this client?',
+      header: 'Confirm Deletion',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.clientService.deleteClient(client.clientID).subscribe({
+          next: () => {
+            this.clients = this.clients.filter(c => c.clientID !== client.clientID);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Client deleted successfully'
+            });
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error deleting client'
+            });
+          }
         });
       }
     });

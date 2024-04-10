@@ -23,9 +23,12 @@ export class ClientService {
   deleteClient(id: number): Observable<any> {
     return this.http.delete<any>(`${environment.apiUrl}/api/Clients/${id}`);
   }
-
-   // Add the updateClient method
+   //vmp
   updateClient(clientID: string, client: any): Observable<any> {
     return this.http.put(`${environment.apiUrl}/api/Clients/${clientID}`, client);
+  }
+   //vmp
+  addClient(client: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/api/Clients/`, client);
   }
 }

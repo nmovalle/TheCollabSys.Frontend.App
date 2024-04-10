@@ -72,6 +72,16 @@ export class ListComponent implements OnInit {
     this.client = {};
     this.submitted = false;
     this.clientDialog = true;
+        // Navigate to the 'add' route
+        this.router.navigate(['/add']).then(success => {
+          if (success) {
+            console.log('Navigation to /add successful!');
+          } else {
+            console.log('Navigation to /add failed!');
+          }
+        }).catch(error => {
+          console.error('Navigation error:', error);
+        });
   }
 
   deleteClient(client: Client): void {

@@ -3,7 +3,7 @@ import { Client } from '../models/client';
 import { ClientService } from '../services/client.service';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { GoogleApiService } from '@app/pages/login/services/google-api.service';
+import { GoogleApiService } from '@app/core/guards/google-api.service';
 
 @Component({
   selector: 'app-list',

@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
-import { GoogleApiService } from '../pages/login/services/google-api.service';
+import { GoogleApiService } from '../core/guards/google-api.service';
 import { Router } from '@angular/router';
 
 @Component({

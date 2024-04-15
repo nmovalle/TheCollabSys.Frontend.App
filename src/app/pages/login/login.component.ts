@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { GoogleApiService } from './services/google-api.service';
+import { GoogleApiService } from '@app/core/guards/google-api.service';
+
 import { UserInfo } from './user-info';
 import { Router } from '@angular/router';
 import { LoadingService } from '@app/core/guards/loading.service';
+
 
 @Component({
   selector: 'app-login',

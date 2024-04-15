@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthConfig, OAuthService, OAuthEvent } from 'angular-oauth2-oidc';
-import { Subject } from 'rxjs';
-import { UserInfo } from '../user-info';
+import { Observable, Subject } from 'rxjs';
+import { UserInfo } from '../../pages/login/user-info';
 import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
 import { LoadingService } from '@app/core/guards/loading.service';
+import { HttpClient } from '@angular/common/http';
+import { GoogleUserInfo } from '../interfaces/google-user-info';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +16,11 @@ export class GoogleApiService {
   userProfileSubject = new Subject<UserInfo>();
 
   constructor(
+    private http: HttpClient,
     private readonly oAuthService: OAuthService,
     private router: Router,
     private location: Location,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
   ) { 
     this.initConfiguration();
   }
@@ -43,17 +46,12 @@ export class GoogleApiService {
     this.oAuthService.setupAutomaticSilentRefresh();
     this.oAuthService.loadDiscoveryDocumentAndTryLogin();
 
-    const self = this;
-    // Suscribirse al evento de OAuthService para detectar cuando se recibe un token de acceso
     this.oAuthService.events.subscribe((event: OAuthEvent) => {
       if (event.type === 'token_received') {
         this.startLoading();
-          console.log(this.oAuthService.getAccessToken());          
-          // Esperar 2000 milisegundos (2 segundos) antes de redirigir
           setTimeout(() => {
-            // Redirigir a la página de inicio
             this.stopLoading();
-            self.router.navigate(['/home']);
+            this.router.navigate(['/home']);
         }, 500);
       }
     });
@@ -69,9 +67,29 @@ export class GoogleApiService {
     this.oAuthService.logOut();
   }
 
-  getProfile() {
-    const profile = this.oAuthService.getIdentityClaims();
-    return profile;
+  getProfile(): GoogleUserInfo {
+    const profile: any = this.oAuthService.getIdentityClaims();
+    const mappedProfile: GoogleUserInfo = {
+      at_hash: profile.at_hash || '',
+      aud: profile.aud || '',
+      azp: profile.azp || '',
+      email: profile.email || '',
+      email_verified: profile.email_verified || false,
+      exp: profile.exp || 0,
+      family_name: profile.family_name || '',
+      given_name: profile.given_name || '',
+      hd: profile.hd || '',
+      iat: profile.iat || 0,
+      iss: profile.iss || '',
+      jti: profile.jti || '',
+      name: profile.name || '',
+      nbf: profile.nbf || 0,
+      nonce: profile.nonce || '',
+      picture: profile.picture || '',
+      sub: profile.sub || ''
+    };
+    console.log(mappedProfile);
+    return mappedProfile;
   }
 
   getToken() {

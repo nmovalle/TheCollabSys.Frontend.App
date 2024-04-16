@@ -6,9 +6,7 @@ import { Table } from 'primeng/table';
 import { GoogleApiService } from '@app/pages/login/services/google-api.service';
 import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
-
-
-
+import { GoogleApiService } from '@app/core/guards/google-api.service';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',

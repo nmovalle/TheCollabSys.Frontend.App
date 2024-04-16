@@ -1,19 +1,17 @@
 import { NgModule } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
-//components
+// Components
 import { AppComponent } from './app.component';
 import { NotfoundComponent } from './shared/notfound/notfound.component';
 import { LoginComponent } from './pages/login/login.component';
 
-//modules
+// Modules
 import { AppRoutingModule } from './app-routing.module';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { PrimengModule } from './core/modules/primeng.module';
-
-
-//services
 import { ProductService } from './core/service/product.service';
 import { CountryService } from './core/service/country.service';
 import { CustomerService } from './core/service/customer.service';
@@ -24,6 +22,8 @@ import { PhotoService } from './core/service/photo.service';
 import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 
+// Interceptor
+import { AuthInterceptor } from './core/modules/auth-interceptor.interceptor';
 
 @NgModule({
     declarations: [
@@ -48,6 +48,11 @@ import { InputTextModule } from 'primeng/inputtext';
         PhotoService, 
         ProductService,
         MessageService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        }
     ],
     bootstrap: [AppComponent],
 })

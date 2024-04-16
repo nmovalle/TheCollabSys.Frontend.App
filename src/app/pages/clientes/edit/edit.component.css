@@ -1,0 +1,18 @@
+.button-set {
+    display: flex;
+}
+
+.button-set :first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.button-set :last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -1px; /* Overlap border to make them look joined */
+}
+
+.button-set .p-button {
+    width: 50%;
+}

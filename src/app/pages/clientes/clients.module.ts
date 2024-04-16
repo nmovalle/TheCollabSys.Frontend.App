@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 //routing module
 import { ClientsRoutingModule } from './clients-routing.module';
@@ -10,6 +13,7 @@ import { AddComponent } from './add/add.component';
 import { ListComponent } from './list/list.component';
 import { ReadComponent } from './read/read.component';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -22,7 +26,10 @@ import { PrimengModule } from 'src/app/core/modules/primeng.module';
   imports: [
     CommonModule,
     ClientsRoutingModule,
-    PrimengModule
+    PrimengModule,
+    FormsModule,
+    InputTextModule,
+    ConfirmDialogModule
   ]
 })
 export class ClientsModule { }

@@ -11,19 +11,6 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   if (googleService.isLoggedIn()) {
     const profile = googleService.getProfile();
-    authService.validateOAuthDomain(profile).subscribe({
-      next: (response: any) => {
-        debugger;
-        // Manejar la respuesta del servicio aquí
-        console.log('Respuesta del servicio:', response);
-      },
-      error: (error: any) => {
-        console.error('Error en la solicitud:', error);
-        return false;
-      }
-    });
-
-
 
     if (state.url === '/home') return true;
     else {

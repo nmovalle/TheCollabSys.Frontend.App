@@ -25,18 +25,22 @@ import { MessageService } from 'primeng/api';
 
 // Interceptor
 import { AuthInterceptor } from './core/modules/auth-interceptor.interceptor';
+import { GuestComponent } from './pages/guest/guest.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
         AppComponent, 
         NotfoundComponent, 
-        LoginComponent
+        LoginComponent,
+        GuestComponent
     ],
     imports: [
         AppRoutingModule, 
         AppLayoutModule,
         PrimengModule,
-        OAuthModule.forRoot()
+        OAuthModule.forRoot(),
+        FormsModule
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

@@ -116,7 +116,6 @@ export class GoogleApiService {
       picture: profile.picture || '',
       sub: profile.sub || ''
     };
-    console.log(mappedProfile);
     return mappedProfile;
   }
 

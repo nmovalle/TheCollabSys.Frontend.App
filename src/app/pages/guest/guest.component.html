@@ -1,0 +1,53 @@
+<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-column align-items-center justify-content-center">
+        <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
+                <div class="text-center mb-5">
+                    <div class="text-900 text-3xl font-medium mb-3">Welcome, {{ userLogged?.email }} !</div>
+                    <span class="text-600 text-2xl font-medium">Choose your role, we're almost set! </span>
+                </div>
+
+                <div class="col-12">
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="field col-12 md:col-12">
+                            <label htmlFor="state">Proposale Role:</label>
+                            <p-dropdown 
+                                [options]="proposaleRoles" 
+                                optionLabel="proposalName" 
+                                [(ngModel)]="selectedProposaleRole"
+                                (onChange)="onProposaleRoleChange()"
+                                ></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="field col-12 md:col-12">
+                            <label htmlFor="state">Role:</label>
+                            <p-dropdown 
+                                [options]="roles" 
+                                optionLabel="name" 
+                                [(ngModel)]="selectedRole"
+                                [disabled]="isProposalRoleDisabled()"
+                                ></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <button 
+                        pButton 
+                        pRipple 
+                        label="Next" 
+                        class="w-full p-3 text-xl"
+                        [disabled]="isNextButtonDisabled()"
+                        (click)="onNextButtonClick()"
+                        ></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (loading) {
+    <div class="progress-spinner">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    </div>
+}

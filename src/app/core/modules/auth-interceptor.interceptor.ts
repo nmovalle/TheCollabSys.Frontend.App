@@ -10,7 +10,6 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(req.url)
     // Verifica si la solicitud ya tiene un encabezado de autorización
     if (req.headers.has('Authorization')) {
       // Si ya tiene un encabezado de autorización, simplemente pasa la solicitud al siguiente manejador
@@ -34,8 +33,6 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       });
       
-      console.log('Request with Authorization Token:', authReq);
-
       // Continúa con la solicitud modificada
       return next.handle(authReq).pipe(
         catchError((error: any) => {

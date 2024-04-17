@@ -8,13 +8,15 @@ export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   
-
   if (googleService.isLoggedIn()) {
-    const profile = googleService.getProfile();
+    const userRole = authService.getUserRole();    
+    if (userRole?.roleName === "Guest") {
+      router.navigate(['/guest'], { replaceUrl: true });
+      return false;
+    }
 
     if (state.url === '/home') return true;
     else {
-      console.log(profile);
 
       //checar permisos de menus
       return true;

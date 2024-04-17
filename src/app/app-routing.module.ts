@@ -4,11 +4,13 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
 import { NotfoundComponent } from './shared/notfound/notfound.component';
 import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './core/guards/auth.guard';
+import { GuestComponent } from './pages/guest/guest.component';
 
 @NgModule({
     imports: [
         RouterModule.forRoot([
             { path: '', component: LoginComponent },
+            { path: 'guest', component: GuestComponent },
             {
                 path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule)
             },

@@ -84,7 +84,6 @@ export class ListComponent implements OnInit {
     this.clientService.getClients().subscribe({
       next: (response: any) => {
         this.clients = response;
-        console.log(this.clients);
       },
       error: () => {
         this.messageService.add({
@@ -99,7 +98,6 @@ export class ListComponent implements OnInit {
   ngOnInit() {
     this.getClients();
     const profile = this.googleService.getProfile();
-    console.log(profile);
   }
 
   onGlobalFilter(table: Table, event: Event) {

@@ -27,13 +27,19 @@ import { MessageService } from 'primeng/api';
 import { AuthInterceptor } from './core/modules/auth-interceptor.interceptor';
 import { GuestComponent } from './pages/guest/guest.component';
 import { FormsModule } from '@angular/forms';
+import { IdentifyComponent } from './pages/identify/identify.component';
+import { ForgotComponent } from './pages/forgot/forgot.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 @NgModule({
     declarations: [
         AppComponent, 
         NotfoundComponent, 
         LoginComponent,
-        GuestComponent
+        GuestComponent,
+        IdentifyComponent,
+        ForgotComponent,
+        RegisterComponent
     ],
     imports: [
         AppRoutingModule, 

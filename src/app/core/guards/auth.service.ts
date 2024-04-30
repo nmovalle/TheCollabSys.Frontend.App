@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GoogleUserInfo } from '../interfaces/google-user-info';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserRole } from '../constants/types';
@@ -12,11 +11,27 @@ export class AuthService {
   googleAuthInProgress: boolean = false;
 
   constructor(
-    private http: HttpClient,
+    private http: HttpClient
   ) { }
 
   public isLoggedIn(): boolean {
     return localStorage.getItem('accessToken') !== null;
+  }
+
+  public setAuthProvider(authProvider: string) {
+    localStorage.setItem('authProvider', authProvider);
+  }
+
+  public getAuthProvider() {
+    return localStorage.getItem('authProvider');
+  }
+
+  public setUsername(username: string) {
+    localStorage.setItem('username', username);
+  }
+
+  public getUsername() {
+    return localStorage.getItem('username');
   }
 
   public setAccessToken(token: string) {
@@ -56,9 +71,15 @@ export class AuthService {
     return null;
   }
 
+  public cleanLocalStorage() {
+    localStorage.clear();
+  }
 
+  public logout() {
+    this.cleanLocalStorage();
+  }
 
-  public validateOAuthDomain(user: GoogleUserInfo): Observable<any> {
+  public validateOAuthDomain(user: any): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/api/auth/validate-oauth-domain`, user);
   }
 

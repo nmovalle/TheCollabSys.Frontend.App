@@ -58,7 +58,10 @@ export class GoogleApiService {
             console.log('validateOAuthDomain response:', response);
             const { userRole, authToken } = response;
             const { accessToken, refreshToken, accessTokenExpiration } = authToken;
+            const { email } = profile;
 
+            this.authService.setAuthProvider("Google");
+            this.authService.setUsername(email);
             this.authService.setAccessToken(accessToken);
             this.authService.setRefreshToken(refreshToken);
             this.authService.setAccessTokenExpiration(accessTokenExpiration);

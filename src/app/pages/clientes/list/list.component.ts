@@ -3,7 +3,7 @@ import { Client } from '../models/client';
 import { ClientService } from '../services/client.service';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { GoogleApiService } from '@app/pages/login/services/google-api.service';
+import { GoogleApiService } from '@app/core/guards/google-api.service';
 
 @Component({
   selector: 'app-list',
@@ -84,7 +84,6 @@ export class ListComponent implements OnInit {
     this.clientService.getClients().subscribe({
       next: (response: any) => {
         this.clients = response;
-        console.log(this.clients);
       },
       error: () => {
         this.messageService.add({
@@ -99,7 +98,6 @@ export class ListComponent implements OnInit {
   ngOnInit() {
     this.getClients();
     const profile = this.googleService.getProfile();
-    console.log(profile);
   }
 
   onGlobalFilter(table: Table, event: Event) {

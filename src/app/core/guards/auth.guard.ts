@@ -1,14 +1,21 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { GoogleApiService } from '@app/pages/login/services/google-api.service';
+import { AuthService } from './auth.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const googleService = inject(GoogleApiService);
-  const router = inject(Router);  
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  if (googleService.isLoggedIn()) {
+  if (authService.isLoggedIn()) {
+    const userRole = authService.getUserRole();    
+    if (userRole?.roleName === "Guest") {
+      router.navigate(['/guest'], { replaceUrl: true });
+      return false;
+    }
+
     if (state.url === '/home') return true;
     else {
+
       //checar permisos de menus
       return true;
     }

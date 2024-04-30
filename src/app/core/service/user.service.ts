@@ -16,6 +16,18 @@ export class UserService {
     return this.http.get<any>(`${environment.apiUrl}/api/User/GetUserByName/${username}`);
   }
 
+  register(user: any) {
+    return this.http.post(`${environment.apiUrl}/api/User/register`, user);
+  }
+
+  login(credentials: any) {
+    return this.http.post(`${environment.apiUrl}/api/User/login`, credentials);
+  }
+
+  updatePassword(updatePassword: any) {
+    return this.http.post(`${environment.apiUrl}/api/User/updatepassword`, updatePassword);
+  }
+
   updateUserRole(username: string, newRoleId: string) {
     return this.http.put(`${environment.apiUrl}/api/UserRole/UpdateUserRoleByUserName/${username}/${newRoleId}`, null);
   }

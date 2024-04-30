@@ -6,12 +6,13 @@
                     <div class="text-900 text-3xl font-medium mb-3">Welcome, {{ userLogged?.email }} !</div>
                     <span class="text-600 text-2xl font-medium">Choose your role, we're almost set! </span>
                 </div>
-
-                <div class="col-12">
+                <p-toast></p-toast>
+                <div>
                     <div class="p-fluid p-formgrid grid">
                         <div class="field col-12 md:col-12">
-                            <label htmlFor="state">Proposale Role:</label>
-                            <p-dropdown 
+                            <label class="block text-900 text-xl font-medium mb-2" htmlFor="state">Proposale Role:</label>
+                            <p-dropdown
+                                class="block w-full md:w-30rem"
                                 [options]="proposaleRoles" 
                                 optionLabel="proposalName" 
                                 [(ngModel)]="selectedProposaleRole"
@@ -21,8 +22,9 @@
                     </div>
                     <div class="p-fluid p-formgrid grid">
                         <div class="field col-12 md:col-12">
-                            <label htmlFor="state">Role:</label>
+                            <label class="block text-900 text-xl font-medium mb-2" htmlFor="state">Role:</label>
                             <p-dropdown 
+                            class="block w-full md:w-30rem"
                                 [options]="roles" 
                                 optionLabel="name" 
                                 [(ngModel)]="selectedRole"

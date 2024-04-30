@@ -9,8 +9,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-guest',
-  templateUrl: './guest.component.html',
-  styleUrl: './guest.component.scss'
+  templateUrl: './guest.component.html'
 })
 export class GuestComponent implements OnInit {
   loading: boolean = false;
@@ -130,7 +129,7 @@ export class GuestComponent implements OnInit {
   }
 
   onNextButtonClick() {
-    const { email } = this.userLogged;
+    const email = this.userLogged;
     const { id } = this.selectedRole;
     this.updateUserRole(email, id);
 }
@@ -139,6 +138,8 @@ export class GuestComponent implements OnInit {
     this.getRoles();
     this.getProposalRoles();
 
-    this.userLogged = this.googleService.getProfile();
+
+
+    this.userLogged = this.authService.getUsername();
   }
 }

@@ -1,1 +1,104 @@
-<p>add works!</p>
+<p-panel>
+    <ng-template pTemplate="header">
+      <span class="w-full text-center font-bold">Add New Customer</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button
+                pButton
+                pRipple
+                icon="pi pi-arrow-left"
+                label="Back"
+                class="p-button mr-2"
+                [routerLink]="'/clients'"
+                ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+  
+    <ng-template pTemplate="content">
+        <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="clientName">Customer Name</label>
+                    <input 
+                        type="text" 
+                        id="clientName" 
+                        formControlName="clientName" 
+                        class="w-full"
+                        name="clientName"
+                        pInputText />
+                        <small id="clientName-help" class="p-error" *ngIf="(clientName.invalid && (clientName.dirty || clientName.touched)) || !clientName.value">
+                            Client name field is required *
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="address">Address</label>
+                    <input 
+                        type="text" 
+                        id="address" 
+                        formControlName="address" 
+                        class="w-full"
+                        name="address"
+                        pInputText />
+                        <small id="address-help" class="p-error" *ngIf="(address.invalid && (address.dirty || address.touched)) || !address.value">
+                            Address name field is required *
+                        </small>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="phone">Phone</label>
+                    <input 
+                        type="text" 
+                        id="phone" 
+                        formControlName="phone" 
+                        class="w-full"
+                        name="phone"
+                        pInputText />
+                        <small id="phone-help" class="p-error" *ngIf="(phone.invalid && (phone.dirty || phone.touched)) || !phone.value">
+                            <ng-container *ngIf="phone.errors.required">
+                                Phone field is required *
+                            </ng-container>
+                            <ng-container *ngIf="phone.errors.pattern && !phone.errors.required">
+                                Invalid phone number format *
+                            </ng-container>
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="email">Email</label>
+                    <input 
+                        type="text" 
+                        id="email" 
+                        formControlName="email" 
+                        class="w-full"
+                        name="email"
+                        pInputText />
+                        <small id="email-help" class="p-error" *ngIf="(email.invalid && (email.dirty || email.touched)) || !email.value">
+                            <ng-container *ngIf="email.errors.required">
+                                Email field is required *
+                            </ng-container>
+                            <ng-container *ngIf="email.errors.email && !email.errors.required">
+                                Invalid email format *
+                            </ng-container>
+                        </small>
+                </div>
+            </div>
+      
+          <div class="mt-4">
+            <button type="submit" pButton label="Save" class="p-button-success"></button>
+          </div>
+        </form>
+    </ng-template>
+  </p-panel>
+  
+<p-confirmDialog></p-confirmDialog>
+@if (loading) {
+    <div class="progress-spinner">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    </div>
+}

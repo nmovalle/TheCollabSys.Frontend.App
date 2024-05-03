@@ -10,6 +10,7 @@ import { AddComponent } from './add/add.component';
 import { ListComponent } from './list/list.component';
 import { ReadComponent } from './read/read.component';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -21,8 +22,10 @@ import { PrimengModule } from 'src/app/core/modules/primeng.module';
   ],
   imports: [
     CommonModule,
+    PrimengModule,
+    FormsModule,
+    ReactiveFormsModule,
     ClientsRoutingModule,
-    PrimengModule
   ]
 })
 export class ClientsModule { }

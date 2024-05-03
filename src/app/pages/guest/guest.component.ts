@@ -132,13 +132,25 @@ export class GuestComponent implements OnInit {
     const email = this.userLogged;
     const { id } = this.selectedRole;
     this.updateUserRole(email, id);
-}
+  }
+
+  logout() {
+    const authProvider = this.authService.getAuthProvider();
+      switch (authProvider) {
+        case "Google":
+          this.googleService.logout();
+          break;
+        default:
+          break;
+      }
+
+      this.authService.logout();
+      this.router.navigate(['/'], { replaceUrl: true });
+  }
 
   ngOnInit(): void {
     this.getRoles();
     this.getProposalRoles();
-
-
 
     this.userLogged = this.authService.getUsername();
   }

@@ -39,9 +39,21 @@
                         pButton 
                         pRipple 
                         label="Next" 
-                        class="w-full p-3 text-xl"
+                        class="block w-full p-3 text-xl mb-5"
                         [disabled]="isNextButtonDisabled()"
                         (click)="onNextButtonClick()"
+                        ></button>
+                </div>
+                <div class="text-center mb-5">
+                    <span class="text-600 font-medium">Or back to Log In: </span>
+                </div>
+                <div>
+                    <button 
+                        pButton 
+                        pRipple 
+                        label="Log In" 
+                        class="block w-full p-3 text-xl"
+                        (click)="logout()"
                         ></button>
                 </div>
             </div>

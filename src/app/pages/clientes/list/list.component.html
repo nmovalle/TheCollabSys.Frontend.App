@@ -1,42 +1,40 @@
-<div class="grid">
-    <div class="col-12">
-        <div class="card px-6 py-6">
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="w-full text-center font-bold">Customer List</span>
+    </ng-template>
+    <div class="grid">
+        <div class="col-12">
             <p-toast></p-toast>
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedClients()" [disabled]="!selectedClients || !selectedClients.length"></button>
+                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                            [routerLink]="'add'"></button>
+                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                            [disabled]="!selectedClients || !selectedClients.length"></button>
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
+                        chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+                        (click)="dt.exportCSV()"></button>
                 </ng-template>
             </p-toolbar>
 
-            <p-table 
-                [value]="clients" 
-                [columns]="cols" 
-                responsiveLayout="scroll" 
-                [rows]="10" 
+            <p-table #dt [value]="clients" [columns]="cols" responsiveLayout="scroll" [rows]="10"
                 [globalFilterFields]="['clientID','clientName','address', 'phone', 'email', 'dateCreated']"
-                [paginator]="true" 
-                [rowsPerPageOptions]="[10,20,30]" 
-                [showCurrentPageReport]="true" 
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
-                [(selection)]="selectedClients" 
-                selectionMode="multiple" 
-                [rowHover]="true" 
-                dataKey="clientID"
-                >
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedClients" selectionMode="multiple" [rowHover]="true" dataKey="clientID">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Manage Clients</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
                         </span>
                     </div>
                 </ng-template>
@@ -83,8 +81,14 @@
                         </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editClient(client)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteClient(client)"></button>
+                                <button pButton pRipple icon="pi pi-eye"
+                                    class="p-button-rounded p-button-secondary mr-2"
+                                    [routerLink]="'read/' + client.clientID"></button>
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    [routerLink]="'edit/' + client.clientID"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteClient(client)"></button>
                             </div>
                         </td>
                     </tr>
@@ -97,4 +101,4 @@
             </p-table>
         </div>
     </div>
-</div>
+</p-panel>

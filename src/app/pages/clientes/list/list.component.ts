@@ -3,7 +3,6 @@ import { Client } from '../models/client';
 import { ClientService } from '../services/client.service';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { GoogleApiService } from '@app/core/guards/google-api.service';
 
 @Component({
   selector: 'app-list',
@@ -11,23 +10,18 @@ import { GoogleApiService } from '@app/core/guards/google-api.service';
   providers: [MessageService]
 })
 export class ListComponent implements OnInit {
-  clientDialog: boolean = false;
   deleteClentDialog: boolean = false;
   deleteClientsDialog: boolean = false;
 
   clients!: any[];
   client = {} as any;
   selectedClients: any[];
-
-  submitted: boolean = false;
+  
   cols: any[] = [];
-  statuses: any[] = [];
-  rowsPerPageOptions = [5, 10, 20];
 
   constructor(
     private clientService: ClientService,
     private messageService: MessageService,
-    private googleService: GoogleApiService
   ) {
     this.cols = [
       { field: 'clientID', header: 'ID' },
@@ -39,19 +33,8 @@ export class ListComponent implements OnInit {
     ];
   }
 
-  openNew() {
-    this.client = {};
-    this.submitted = false;
-    this.clientDialog = true;
-  }
-
   deleteSelectedClients() {
     this.deleteClientsDialog = true;
-  }
-
-  editProduct(client: Client) {
-    this.client = { ...client };
-    this.clientDialog = true;
   }
 
   deleteClient(client: Client) {
@@ -77,7 +60,6 @@ export class ListComponent implements OnInit {
         this.deleteClentDialog = false;
       }
     });
-    
   }
 
   getClients() {
@@ -97,7 +79,6 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.getClients();
-    const profile = this.googleService.getProfile();
   }
 
   onGlobalFilter(table: Table, event: Event) {

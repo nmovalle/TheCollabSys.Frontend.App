@@ -29,7 +29,9 @@ export class ListComponent implements OnInit {
       { field: 'address', header: 'Address' },
       { field: 'phone', header: 'Phone' },
       { field: 'email', header: 'Email' },
-      { field: 'dateCreated', header: 'Date Created' }
+      { field: 'dateCreated', header: 'Date Created' },
+      { field: 'dateUpdate', header: 'Date Updated' },
+      { field: 'active', header: 'Active' },
     ];
   }
 
@@ -65,6 +67,7 @@ export class ListComponent implements OnInit {
   getClients() {
     this.clientService.getClients().subscribe({
       next: (response: any) => {
+        console.log(response)
         this.clients = response;
       },
       error: () => {

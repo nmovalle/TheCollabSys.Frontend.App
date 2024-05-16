@@ -34,6 +34,25 @@
                 <div>{{ clientForm.get('email').value }}</div>
             </div>
         </div>
+        <div class="formgrid grid">
+            <div class="field col mb-5">
+                <label for="Image" class="text-center font-bold">Image</label>
+                @if (imagenURL != null) {
+                    <div class="flex justify-content-left">
+                        <p-image 
+                            [src]="imagenURL" 
+                            alt="Image" 
+                            width="250" 
+                            [preview]="true">
+                        </p-image>
+                    </div>
+                }
+            </div>
+            <div class="field col mb-5">
+                <label for="active" class="text-center font-bold">Active</label>
+                <div>{{ clientForm.get('active').value }}</div>
+            </div>
+        </div>
     </ng-template>
 </p-panel>
 

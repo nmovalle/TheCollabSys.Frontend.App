@@ -27,12 +27,21 @@ export class AuthInterceptor implements HttpInterceptor {
 
     // Si hay un token, clona la solicitud y agrega el encabezado de autorización
     if (authToken) {
+      const { userId } = this.authService.getUserRole();
+
+      const headers = req.body instanceof FormData ? {
+        Authorization: `Bearer ${authToken}`,
+        'User-Id': `${userId}`
+      } : {
+        Authorization: `Bearer ${authToken}`,
+        'User-Id': `${userId}`,
+        'Content-Type': req.headers.get('Content-Type') || 'application/json'
+      };
+
       const authReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${authToken}`
-        }
+        setHeaders: headers
       });
-      
+
       // Continúa con la solicitud modificada
       return next.handle(authReq).pipe(
         catchError((error: any) => {

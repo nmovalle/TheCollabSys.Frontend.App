@@ -11,6 +11,7 @@ import { ListComponent } from './list/list.component';
 import { ReadComponent } from './read/read.component';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FileUploadModule } from 'primeng/fileupload';
 
 
 @NgModule({

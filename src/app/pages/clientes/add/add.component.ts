@@ -12,6 +12,9 @@ export class AddComponent implements OnInit {
   loading: boolean = false;
   clientForm!: FormGroup;
 
+  selectedFile: File | null = null;
+  imagenURL: string = null;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -40,11 +43,25 @@ export class AddComponent implements OnInit {
     return this.clientForm.get('email') as FormControl;
   }
 
-  onSubmit() {     
+  get logo() {
+    return this.clientForm.get('logo') as FormControl;
+  }
+
+  get filetype() {
+    return this.clientForm.get('filetype') as FormControl;
+  }
+
+  get active() {
+    return this.clientForm.get('active') as FormControl;
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
     if (this.clientForm.valid) {
       const data = this.clientForm.value;
+
       this.loading = true;
-      this.clientService.addClient(data).subscribe({
+      this.clientService.addClient(data, this.selectedFile).subscribe({
         next: (response: any) => {
           if (response) {
             this.loading = false;
@@ -83,12 +100,23 @@ export class AddComponent implements OnInit {
     }
   }
 
+  onUpload(event: any, fileUpload) {
+    this.selectedFile = event.files[0];
+    this.renderImage();
+    fileUpload.clear();
+  }
+  
+  renderImage() {
+    this.imagenURL = URL.createObjectURL(this.selectedFile);
+  }
+
   ngOnInit(): void {
     this.clientForm = this.fb.group({
       clientName: ['', Validators.required],
       address: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern('[0-9]+')]],
       email: ['', [Validators.required, Validators.email]],
+      active: [true, [Validators.required]],
     });
   }
 }

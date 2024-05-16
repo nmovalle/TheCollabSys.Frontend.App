@@ -34,6 +34,7 @@ import { RippleModule } from 'primeng/ripple';
 import { FileUploadModule } from 'primeng/fileupload';
 import { RatingModule } from 'primeng/rating';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ImageModule } from 'primeng/image';
 
 @NgModule({
   declarations: [],
@@ -68,7 +69,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     FileUploadModule,
     RatingModule,
     InputTextareaModule,
-    
+    ImageModule
   ],
 
   exports: [
@@ -103,7 +104,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     FileUploadModule,
     RatingModule,
     InputTextareaModule,
-    
+    ImageModule
   ],
 
   providers: [ConfirmationService, MessageService]

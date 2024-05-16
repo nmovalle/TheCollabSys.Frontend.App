@@ -21,10 +21,10 @@
     </p-toolbar>
   
     <ng-template pTemplate="content">
-        <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="clientForm" (ngSubmit)="onSubmit($event)">
             <div class="formgrid grid">
                 <div class="field col">
-                    <label for="clientName">Customer Name</label>
+                    <label for="clientName" class="text-center font-bold mb-2">Customer Name</label>
                     <input 
                         type="text" 
                         id="clientName" 
@@ -37,7 +37,7 @@
                         </small>
                 </div>
                 <div class="field col">
-                    <label for="address">Address</label>
+                    <label for="address" class="text-center font-bold mb-2">Address</label>
                     <input 
                         type="text" 
                         id="address" 
@@ -52,7 +52,7 @@
             </div>
             <div class="formgrid grid">
                 <div class="field col">
-                    <label for="phone">Phone</label>
+                    <label for="phone" class="text-center font-bold mb-2">Phone</label>
                     <input 
                         type="text" 
                         id="phone" 
@@ -70,7 +70,7 @@
                         </small>
                 </div>
                 <div class="field col">
-                    <label for="email">Email</label>
+                    <label for="email" class="text-center font-bold mb-2">Email</label>
                     <input 
                         type="text" 
                         id="email" 
@@ -86,6 +86,43 @@
                                 Invalid email format *
                             </ng-container>
                         </small>
+                </div>
+            </div>
+
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="Image" class="text-center font-bold mb-2">Image</label>               
+                    <p-fileUpload
+                        #fileUpload
+                        name="image"
+                        id="file" 
+                        (onSelect)="onUpload($event, fileUpload)"
+                        [multiple]="false" 
+                        accept="image/*" 
+                        [maxFileSize]="1000000"
+                        mode="basic"
+                        >
+                    </p-fileUpload>
+                    @if (imagenURL != null) {
+                        <div class="flex justify-content-left">
+                            <p-image 
+                                [src]="imagenURL" 
+                                alt="Image" 
+                                width="250" 
+                                [preview]="true">
+                            </p-image>
+                        </div>
+                    }
+                </div>                
+                <div class="field col">
+                    <label for="active" class="w-full font-bold mb-2">Active</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="active" 
+                        formControlName="active" 
+                        class="w-full"
+                        name="active"
+                        ></p-inputSwitch>
                 </div>
             </div>
       

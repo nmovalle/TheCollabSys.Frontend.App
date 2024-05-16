@@ -11,6 +11,7 @@ import { ClientService } from '../services/client.service';
 export class ReadComponent implements OnInit {
   loading: boolean = false;
   id: number | null = null;
+  imagenURL: string = null;
   clientForm!: FormGroup;
   
   constructor(
@@ -42,11 +43,24 @@ export class ReadComponent implements OnInit {
     return this.clientForm.get('email') as FormControl;
   }
 
+  get logo() {
+    return this.clientForm.get('logo') as FormControl;
+  }
+
+  get filetype() {
+    return this.clientForm.get('filetype') as FormControl;
+  }
+
+  get active() {
+    return this.clientForm.get('active') as FormControl;
+  }
+
   getClient(id: number) {
     this.clientService.getClient(this.id).subscribe({
       next: (response: any) => {
         if (response) {
           this.clientForm.patchValue(response);
+          this.renderImage();
           this.loading = false;
         } else {
           this.loading = false;
@@ -68,12 +82,20 @@ export class ReadComponent implements OnInit {
     });
   }
 
+  renderImage() {
+    const { filetype, logo } = this;
+    this.imagenURL = filetype.value && logo.value ? `data:${filetype.value};base64,${logo.value}` : null;
+  }
+
   ngOnInit(): void {
     this.clientForm = this.fb.group({
       clientName: [''],
       address: [''],
       phone: [''],
       email: [''],
+      logo: [null],
+      filetype: [null],
+      active: [false],
     });
 
     this.route.paramMap.subscribe(params => {

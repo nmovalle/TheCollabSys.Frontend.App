@@ -3,6 +3,7 @@ import { Client } from '../models/client';
 import { ClientService } from '../services/client.service';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { ResponseApi } from '@app/core/interfaces/response-api';
 
 @Component({
   selector: 'app-list',
@@ -66,9 +67,9 @@ export class ListComponent implements OnInit {
 
   getClients() {
     this.clientService.getClients().subscribe({
-      next: (response: any) => {
+      next: async (response: ResponseApi) => {
         console.log(response)
-        this.clients = response;
+        this.clients = response.data;
       },
       error: () => {
         this.messageService.add({

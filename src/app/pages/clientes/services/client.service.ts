@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { ResponseApi } from '@app/core/interfaces/response-api';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,12 @@ export class ClientService {
     private http: HttpClient
   ) { }
 
-  getClients(): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/api/Clients/GetAllClientsAsync`);
+  getClients(): Observable<ResponseApi> {
+    return this.http.get<any>(`${environment.apiUrl}/api/Clients`);
   }
 
-  getClient(id: number): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/api/Clients/GetClientByIdAsync/${id}`);
+  getClient(id: number): Observable<ResponseApi> {
+    return this.http.get<any>(`${environment.apiUrl}/api/Clients/${id}`);
   }
 
   addClient(client: any, file: File): Observable<any> {

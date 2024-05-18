@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ClientService } from '../services/client.service';
+import { ResponseApi } from '@app/core/interfaces/response-api';
 
 @Component({
   selector: 'app-edit',
@@ -95,11 +96,22 @@ export class EditComponent implements OnInit {
 
   getClient(id: number) {
     this.clientService.getClient(this.id).subscribe({
-      next: (response: any) => {
+      next: async (response: ResponseApi) => {
         if (response) {
-          this.clientForm.patchValue(response);
-          this.renderImage();
-          this.loading = false;
+          const { status, data, message } = response;
+          if (status == 'success') {
+            this.clientForm.patchValue(data);
+            this.renderImage();
+            this.loading = false;
+          }
+          if (status == 'error') {
+            this.loading = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: message
+            });
+          }
         } else {
           this.loading = false;
           this.messageService.add({

@@ -133,17 +133,18 @@ export class EditComponent implements OnInit {
   }
 
   onUpload(event: any, fileUpload) {
+    this.imagenURL = null;
     this.selectedFile = event.files[0];
     this.renderImage();
     fileUpload.clear();
   }
   
   renderImage() {
-    if (this.imagenURL) {
-      this.imagenURL = URL.createObjectURL(this.selectedFile);
-    } else {
-      const { filetype, logo } = this;
+    const { filetype, logo } = this;
+    if (filetype.value && logo.value) {
       this.imagenURL = filetype.value && logo.value ? `data:${filetype.value};base64,${logo.value}` : null;
+    } else {
+      this.imagenURL = URL.createObjectURL(this.selectedFile);
     }
   }
 

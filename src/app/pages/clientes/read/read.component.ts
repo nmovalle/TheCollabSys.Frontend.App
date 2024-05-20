@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ClientService } from '../services/client.service';
+import { ResponseApi } from '@app/core/interfaces/response-api';
 
 @Component({
   selector: 'app-read',
@@ -57,9 +58,10 @@ export class ReadComponent implements OnInit {
 
   getClient(id: number) {
     this.clientService.getClient(this.id).subscribe({
-      next: (response: any) => {
+      next: (response: ResponseApi) => {
         if (response) {
-          this.clientForm.patchValue(response);
+          const { status, data, message } = response;
+          this.clientForm.patchValue(data);
           this.renderImage();
           this.loading = false;
         } else {

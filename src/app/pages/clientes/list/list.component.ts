@@ -67,8 +67,9 @@ export class ListComponent implements OnInit {
 
   getClients() {
     this.clientService.getClients().subscribe({
-      next: async (response: ResponseApi) => {
-        console.log(response)
+      next: (response: ResponseApi) => {
+        const {data} = response;
+        console.log(data)
         this.clients = response.data;
       },
       error: () => {

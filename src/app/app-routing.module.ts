@@ -38,6 +38,12 @@ import { RegisterComponent } from './pages/register/register.component';
                     { path: '', loadChildren: () => import('./pages/clientes/clients.module').then(m => m.ClientsModule) },
                 ]
             },
+            {
+                path: 'employers', component: AppLayoutComponent, canActivate: [authGuard],
+                children: [
+                    { path: '', loadChildren: () => import('./pages/employers/employers.module').then(m => m.EmployersModule) },
+                ]
+            },
             { path: '**', redirectTo: '/notfound' },
 
             

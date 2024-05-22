@@ -1,21 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { ClientService } from '../services/client.service';
-import { ResponseApi } from '@app/core/interfaces/response-api';
+import { EmployerService } from '../employer.service';
 
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
 })
-export class EditComponent implements OnInit {
+export class EditComponent {
   loading: boolean = false;
   id: number | null = null;
-  clientForm!: FormGroup;
+  employerForm!: FormGroup;
 
   selectedFile: File | null = null;
-  imagenURL: string = null;
+  imageURL: string = null;
   isUpload: boolean = false;
   
   constructor(
@@ -23,50 +22,46 @@ export class EditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
-    private clientService: ClientService
+    private employerService: EmployerService
   ) {
   }
 
-  get clientID() {
-    return this.clientForm.get('clientID') as FormControl;
+  get employerId() {
+    return this.employerForm.get('employerId') as FormControl;
   }
 
-  get clientName() {
-    return this.clientForm.get('clientName') as FormControl;
+  get employerName() {
+    return this.employerForm.get('employerName') as FormControl;
   }
 
   get address() {
-    return this.clientForm.get('address') as FormControl;
+    return this.employerForm.get('address') as FormControl;
   }
 
   get phone() {
-    return this.clientForm.get('phone') as FormControl;
+    return this.employerForm.get('phone') as FormControl;
   }
 
-  get email() {
-    return this.clientForm.get('email') as FormControl;
-  }
-
-  get logo() {
-    return this.clientForm.get('logo') as FormControl;
+  get image() {
+    return this.employerForm.get('image') as FormControl;
   }
 
   get filetype() {
-    return this.clientForm.get('filetype') as FormControl;
+    return this.employerForm.get('filetype') as FormControl;
   }
 
   get active() {
-    return this.clientForm.get('active') as FormControl;
+    return this.employerForm.get('active') as FormControl;
   }
 
   onSubmit(event) {
     event.preventDefault();
-    if (this.clientForm.valid) {
-      const data = this.clientForm.value;
-      data.ClientID = this.id;
+    if (this.employerForm.valid) {
+      const data = this.employerForm.value;
+      data.EmployerId = this.id;
 
       this.loading = true;
-      this.clientService.updateClient(data.ClientID, data, this.selectedFile).subscribe({
+      this.employerService.updateEmployer(data.EmployerId, data, this.selectedFile).subscribe({
         next: async (response: any) => {
           this.loading = false;
           this.messageService.add({
@@ -74,7 +69,7 @@ export class EditComponent implements OnInit {
             summary: 'Success',
             detail: 'Record was successfully updated.'
           });
-          this.router.navigate(['/clients'], { replaceUrl: true });
+          this.router.navigate(['/employers'], { replaceUrl: true });
         },
         error: () => {
           this.loading = false;
@@ -95,13 +90,14 @@ export class EditComponent implements OnInit {
     }
   }
 
-  getClient(id: number) {
-    this.clientService.getClient(this.id).subscribe({
-      next: async (response: ResponseApi) => {
+  getEmployer(id: number) {
+    this.employerService.getEmployer(this.id).subscribe({
+      next: async (response: any) => {
         if (response) {
           const { status, data, message } = response;
+          console.log(data)
           if (status == 'success') {
-            this.clientForm.patchValue(data);
+            this.employerForm.patchValue(data);
             this.renderImage();
             this.loading = false;
           }
@@ -118,7 +114,7 @@ export class EditComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'An error occurred while getting the customer.'
+            detail: 'An error occurred while getting the employer.'
           });
         }
       },
@@ -127,13 +123,13 @@ export class EditComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'An error occurred while getting the customer.'
+          detail: 'An error occurred while getting the employer.'
         });
       }
     });
   }
 
-  onUpload(event: any, fileUpload) {
+  onUpload(event: any, fileUpload) {    
     this.isUpload = true;
     this.selectedFile = event.files[0];
     this.renderImage();
@@ -142,23 +138,22 @@ export class EditComponent implements OnInit {
   
   renderImage() {
     if (this.isUpload) {
-      this.imagenURL = URL.createObjectURL(this.selectedFile);
+      this.imageURL = URL.createObjectURL(this.selectedFile);
     } else {
-      const { filetype, logo } = this;
-      if (filetype.value && logo.value) {
-        this.imagenURL = filetype.value && logo.value ? `data:${filetype.value};base64,${logo.value}` : null;
+      const { filetype, image } = this;
+      if (filetype.value && image.value) {
+        this.imageURL = filetype.value && image.value ? `data:${filetype.value};base64,${image.value}` : null;
       }
     }
   }
 
   ngOnInit(): void {
-    this.clientForm = this.fb.group({
-      clientID: [0],
-      clientName: [null, Validators.required],
+    this.employerForm = this.fb.group({
+      employerId: [0],
+      employerName: [null, Validators.required],
       address: [null, Validators.required],
       phone: [null, [Validators.required, Validators.pattern('[0-9]+')]],
-      email: [null, [Validators.required, Validators.email]],
-      logo: [null],
+      image: [null],
       filetype: [null],
       active: [false, Validators.required],
       dateCreated: [null],
@@ -170,7 +165,7 @@ export class EditComponent implements OnInit {
       const id = params.get('id');
       if (id != null) {
         this.id = +id;
-        this.getClient(this.id);
+        this.getEmployer(this.id);
       }
     });
   }

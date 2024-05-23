@@ -39,7 +39,7 @@ export class ListComponent {
   deleteEmployer(employerId: number) {
     this.deleteEmployerDialog = true;
     this.employerService.deleteEmployer(employerId).subscribe({
-      next: () => {
+      next: async () => {
         this.employers = this.employers.filter(c => c.employerId !== employerId);
         this.messageService.add({
           severity: 'success',

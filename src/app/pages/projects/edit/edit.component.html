@@ -1,0 +1,145 @@
+<p-panel>
+    <ng-template pTemplate="header">
+      <span class="w-full text-center font-bold">Edit Project</span>
+    </ng-template>
+
+    <div>
+        <pre>{{ dataForm.value | json }}</pre>
+    </div>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button
+                pButton
+                pRipple
+                icon="pi pi-arrow-left"
+                label="Back"
+                class="p-button mr-2"
+                [routerLink]="'/projects'"
+                ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+  
+    <ng-template pTemplate="content">
+        <form [formGroup]="dataForm" (ngSubmit)="onSubmit($event)">
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="projectName" class="text-center font-bold mb-2">Project Name</label>
+                    <input 
+                        type="text" 
+                        id="projectName" 
+                        formControlName="projectName" 
+                        class="w-full"
+                        name="projectName"
+                        pInputText />
+                        <small id="projectName-help" class="p-error" *ngIf="(projectName.invalid && (projectName.dirty || projectName.touched)) || !projectName.value">
+                            Project name field is required *
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="clientName" class="text-center font-bold mb-2">Client</label>
+                    <p-dropdown
+                        name="clientId"
+                        optionValue="clientID"
+                        [options]="clients"
+                        [style]="{'min-width': '100%'}"
+                        optionLabel="clientName"
+                        formControlName="clientId"
+                    >
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="projectDescription" class="text-center font-bold mb-2">Description</label>
+                    <input 
+                        type="text" 
+                        id="projectDescription" 
+                        formControlName="projectDescription" 
+                        class="w-full"
+                        name="projectDescription"
+                        pInputText />
+                        <small id="projectDescription-help" class="p-error" *ngIf="(projectDescription.invalid && (projectDescription.dirty || projectDescription.touched)) || !projectDescription.value">
+                            Project description field is required *
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="numberPositionTobeFill" class="text-center font-bold mb-2">Number Position</label>
+                    <input 
+                        type="number" 
+                        id="numberPositionTobeFill" 
+                        formControlName="numberPositionTobeFill" 
+                        class="w-full"
+                        name="numberPositionTobeFill"
+                        pInputText />
+                        <small id="numberPositionTobeFill-help" class="p-error" *ngIf="(numberPositionTobeFill.invalid && (numberPositionTobeFill.dirty || numberPositionTobeFill.touched)) || !numberPositionTobeFill.value">
+                            <ng-container *ngIf="numberPositionTobeFill.errors.required">
+                                Number Position field is required *
+                            </ng-container>
+                            <ng-container *ngIf="numberPositionTobeFill.errors.numberPositionTobeFill && !numberPositionTobeFill.errors.required">
+                                Invalid Number Position format *
+                            </ng-container>
+                        </small>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="startDate" class="text-center font-bold mb-2">Start Date</label>
+                    <p-calendar 
+                        inputId="startDate" 
+                        formControlName="startDate" 
+                        name="startDate"
+                        [style]="{'min-width': '100%'}"
+                        class="ng-invalid ng-dirty" 
+                        [showIcon]="true">
+                    </p-calendar>
+                    <small id="startDate-help" class="p-error" *ngIf="(startDate.invalid && (startDate.dirty || startDate.touched)) || !startDate.value">
+                        Start Date field is required *
+                    </small>
+                </div>
+                <div class="field col">
+                    <label for="endDate" class="text-center font-bold mb-2">End Date</label>
+                    <p-calendar 
+                        inputId="endDate" 
+                        formControlName="endDate" 
+                        name="endDate"
+                        [style]="{'min-width': '100%'}"
+                        class="ng-invalid ng-dirty" 
+                        [showIcon]="true">
+                    </p-calendar>
+                        <small id="endDate-help" class="p-error" *ngIf="(endDate.invalid && (endDate.dirty || endDate.touched)) || !endDate.value">
+                            End Date field is required *
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="statusId" class="text-center font-bold mb-2">Status</label>
+                    <input 
+                        type="number" 
+                        id="statusId" 
+                        formControlName="statusId" 
+                        class="w-full"
+                        name="statusId"
+                        pInputText />
+                        <small id="statusId-help" class="p-error" *ngIf="(statusId.invalid && (statusId.dirty || statusId.touched)) || !statusId.value">
+                            Status field is required *
+                        </small>
+                </div>
+            </div>
+      
+          <div class="mt-4">
+            <button type="submit" pButton label="Save" class="p-button-success"></button>
+          </div>
+        </form>
+    </ng-template>
+  </p-panel>
+  
+<p-confirmDialog></p-confirmDialog>
+@if (loading) {
+    <div class="progress-spinner">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    </div>
+}

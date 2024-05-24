@@ -29,6 +29,6 @@ export class UserService {
   }
 
   updateUserRole(username: string, newRoleId: string) {
-    return this.http.put(`${environment.apiUrl}/api/UserRole/UpdateUserRoleByUserName/${username}/${newRoleId}`, null);
+    return this.http.post(`${environment.apiUrl}/api/UserRole/UpdateUserRoleByUserName/${username}/${newRoleId}`, null);
   }
 }

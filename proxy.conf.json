@@ -1,6 +1,6 @@
 {
     "/api": {
-        "target": "https://www.automationmadeeazy.com/thecollabsys.api",
+        "target": "http://localhost:83",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug",

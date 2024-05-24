@@ -40,7 +40,7 @@ export class SkillService {
     
     formData.append('dto', JSON.stringify(data));
   
-    return this.http.put<void>(`${environment.apiUrl}/api/Skills/${id}`, formData);
+    return this.http.post<void>(`${environment.apiUrl}/api/Skills/${id}`, formData);
   }
 
   deleteSkill(id: number): Observable<any> {

@@ -35,6 +35,16 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { RatingModule } from 'primeng/rating';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ImageModule } from 'primeng/image';
+import { PickListModule } from 'primeng/picklist';
+import { ScrollerModule } from 'primeng/scroller';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { ScrollTopModule } from 'primeng/scrolltop';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TreeModule } from 'primeng/tree';
+import { TreeSelectModule } from 'primeng/treeselect';
+import { TreeTableModule } from 'primeng/treetable';
+import { VirtualScrollerModule } from 'primeng/virtualscroller';
+import { OrderListModule } from 'primeng/orderlist';
 
 @NgModule({
   declarations: [],
@@ -69,7 +79,17 @@ import { ImageModule } from 'primeng/image';
     FileUploadModule,
     RatingModule,
     InputTextareaModule,
-    ImageModule
+    ImageModule,
+    PickListModule,
+    ScrollerModule,
+    ScrollPanelModule,
+    ScrollTopModule,
+    SkeletonModule,
+    TreeModule,
+    TreeSelectModule,
+    TreeTableModule,
+    VirtualScrollerModule,
+    OrderListModule
   ],
 
   exports: [
@@ -104,7 +124,17 @@ import { ImageModule } from 'primeng/image';
     FileUploadModule,
     RatingModule,
     InputTextareaModule,
-    ImageModule
+    ImageModule,
+    PickListModule,
+    ScrollerModule,
+    ScrollPanelModule,
+    ScrollTopModule,
+    SkeletonModule,
+    TreeModule,
+    TreeSelectModule,
+    TreeTableModule,
+    VirtualScrollerModule,
+    OrderListModule
   ],
 
   providers: [ConfirmationService, MessageService]

@@ -1,0 +1,61 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="w-full text-center font-bold">Edit Project Skill</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button
+                    pButton
+                    pRipple
+                    icon="pi pi-arrow-left"
+                    label="Back"
+                    class="p-button mr-2"
+                    [routerLink]="'/projects/skills'"
+                ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <ng-template pTemplate="content">
+        <div *ngIf="loading; else contentTemplate">
+            <div class="progress-spinner">
+                <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+            </div>
+        </div>
+        <ng-template #contentTemplate>
+            <div class="field col">
+                <label for="projectName" class="text-center font-bold mb-2">Project</label>
+                <div>{{ projectName }}</div>
+            </div>
+            <div class="field col">
+                <label for="projectName" class="text-center font-bold">Skills</label>
+                <div class="flex justify-content-left align-items-center">
+                    <p-table [value]="targetSkills" scrollDirection="both" [scrollable]="true" scrollHeight="400px" styleClass="mt-3" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pFrozenColumn>Skill Name</th>
+                                <th>Level</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-skill>
+                            <tr>
+                                <td pFrozenColumn class="font-bold">{{skill.skillName}}</td>
+                                <td>
+                                    <span>
+                                        <p-rating [(ngModel)]="skill.levelId" [readonly]="true" [cancel]="false"></p-rating>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </ng-template>
+    </ng-template>
+</p-panel>
+
+<p-confirmDialog></p-confirmDialog>

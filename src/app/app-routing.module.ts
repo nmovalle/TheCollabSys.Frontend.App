@@ -54,6 +54,7 @@ import { RegisterComponent } from './pages/register/register.component';
                 path: 'projects', component: AppLayoutComponent, canActivate: [authGuard],
                 children: [
                     { path: '', loadChildren: () => import('./pages/projects/projects.module').then(m => m.ProjectsModule) },
+                    { path: 'skills', loadChildren: () => import('./pages/project-skill/project-skill.module').then(m => m.ProjectSkillModule) },
                 ]
             },
             { path: '**', redirectTo: '/notfound' },

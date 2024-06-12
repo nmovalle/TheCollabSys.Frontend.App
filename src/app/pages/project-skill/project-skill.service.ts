@@ -40,7 +40,7 @@ export class ProjectSkillService {
     
     formData.append('dto', JSON.stringify(data));
   
-    return this.http.post<void>(`${environment.apiUrl}/api/ProjectSkills/${id}`, formData);
+    return this.http.put<void>(`${environment.apiUrl}/api/ProjectSkills/${id}`, formData);
   }
 
   deleteProjectSkill(id: number): Observable<any> {

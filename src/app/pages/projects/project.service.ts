@@ -40,7 +40,7 @@ export class ProjectService {
     
     formData.append('dto', JSON.stringify(data));
   
-    return this.http.post<void>(`${environment.apiUrl}/api/Projects/${id}`, formData);
+    return this.http.put<void>(`${environment.apiUrl}/api/Projects/${id}`, formData);
   }
 
   deleteProject(id: number): Observable<any> {

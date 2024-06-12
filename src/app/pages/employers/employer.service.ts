@@ -40,7 +40,7 @@ export class EmployerService {
     
     formData.append('dto', JSON.stringify(data));
   
-    return this.http.post<void>(`${environment.apiUrl}/api/Employers/${id}`, formData);
+    return this.http.put<void>(`${environment.apiUrl}/api/Employers/${id}`, formData);
   }
 
   deleteEmployer(id: number): Observable<any> {

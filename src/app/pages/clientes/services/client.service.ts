@@ -40,7 +40,7 @@ export class ClientService {
     
     formData.append('clientDTO', JSON.stringify(clientDTO));
   
-    return this.http.post<void>(`${environment.apiUrl}/api/Clients/${id}`, formData);
+    return this.http.put<void>(`${environment.apiUrl}/api/Clients/${id}`, formData);
   }
 
   deleteClient(id: number): Observable<any> {

@@ -7,21 +7,21 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class SkillService {
+export class EngineerService {
 
   constructor(
     private http: HttpClient
   ) { }
 
-  getSkills(): Observable<ResponseApi> {
-    return this.http.get<any>(`${environment.apiUrl}/api/Skills`);
+  getEngineers(): Observable<ResponseApi> {
+    return this.http.get<any>(`${environment.apiUrl}/api/Engineers`);
   }
 
-  getSkill(id: number): Observable<ResponseApi> {
-    return this.http.get<any>(`${environment.apiUrl}/api/Skills/${id}`);
+  getEngineer(id: number): Observable<ResponseApi> {
+    return this.http.get<any>(`${environment.apiUrl}/api/Engineers/${id}`);
   }
 
-  addSkill(data: any, file: File): Observable<any> {
+  addEngineer(data: any, file: File): Observable<any> {
     const formData: FormData = new FormData();
     
     if (file)
@@ -29,10 +29,10 @@ export class SkillService {
     
     formData.append('dto', JSON.stringify(data));
   
-    return this.http.post<any>(`${environment.apiUrl}/api/Skills`, formData);
+    return this.http.post<any>(`${environment.apiUrl}/api/Engineers`, formData);
   }
   
-  updateSkill(id:number, data: any, file: File): Observable<void> {
+  updateEngineer(id:number, data: any, file: File): Observable<void> {
     const formData: FormData = new FormData();
     
     if (file)
@@ -40,10 +40,10 @@ export class SkillService {
     
     formData.append('dto', JSON.stringify(data));
   
-    return this.http.put<void>(`${environment.apiUrl}/api/Skills/${id}`, formData);
+    return this.http.put<void>(`${environment.apiUrl}/api/Engineers/${id}`, formData);
   }
 
-  deleteSkill(id: number): Observable<any> {
-    return this.http.delete<any>(`${environment.apiUrl}/api/Skills/${id}`);
+  deleteEngineer(id: number): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}/api/Engineers/${id}`);
   }
 }

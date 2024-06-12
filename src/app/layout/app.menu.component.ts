@@ -48,7 +48,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Employees',
                 items: [
-                    { label: 'Engineers', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Engineers', icon: 'pi pi-fw pi-id-card', routerLink: ['/engineers'] },
                     { label: 'Engineers Skills', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
                     { label: 'Engineers Activites', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
                     { label: 'Engineers Daily Asignment', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },

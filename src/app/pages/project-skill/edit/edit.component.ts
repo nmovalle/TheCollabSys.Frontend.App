@@ -110,7 +110,7 @@ export class EditComponent {
       skills: this.targetSkills
     };
 
-    this.projectSkillService.addProjectSkill(data, null).subscribe({
+    this.projectSkillService.updateProjectSkill(this.projectId, data, null).subscribe({
       next: (response: any) => {
         console.log(response);
         this.loading = false;

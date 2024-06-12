@@ -1,0 +1,172 @@
+<p-panel>
+    <ng-template pTemplate="header">
+      <span class="w-full text-center font-bold">Edit Engineer</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button
+                pButton
+                pRipple
+                icon="pi pi-arrow-left"
+                label="Back"
+                class="p-button mr-2"
+                [routerLink]="'/engineers'"
+                ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+  
+    <ng-template pTemplate="content">
+        <form [formGroup]="dataForm" (ngSubmit)="onSubmit($event)">
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="employerName" class="text-center font-bold mb-2">Employer</label>
+                    <p-dropdown
+                        name="employerId"
+                        optionValue="employerId"
+                        [options]="employers"
+                        [style]="{'min-width': '100%'}"
+                        optionLabel="employerName"
+                        formControlName="employerId"
+                    >
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col-6 md:col-6">
+                    <label for="engineerName" class="text-center font-bold mb-2">Engineer Name</label>
+                    <input 
+                        type="text" 
+                        id="engineerName" 
+                        formControlName="engineerName" 
+                        class="w-full"
+                        name="engineerName"
+                        pInputText />
+                        <small id="engineerName-help" class="p-error" *ngIf="(engineerName.invalid && (engineerName.dirty || engineerName.touched)) || !engineerName.value">
+                            Engineer name field is required *
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="firstName" class="text-center font-bold mb-2">First Name</label>
+                    <input 
+                        type="text" 
+                        id="firstName" 
+                        formControlName="firstName" 
+                        class="w-full"
+                        name="firstName"
+                        pInputText />
+                        <small id="firstName-help" class="p-error" *ngIf="(firstName.invalid && (firstName.dirty || firstName.touched)) || !firstName.value">
+                            Address name field is required *
+                        </small>
+                </div>
+            </div>
+
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="lastName" class="text-center font-bold mb-2">Last Name</label>
+                    <input 
+                        type="text" 
+                        id="lastName" 
+                        formControlName="lastName" 
+                        class="w-full"
+                        name="lastName"
+                        pInputText />
+                        <small id="lastName-help" class="p-error" *ngIf="(lastName.invalid && (lastName.dirty || lastName.touched)) || !lastName.value">
+                            Last name field is required *
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="phone" class="text-center font-bold mb-2">Phone</label>
+                    <input 
+                        type="text" 
+                        id="phone" 
+                        formControlName="phone" 
+                        class="w-full"
+                        name="phone"
+                        pInputText />
+                        <small id="phone-help" class="p-error" *ngIf="(phone.invalid && (phone.dirty || phone.touched)) || !phone.value">
+                            <ng-container *ngIf="phone.errors.required">
+                                Phone field is required *
+                            </ng-container>
+                            <ng-container *ngIf="phone.errors.pattern && !phone.errors.required">
+                                Invalid phone number format *
+                            </ng-container>
+                        </small>
+                </div>
+            </div>
+
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="email" class="text-center font-bold mb-2">Email</label>
+                    <input 
+                        type="text" 
+                        id="email" 
+                        formControlName="email" 
+                        class="w-full"
+                        name="email"
+                        pInputText />
+                        <small id="email-help" class="p-error" *ngIf="(email.invalid && (email.dirty || email.touched)) || !email.value">
+                            <ng-container *ngIf="email.errors.required">
+                                Email field is required *
+                            </ng-container>
+                            <ng-container *ngIf="email.errors.email && !email.errors.required">
+                                Invalid email format *
+                            </ng-container>
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="isActive" class="w-full font-bold mb-2">Active</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="isActive" 
+                        formControlName="isActive" 
+                        class="w-full"
+                        name="isActive"
+                        ></p-inputSwitch>
+                </div>     
+            </div>
+            
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="Image" class="text-center font-bold mb-2">Image</label>               
+                    <p-fileUpload
+                        #fileUpload
+                        name="image"
+                        id="file" 
+                        (onSelect)="onUpload($event, fileUpload)"
+                        [multiple]="false" 
+                        accept="image/*" 
+                        [maxFileSize]="1000000"
+                        mode="basic"
+                        >
+                    </p-fileUpload>
+                    @if (imagenURL != null) {
+                        <div class="flex justify-content-left">
+                            <p-image 
+                                [src]="imagenURL" 
+                                alt="Image" 
+                                width="250" 
+                                [preview]="true">
+                            </p-image>
+                        </div>
+                    }
+                </div>                
+            </div>
+      
+          <div class="mt-4">
+            <button type="submit" pButton label="Save" class="p-button-success"></button>
+          </div>
+        </form>
+    </ng-template>
+  </p-panel>
+  
+<p-confirmDialog></p-confirmDialog>
+@if (loading) {
+    <div class="progress-spinner">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    </div>
+}

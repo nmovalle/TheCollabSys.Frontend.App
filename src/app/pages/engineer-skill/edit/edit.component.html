@@ -1,0 +1,78 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="w-full text-center font-bold">Edit Engineer Skill</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button
+                    pButton
+                    pRipple
+                    icon="pi pi-arrow-left"
+                    label="Back"
+                    class="p-button mr-2"
+                    [routerLink]="'/engineers/skills'"
+                ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <ng-template pTemplate="content">
+        <div *ngIf="loading; else contentTemplate">
+            <div class="progress-spinner">
+                <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+            </div>
+        </div>
+        <ng-template #contentTemplate>
+            <div class="field col">
+                <label for="engineerName" class="text-center font-bold mb-2">Engineer</label>
+                <div>{{ engineerName }}</div>
+            </div>
+            <div class="formgrid grid flex justify-content-center align-items-center">
+                <p-pickList 
+                    [source]="sourceSkills" 
+                    [target]="targetSkills" 
+                    sourceHeader="Available" 
+                    targetHeader="Selected" 
+                    [dragdrop]="true" 
+                    [responsive]="true" 
+                    [sourceStyle]="{ height: '30rem' }"
+                    [targetStyle]="{ height: '30rem' }" 
+                    filterBy="skillName" 
+                    sourceFilterPlaceholder="Search by name" 
+                    targetFilterPlaceholder="Search by name" 
+                    breakpoint="1400px">
+                        <ng-template let-skill pTemplate="item">
+                            <div class="flex flex-wrap align-items-center">
+                                <div class="flex-1 flex flex-column gap-2">
+                                    <span class="font-bold">Skill</span>
+                                    <div class="flex align-items-center gap-2">
+                                        <i class="pi pi-check-circle text-sm"></i>
+                                        <span>
+                                            {{ skill.skillName }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex-1 flex flex-column gap-2">
+                                    <span class="font-bold">Level</span>
+                                    <div class="flex align-items-center gap-2">
+                                        <span>
+                                            <p-rating [(ngModel)]="skill.levelId" [cancel]="false"></p-rating>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                </p-pickList>
+            </div>
+            <div class="mt-4">
+                <button pButton label="Save" class="p-button-success" (click)="saveEngineer()" [disabled]="engineerId === 0"></button>
+            </div>
+        </ng-template>
+    </ng-template>
+</p-panel>
+
+<p-confirmDialog></p-confirmDialog>

@@ -1,6 +1,6 @@
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="w-full text-center font-bold">Project Skill Details</span>
+        <span class="w-full text-center font-bold">Engineer Skill Details</span>
     </ng-template>
 
     <p-toast></p-toast>
@@ -14,7 +14,7 @@
                     icon="pi pi-arrow-left"
                     label="Back"
                     class="p-button mr-2"
-                    [routerLink]="'/projects/skills'"
+                    [routerLink]="'/engineers/skills'"
                 ></button>
             </div>
         </ng-template>
@@ -28,8 +28,8 @@
         </div>
         <ng-template #contentTemplate>
             <div class="field col">
-                <label for="projectName" class="text-center font-bold mb-2">Project</label>
-                <div>{{ projectName }}</div>
+                <label for="projectName" class="text-center font-bold mb-2">Engineer</label>
+                <div>{{ engineerName }}</div>
             </div>
             <div class="field col">
                 <label for="projectName" class="text-center font-bold">Skills</label>

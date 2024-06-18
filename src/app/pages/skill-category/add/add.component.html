@@ -1,0 +1,53 @@
+<p-panel>
+    <ng-template pTemplate="header">
+      <span class="w-full text-center font-bold">Add New Category</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button
+                pButton
+                pRipple
+                icon="pi pi-arrow-left"
+                label="Back"
+                class="p-button mr-2"
+                [routerLink]="'/skills/categories'"
+                ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+  
+    <ng-template pTemplate="content">
+        <form [formGroup]="dataForm" (ngSubmit)="onSubmit($event)">
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="categoryName" class="text-center font-bold mb-2">Category Name</label>
+                    <input 
+                        type="text" 
+                        id="categoryName" 
+                        formControlName="categoryName" 
+                        class="w-full"
+                        name="categoryName"
+                        pInputText />
+                        <small id="categoryName-help" class="p-error" *ngIf="(categoryName.invalid && (categoryName.dirty || categoryName.touched)) || !categoryName.value">
+                            Category name field is required *
+                        </small>
+                </div>
+            </div>
+      
+          <div class="mt-4">
+            <button type="submit" pButton label="Save" class="p-button-success"></button>
+          </div>
+        </form>
+    </ng-template>
+  </p-panel>
+  
+<p-confirmDialog></p-confirmDialog>
+@if (loading) {
+    <div class="progress-spinner">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    </div>
+}

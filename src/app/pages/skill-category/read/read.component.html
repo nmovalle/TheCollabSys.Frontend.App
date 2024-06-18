@@ -1,0 +1,30 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="w-full text-center font-bold">Category Details</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button pButton pRipple icon="pi pi-arrow-left" label="Back" class="p-button mr-2" [routerLink]="'/skills/categories'"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <ng-template pTemplate="content">
+        <div class="formgrid grid">
+            <div class="field col mb-5">
+                <label for="categoryName" class="text-center font-bold">Category Name</label>
+                <div>{{ dataForm.get('categoryName').value }}</div>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>
+
+<p-confirmDialog></p-confirmDialog>
+
+<div *ngIf="loading" class="progress-spinner">
+    <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+</div>

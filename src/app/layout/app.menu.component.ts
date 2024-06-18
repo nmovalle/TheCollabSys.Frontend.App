@@ -36,6 +36,8 @@ export class AppMenuComponent implements OnInit {
                 label: 'Skills',
                 items: [
                     { label: 'Skills', icon: 'pi pi-fw pi-id-card', routerLink: ['/skills'] },
+                    { label: 'Categories', icon: 'pi pi-fw pi-id-card', routerLink: ['/skills/categories'] },
+                    { label: 'Sub Categories', icon: 'pi pi-fw pi-id-card', routerLink: ['/skills/subcategories'] },
                 ]
             },
             {

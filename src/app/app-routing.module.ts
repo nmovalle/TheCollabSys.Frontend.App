@@ -48,6 +48,7 @@ import { RegisterComponent } from './pages/register/register.component';
                 path: 'skills', component: AppLayoutComponent, canActivate: [authGuard],
                 children: [
                     { path: '', loadChildren: () => import('./pages/skills/skills.module').then(m => m.SkillsModule) },
+                    { path: 'categories', loadChildren: () => import('./pages/skill-category/skill-category.module').then(m => m.SkillCategoryModule) },
                 ]
             },
             {

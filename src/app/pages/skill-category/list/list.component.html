@@ -1,17 +1,39 @@
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="w-full text-center font-bold">Project List</span>
+        <span class="w-full text-center font-bold">Skills Categories List</span>
     </ng-template>
     <div class="grid">
         <div class="col-12">
             <p-toast></p-toast>
+            <p-confirmDialog #cd>
+                <ng-template pTemplate="headless" let-message>
+                    <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+                        <div class="border-circle bg-primary inline-flex justify-content-center align-items-center h-6rem w-6rem">
+                            <i class="pi pi-question text-5xl"></i>
+                        </div>
+                        <span class="font-bold text-2xl block mb-2 mt-4">
+                            {{ message.header }}
+                        </span>
+                        <p class="mb-0">{{ message.message }}</p>
+                        <div class="flex align-items-center gap-2 mt-4">
+                            <button
+                                pButton label="Accept" (click)="cd.accept()" class="w-8rem"
+                            ></button>
+                            <button
+                                pButton label="Cancel" (click)="cd.reject()" class="p-button-outlined w-8rem"
+                            ></button>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-confirmDialog>
+            
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
                         <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
                             [routerLink]="'add'"></button>
                         <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
-                            [disabled]="!selectedProjects || !selectedProjects.length"></button>
+                            [disabled]="!selectedEntities || !selectedEntities.length"></button>
                     </div>
                 </ng-template>
 
@@ -23,14 +45,14 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="projects" [columns]="cols" responsiveLayout="scroll" [rows]="10"
-                [globalFilterFields]="['projectId','projectName','clientName', 'projectDescription', 'numberPositionTobeFill', 'dateCreated', 'startDate', 'endDate', 'statusId', 'dateUpdate']"
+            <p-table #dt [value]="categories" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['categoryId','categoryName']"
                 [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [(selection)]="selectedProjects" selectionMode="multiple" [rowHover]="true" dataKey="projectId">
+                [(selection)]="selectedEntities" selectionMode="multiple" [rowHover]="true" dataKey="projectId">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Manage Projects</h5>
+                        <h5 class="m-0">Manage Categories</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
@@ -51,59 +73,38 @@
                     </tr>
                 </ng-template>
 
-                <ng-template pTemplate="body" let-project>
+                <ng-template pTemplate="body" let-category>
                     <tr>
                         <td>
-                            <p-tableCheckbox [value]="project"></p-tableCheckbox>
-                        </td>
-                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">ID</span>
-                            {{project.projectId}}
-                        </td>
-                        <td style="width:14%; min-width:10rem;">
-                            <span class="p-column-title">Name</span>
-                            {{project.projectName}}
-                        </td>
-                        <td style="width:14%; min-width:8rem;">
-                            <span class="p-column-title">Client</span>
-                            {{project.clientName}}
-                        </td>
-                        <td style="width:14%; min-width:10rem;">
-                            <span class="p-column-title">Project Description</span>
-                            {{project.projectDescription}}
-                        </td>
-                        <td style="width:14%; min-width: 10rem;">
-                            <span class="p-column-title">Number Position</span>
-                            {{project.numberPositionTobeFill}}
-                        </td>
-                        <td style="width:14%; min-width: 10rem;">
-                            <span class="p-column-title">Start Updated</span>
-                            {{project.startDate | date: 'dd/MM/yyyy HH:mm'}}
-                        </td>
-                        <td style="width:14%; min-width: 10rem;">
-                            <span class="p-column-title">End Updated</span>
-                            {{project.endDate | date: 'dd/MM/yyyy HH:mm'}}
-                        </td>
-                        <td style="width:14%; min-width: 10rem;">
-                            <span class="p-column-title">Status</span>
-                            {{project.statusId}}
+                            <p-tableCheckbox [value]="category"></p-tableCheckbox>
                         </td>
                         <td>
-                            <div class="flex">
+                            <div class="flex justify-content-between">
+                                {{category.categoryId}}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex justify-content-between">
+                                {{category.categoryName}}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex justify-content-end">
                                 <button pButton pRipple icon="pi pi-eye"
                                     class="p-button-rounded p-button-secondary mr-2"
-                                    [routerLink]="'read/' + project.projectId"></button>
+                                    [routerLink]="'read/' + category.categoryId"></button>
                                 <button pButton pRipple icon="pi pi-pencil"
                                     class="p-button-rounded p-button-success mr-2"
-                                    [routerLink]="'edit/' + project.projectId"></button>
+                                    [routerLink]="'edit/' + category.categoryId"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                                    (click)="deleteProject(project.projectId)"></button>
+                                    (click)="confirmDelete(category.categoryId)"></button>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        There are {{projects ? projects.length : 0}} projects
+                        There are {{categories ? categories.length : 0}} categories
                     </div>
                 </ng-template>
             </p-table>

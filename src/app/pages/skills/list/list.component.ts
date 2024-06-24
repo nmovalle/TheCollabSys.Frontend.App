@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Table } from 'primeng/table';
 import { SkillService } from '../skill.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-list',
@@ -20,16 +20,41 @@ export class ListComponent {
   constructor(
     private skillService: SkillService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {
     this.cols = [
       { field: 'skillId', header: 'ID' },
       { field: 'skillName', header: 'Name' },
+      { field: 'categoryName', header: 'Category Name' },
+      { field: 'subcategoryName', header: 'Subcategory Name' },
       
     ];
   }
 
   deleteSelectedSkills() {
     this.deleteSkillsDialog = true;
+  }
+
+  confirmDelete(id?: number): void {
+    const hdr = "Confirm"
+    let msg = "Are you sure you want to delete this record?"
+
+    if(!id && this.selectedSkills.length > 0) {
+      msg = "Are you sure you want to delete these records?"
+    }
+
+    this.confirmationService.confirm({
+      header: hdr,
+      message: msg,
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log("remove...")
+        this.deleteSkill(id);
+      },
+      reject: () => {
+        console.log("reject...")
+      }
+    });
   }
 
   deleteSkill(skillId: number) {

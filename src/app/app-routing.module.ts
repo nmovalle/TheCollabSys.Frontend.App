@@ -49,6 +49,7 @@ import { RegisterComponent } from './pages/register/register.component';
                 children: [
                     { path: '', loadChildren: () => import('./pages/skills/skills.module').then(m => m.SkillsModule) },
                     { path: 'categories', loadChildren: () => import('./pages/skill-category/skill-category.module').then(m => m.SkillCategoryModule) },
+                    { path: 'subcategories', loadChildren: () => import('./pages/skill-subcategory/skill-subcategory.module').then(m => m.SkillSubcategoryModule) },
                 ]
             },
             {

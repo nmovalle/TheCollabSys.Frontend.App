@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { SkillService } from '../skill.service';
+import { SkillSubcategoryService } from '../skill-subcategory.service';
 
 @Component({
   selector: 'app-read',
@@ -11,26 +11,33 @@ import { SkillService } from '../skill.service';
 export class ReadComponent {
   loading: boolean = false;
   id: number | null = null;
-  imageURL: string = null;
-  skillForm!: FormGroup;
+  dataForm!: FormGroup;
   
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private messageService: MessageService,
-    private skillService: SkillService
+    private skillsSubcategoriesService: SkillSubcategoryService,
   ) {
-    
   }
 
-  async getSkill(id: number) {
-    this.skillService.getSkill(id).subscribe({
+  get categoryName() {
+    return this.dataForm.get('categoryName') as FormControl;
+  }
+
+  get subcategoryName() {
+    return this.dataForm.get('subcategoryName') as FormControl;
+  }
+
+  
+  async getSubcategory(id: number) {
+    this.skillsSubcategoriesService.getSkillSubcategory(id).subscribe({
       next: async (response: any) => {
         if (response) {
           const { status, data, message } = response;
-          console.log(data)
           if (status == 'success') {
-            this.skillForm.patchValue(data);
+            this.dataForm.patchValue(data);
             this.loading = false;
           }
           if (status == 'error') {
@@ -46,7 +53,7 @@ export class ReadComponent {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'An error occurred while getting the skill.'
+            detail: 'An error occurred while getting the subcategory.'
           });
         }
       },
@@ -55,24 +62,24 @@ export class ReadComponent {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'An error occurred while getting the skill.'
+          detail: 'An error occurred while getting the subcategory.'
         });
       }
     });
   }
 
   ngOnInit(): void {
-    this.skillForm = this.fb.group({
-      skillName: [''],
-      categoryName: [''],
-      subcategoryName: [''],
+    this.dataForm = this.fb.group({
+      subcategoryId: [0],
+      categoryName: [null],
+      subcategoryName: [null]
     });
 
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id != null) {
         this.id = +id;
-        this.getSkill(this.id);
+        this.getSubcategory(this.id);
       }
     });
   }

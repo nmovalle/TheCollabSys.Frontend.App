@@ -24,6 +24,31 @@
         <form [formGroup]="skillForm" (ngSubmit)="onSubmit($event)">
             <div class="formgrid grid">
                 <div class="field col">
+                    <label for="categoryName" class="text-center font-bold mb-2">Category</label>
+                    <p-dropdown
+                        name="categoryId"
+                        optionValue="categoryId"
+                        [options]="categories"
+                        [style]="{'min-width': '100%'}"
+                        optionLabel="categoryName"
+                        formControlName="categoryId"
+                        (onChange)="loadCategories($event.value)"
+                    >
+                    </p-dropdown>
+                </div>
+                <div class="field col">
+                    <label for="subcategoryName" class="text-center font-bold mb-2">Subcategory</label>
+                    <p-dropdown
+                        name="subcategoryId"
+                        optionValue="subcategoryId"
+                        [options]="listSubcategories"
+                        [style]="{'min-width': '100%'}"
+                        optionLabel="subcategoryName"
+                        formControlName="subcategoryId"
+                    >
+                    </p-dropdown>
+                </div>
+                <div class="field col">
                     <label for="skillName" class="text-center font-bold mb-2">Skill Name</label>
                     <input 
                         type="text" 

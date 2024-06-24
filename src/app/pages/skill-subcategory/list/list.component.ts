@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { SkillCategoryService } from '../skill-category.service';
+import { Category } from '@app/pages/skill-category/models/category';
+import { SkillSubcategoryService } from '../skill-subcategory.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { SkillCategoryService } from '@app/pages/skill-category/skill-category.service';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -12,20 +14,21 @@ export class ListComponent {
   deleteEntityDialog: boolean = false;
   deleteEntitiesDialog: boolean = false;
 
-  categories!: any[];
-  category = {} as any;
+  subcategories!: any[];
+  subcategory = {} as any;
   selectedEntities: any[];
   
   cols: any[] = [];
 
   constructor(
-    private skillsCategoriesService: SkillCategoryService,
+    private skillsSubcategoriesService: SkillSubcategoryService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {
     this.cols = [
-      { field: 'categoryId', header: 'ID' },
+      { field: 'subcategoryId', header: 'ID' },
       { field: 'categoryName', header: 'Category Name' },
+      { field: 'subcategoryName', header: 'Subcategory Name' },
       
     ];
   }
@@ -58,20 +61,20 @@ export class ListComponent {
 
   deleteEntity(id: number) {
     this.deleteEntityDialog = true;
-    this.skillsCategoriesService.deleteSkillCategory(id).subscribe({
+    this.skillsSubcategoriesService.deleteSkillSubcategory(id).subscribe({
       next: async () => {
-        this.categories = this.categories.filter(c => c.categoryId !== id);
+        this.subcategories = this.subcategories.filter(c => c.subcategoryId !== id);
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'The category was successfully removed'
+          detail: 'The subcategory was successfully removed'
         });
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error deleting the category'
+          detail: 'There was an error deleting the subcategory'
         });
       },
       complete: () => {
@@ -80,25 +83,25 @@ export class ListComponent {
     });
   }
 
-  async getCategories() {
-    this.skillsCategoriesService.getSkillCategories().subscribe({
+  async getSubcategories() {
+    this.skillsSubcategoriesService.getSkillSubcategories().subscribe({
       next: async (response: any) => {
         const {data} = response;
         console.log(data)
-        this.categories = response.data;
+        this.subcategories = response.data;
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error getting the categories'
+          detail: 'There was an error getting the subcategories'
         });
       }
     });    
   }
 
   ngOnInit() {
-    this.getCategories();
+    this.getSubcategories();
   }
 
   onGlobalFilter(table: Table, event: Event) {

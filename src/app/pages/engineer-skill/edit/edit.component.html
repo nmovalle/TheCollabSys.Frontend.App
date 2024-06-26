@@ -27,49 +27,66 @@
             </div>
         </div>
         <ng-template #contentTemplate>
-            <div class="field col">
-                <label for="engineerName" class="text-center font-bold mb-2">Engineer</label>
-                <div>{{ engineerName }}</div>
+            <div class="card">
+                <h5>Categories</h5>
+                <p-dialog header="Categories" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+                    <p-tree [value]="skillsTree" selectionMode="checkbox" [(selection)]="selectedTree"></p-tree>
+                    <ng-template pTemplate="footer">
+                            <button pButton icon="pi pi-check" (click)="display=false" label="Filter" class="p-button-outlined" (click)="loadSkills()" [disabled]="selectedTree.length === 0"></button>
+                    </ng-template>
+                </p-dialog>
+                <div class="grid">
+                    <div class="col-12">
+                        <button (click)="display=true" pButton icon="pi pi-external-link" label="Filter"></button>
+                    </div>
+                </div>
             </div>
-            <div class="formgrid grid flex justify-content-center align-items-center">
-                <p-pickList 
-                    [source]="sourceSkills" 
-                    [target]="targetSkills" 
-                    sourceHeader="Available" 
-                    targetHeader="Selected" 
-                    [dragdrop]="true" 
-                    [responsive]="true" 
-                    [sourceStyle]="{ height: '30rem' }"
-                    [targetStyle]="{ height: '30rem' }" 
-                    filterBy="skillName" 
-                    sourceFilterPlaceholder="Search by name" 
-                    targetFilterPlaceholder="Search by name" 
-                    breakpoint="1400px">
-                        <ng-template let-skill pTemplate="item">
-                            <div class="flex flex-wrap align-items-center">
-                                <div class="flex-1 flex flex-column gap-2">
-                                    <span class="font-bold">Skill</span>
-                                    <div class="flex align-items-center gap-2">
-                                        <i class="pi pi-check-circle text-sm"></i>
-                                        <span>
-                                            {{ skill.skillName }}
-                                        </span>
+            <div class="card">
+                <h5>Engineer Skills</h5>
+                <p-panel header="Skills" [toggleable]="true" [collapsed]="collapsedTree" class="line-height-3 m-0">
+                    <div class="field col">
+                        <label for="engineerName" class="text-center font-bold mb-2">Engineer</label>
+                        <div>{{ engineerName }}</div>
+                    </div>
+                    <p-pickList 
+                        [source]="sourceSkills" 
+                        [target]="targetSkills" 
+                        sourceHeader="Available" 
+                        targetHeader="Selected" 
+                        [dragdrop]="true" 
+                        [responsive]="true" 
+                        [sourceStyle]="{ height: '30rem' }"
+                        [targetStyle]="{ height: '30rem' }" 
+                        filterBy="skillName" 
+                        sourceFilterPlaceholder="Search by name" 
+                        targetFilterPlaceholder="Search by name" 
+                        breakpoint="1400px">
+                            <ng-template let-skill pTemplate="item">
+                                <div class="flex flex-wrap align-items-center">
+                                    <div class="flex-1 flex flex-column gap-2">
+                                        <span class="font-bold">Skill</span>
+                                        <div class="flex align-items-center gap-2">
+                                            <i class="pi pi-check-circle text-sm"></i>
+                                            <span>
+                                                {{ skill.skillName }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 flex flex-column gap-2">
+                                        <span class="font-bold">Level</span>
+                                        <div class="flex align-items-center gap-2">
+                                            <span>
+                                                <p-rating [(ngModel)]="skill.levelId" [cancel]="false"></p-rating>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="flex-1 flex flex-column gap-2">
-                                    <span class="font-bold">Level</span>
-                                    <div class="flex align-items-center gap-2">
-                                        <span>
-                                            <p-rating [(ngModel)]="skill.levelId" [cancel]="false"></p-rating>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-template>
-                </p-pickList>
-            </div>
-            <div class="mt-4">
-                <button pButton label="Save" class="p-button-success" (click)="saveEngineer()" [disabled]="engineerId === 0"></button>
+                            </ng-template>
+                    </p-pickList>
+                    <div class="mt-4">
+                        <button pButton label="Save" class="p-button-success" (click)="saveEngineer()" [disabled]="engineerId === 0"></button>
+                    </div>
+                </p-panel>
             </div>
         </ng-template>
     </ng-template>

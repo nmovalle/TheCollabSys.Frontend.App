@@ -21,6 +21,10 @@ export class SkillCategoryService {
     return this.http.get<any>(`${environment.apiUrl}/api/SkillCategories/${id}`);
   }
 
+  getSkillCategoriesTree(): Observable<ResponseApi> {
+    return this.http.get<any>(`${environment.apiUrl}/api/SkillCategories/GetAllWithCategories`);
+  }
+
   addSkillCategory(data: any, file: File): Observable<any> {
     const formData: FormData = new FormData();
     

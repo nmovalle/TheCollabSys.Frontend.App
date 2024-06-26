@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ResponseApi } from '@app/core/interfaces/response-api';
 import { Observable } from 'rxjs';
@@ -15,6 +15,13 @@ export class SkillService {
 
   getSkills(): Observable<ResponseApi> {
     return this.http.get<any>(`${environment.apiUrl}/api/Skills`);
+  }
+
+  getSkillsByCategories(dto: UniqueIdsCategoriesDTO): Observable<ResponseApi> {
+    const formData: FormData = new FormData();
+    formData.append('dto', JSON.stringify(dto));
+  
+    return this.http.post<any>(`${environment.apiUrl}/api/Skills/GetByCategories`, formData);
   }
 
   getSkill(id: number): Observable<ResponseApi> {
@@ -46,4 +53,9 @@ export class SkillService {
   deleteSkill(id: number): Observable<any> {
     return this.http.delete<any>(`${environment.apiUrl}/api/Skills/${id}`);
   }
+}
+
+export interface UniqueIdsCategoriesDTO {
+  categoryIds: number[];
+  subcategoryIds: number[];
 }

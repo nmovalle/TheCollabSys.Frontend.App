@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EngineerService } from '@app/pages/engineers/engineer.service';
-import { SkillService } from '@app/pages/skills/skill.service';
-import { MessageService } from 'primeng/api';
+import { SkillService, UniqueIdsCategoriesDTO } from '@app/pages/skills/skill.service';
+import { MessageService, TreeNode } from 'primeng/api';
 import { EngineerSkillService } from '../engineer-skill.service';
 import { forkJoin } from 'rxjs';
+import { SkillCategoryService } from '@app/pages/skill-category/skill-category.service';
 
 @Component({
   selector: 'app-add',
@@ -19,14 +20,20 @@ export class AddComponent {
   targetSkills: iSkillRating[] = [];
   originalSourceSkills: iSkillRating[] = [];
 
+  display: boolean = false;
+  collapsedTree: boolean = true;
+  skillsTree: TreeNode[] = [];
+  selectedTree: TreeNode[] = [];
+  cols: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private messageService: MessageService,
     private skillsService: SkillService,
+    private skillsCategoryService: SkillCategoryService,
     private engineersService: EngineerService,
     private engineersSkillService: EngineerSkillService,
-    
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -34,10 +41,11 @@ export class AddComponent {
     this.loading = true;
     forkJoin({
       engineers: this.engineersService.getEngineers(),
-      skills: this.skillsService.getSkills()
+      skillsTree: this.skillsCategoryService.getSkillCategoriesTree()
     }).subscribe({
-      next: ({ engineers, skills }) => {
+      next: ({ engineers, skillsTree }) => {
         const engineerData = engineers.data;
+        this.skillsTree = skillsTree.data;
 
         engineerData.unshift({
           engineerId: 0,
@@ -45,13 +53,8 @@ export class AddComponent {
         });
 
         this.engineers = engineerData;
-
-        const skillData: iSkillRating[] = skills.data;
-        const updatedData = skillData.map((item: any) => ({ ...item, levelId: 5 }));
-        this.originalSourceSkills = updatedData;
-        this.sourceSkills = [...this.originalSourceSkills];
-
         this.engineerId = 0;
+
         this.loading = false;
         this.cdr.markForCheck();
       },
@@ -64,6 +67,12 @@ export class AddComponent {
         });
       }
     });
+
+    this.cols = [
+      { field: 'name', header: 'Name' },
+      { field: 'size', header: 'Size' },
+      { field: 'type', header: 'Type' }
+    ];
   }
 
   async getEngineersSkills(event: any) {
@@ -100,6 +109,82 @@ export class AddComponent {
           severity: 'error',
           summary: 'Error',
           detail: 'There was an error getting the engineers skills'
+        });
+      }
+    });
+  }
+
+  extractUniqueIds(dataArray) {
+    const uniqueCategories = new Set<number>();
+    const uniqueSubcategories = new Set<number>();
+
+    dataArray.forEach(item => {
+        const mainData = item.data.split(', ').reduce((acc, pair) => {
+            const [key, value] = pair.split(': ');
+            acc[key] = parseInt(value, 10);
+            return acc;
+        }, {});
+
+        if (mainData.categoryId) {
+            uniqueCategories.add(mainData.categoryId);
+        }
+
+        if (mainData.subcategoryId) {
+            uniqueSubcategories.add(mainData.subcategoryId);
+        }
+
+        if (item.children && Array.isArray(item.children)) {
+            item.children.forEach(child => {
+                const childData = child.data.split(', ').reduce((acc, pair) => {
+                    const [key, value] = pair.split(': ');
+                    acc[key] = parseInt(value, 10);
+                    return acc;
+                }, {});
+
+                if (childData.categoryId) {
+                    uniqueCategories.add(childData.categoryId);
+                }
+
+                if (childData.subcategoryId) {
+                    uniqueSubcategories.add(childData.subcategoryId);
+                }
+            });
+        }
+    });
+
+    return {
+        categoryIds: Array.from(uniqueCategories),
+        subcategoryIds: Array.from(uniqueSubcategories)
+    };
+  }
+
+
+  loadSkills() {
+    const uniqueIds = this.extractUniqueIds(this.selectedTree);
+    const dto: UniqueIdsCategoriesDTO = {
+      categoryIds: uniqueIds.categoryIds,
+      subcategoryIds: uniqueIds.subcategoryIds
+    };
+    
+    this.skillsService.getSkillsByCategories(dto).subscribe({
+      next: (response: any) => {
+        const skillData: iSkillRating[] = response.data;
+        const updatedData = skillData.map((item: any) => ({ ...item, levelId: 5 }));
+        this.originalSourceSkills = updatedData;
+        this.sourceSkills = [...this.originalSourceSkills];
+        this.sourceSkills = this.sourceSkills.filter(skill =>
+          !this.targetSkills.some(targetSkill => targetSkill.skillId === skill.skillId)
+        );
+
+        this.collapsedTree = false;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error loading data'
         });
       }
     });

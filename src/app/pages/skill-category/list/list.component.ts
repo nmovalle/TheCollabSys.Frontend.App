@@ -24,9 +24,7 @@ export class ListComponent {
     private confirmationService: ConfirmationService
   ) {
     this.cols = [
-      { field: 'categoryId', header: 'ID' },
       { field: 'categoryName', header: 'Category Name' },
-      
     ];
   }
 

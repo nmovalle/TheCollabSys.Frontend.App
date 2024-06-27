@@ -23,11 +23,9 @@ export class ListComponent {
     private confirmationService: ConfirmationService
   ) {
     this.cols = [
-      { field: 'skillId', header: 'ID' },
       { field: 'skillName', header: 'Name' },
       { field: 'categoryName', header: 'Category Name' },
       { field: 'subcategoryName', header: 'Subcategory Name' },
-      
     ];
   }
 

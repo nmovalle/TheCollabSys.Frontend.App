@@ -31,12 +31,12 @@ export class ListComponent {
     private confirmationService: ConfirmationService
   ) {
     this.cols = [
-      { field: 'engineerId', header: 'ID' },
-      { field: 'engineerName', header: 'Name' }
+      { field: 'engineerName', header: 'Name' },
+      { field: 'firstName', header: 'First Name' },
+      { field: 'lastName', header: 'Last Name' }
     ];
 
     this.colsDetail = [
-      { field: 'skillId', header: 'Skill Id' },
       { field: 'skillName', header: 'Skill Name' },
       { field: 'levelId', header: 'Level' },
     ]

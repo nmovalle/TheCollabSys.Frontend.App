@@ -10,8 +10,8 @@
                     <div class="my-2">
                         <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
                             [routerLink]="'add'"></button>
-                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
-                            [disabled]="!selectedProjects || !selectedProjects.length"></button>
+                        <!-- <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                            [disabled]="!selectedProjects || !selectedProjects.length"></button> -->
                     </div>
                 </ng-template>
 
@@ -55,9 +55,6 @@
                     <tr>
                         <td>
                             <p-tableCheckbox [value]="project"></p-tableCheckbox>
-                        </td>
-                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">ID</span>
-                            {{project.projectId}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Name</span>

@@ -22,7 +22,6 @@ export class ListComponent {
     private messageService: MessageService,
   ) {
     this.cols = [
-      { field: 'employerId', header: 'ID' },
       { field: 'employerName', header: 'Name' },
       { field: 'address', header: 'Address' },
       { field: 'phone', header: 'Phone' },

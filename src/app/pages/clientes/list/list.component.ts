@@ -25,7 +25,6 @@ export class ListComponent implements OnInit {
     private messageService: MessageService,
   ) {
     this.cols = [
-      { field: 'clientID', header: 'ID' },
       { field: 'clientName', header: 'Name' },
       { field: 'address', header: 'Address' },
       { field: 'phone', header: 'Phone' },

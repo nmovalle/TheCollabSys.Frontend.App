@@ -26,7 +26,6 @@ export class ListComponent {
     private confirmationService: ConfirmationService
   ) {
     this.cols = [
-      { field: 'subcategoryId', header: 'ID' },
       { field: 'categoryName', header: 'Category Name' },
       { field: 'subcategoryName', header: 'Subcategory Name' },
       

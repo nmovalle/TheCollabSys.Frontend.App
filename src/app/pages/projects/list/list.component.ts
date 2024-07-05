@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Table } from 'primeng/table';
 import { ProjectService } from '../project.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { AuthService } from '@app/core/guards/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -16,10 +18,14 @@ export class ListComponent {
   selectedProjects: any[];
   
   cols: any[] = [];
+  permissions: {};
 
   constructor(
     private projectService: ProjectService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private authService: AuthService,
+    private router: Router
   ) {
     this.cols = [
       { field: 'projectName', header: 'Name' },
@@ -30,10 +36,33 @@ export class ListComponent {
       { field: 'endDate', header: 'End Created' },
       { field: 'statusId', header: 'Status' },
     ];
+    this.permissions = this.authService.getPermissions(this.router.url);
   }
 
   deleteSelectedProjects() {
     this.deleteProjectsDialog = true;
+  }
+
+  confirmDelete(id?: number): void {
+    const hdr = "Confirm"
+    let msg = "Are you sure you want to delete this record?"
+
+    if(!id && this.selectedProjects.length > 0) {
+      msg = "Are you sure you want to delete these records?"
+    }
+
+    this.confirmationService.confirm({
+      header: hdr,
+      message: msg,
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log("remove...")
+        this.deleteProject(id);
+      },
+      reject: () => {
+        console.log("reject...")
+      }
+    });
   }
 
   deleteProject(id: number) {

@@ -31,7 +31,10 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="'add'"></button>
+                        @if (permissions.add) {
+                            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" 
+                            [routerLink]="'add'"></button>
+                        }
                         <!-- <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" 
                         [disabled]="!selectedEngineersSkills || !selectedEngineersSkills.length"
                         (click)="confirmDelete();"
@@ -40,7 +43,8 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload
+                    @if (permissions.import) {
+                        <p-fileUpload
                         mode="basic"
                         accept="image/*"
                         [maxFileSize]="1000000"
@@ -48,7 +52,9 @@
                         chooseLabel="Import"
                         class="mr-2 inline-block"
                     ></p-fileUpload>
-                    <button
+                    }
+                    @if (permissions.export) {
+                        <button
                         pButton
                         pRipple
                         label="Export"
@@ -56,6 +62,7 @@
                         class="p-button-help"
                         (click)="dt.exportCSV()"
                     ></button>
+                    }
                 </ng-template>
             </p-toolbar>
 
@@ -112,27 +119,33 @@
                         <td><div class="flex justify-content-between">{{ engineer.lastName }}</div></td>
                         <td>
                             <div class="flex justify-content-end">
-                                <button
+                                @if (permissions.view) {
+                                    <button
                                     pButton
                                     pRipple
                                     icon="pi pi-eye"
                                     class="p-button-rounded p-button-secondary mr-2"
                                     [routerLink]="'read/' + engineer.engineerId"
                                 ></button>
-                                <button
+                                }
+                                @if (permissions.edit) {
+                                    <button
                                     pButton
                                     pRipple
                                     icon="pi pi-pencil"
                                     class="p-button-rounded p-button-success mr-2"
                                     [routerLink]="'edit/' + engineer.engineerId"
                                 ></button>
-                                <button
+                                }
+                                @if (permissions.delete) {
+                                    <button
                                     pButton
                                     pRipple
                                     icon="pi pi-trash"
                                     class="p-button-rounded p-button-warning"
                                     (click)="confirmDelete(engineer.engineerId)"
                                 ></button>
+                                }
                             </div>
                         </td>
                     </tr>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthConfig, OAuthService, OAuthEvent } from 'angular-oauth2-oidc';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, forkJoin } from 'rxjs';
 import { UserInfo } from '../../pages/login/user-info';
 import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
@@ -49,42 +49,40 @@ export class GoogleApiService {
     this.oAuthService.loadDiscoveryDocumentAndTryLogin();
 
     this.oAuthService.events.subscribe((event: OAuthEvent) => {
-      // this.authService.setGoogleAuthInProgress(true);
       if (event.type === 'token_received') {
         this.startLoading();
         const profile = this.getProfile();
-        this.authService.validateOAuthDomain(profile).subscribe({
-          next: (response: any) => {
-            console.log('validateOAuthDomain response:', response);
-            const { userRole, authToken } = response;
-            const { accessToken, refreshToken, accessTokenExpiration } = authToken;
-            const { email } = profile;
 
-            this.authService.setAuthProvider("Google");
-            this.authService.setUsername(email);
-            this.authService.setAccessToken(accessToken);
-            this.authService.setRefreshToken(refreshToken);
-            this.authService.setAccessTokenExpiration(accessTokenExpiration);
+        forkJoin({
+          auth: this.authService.validateOAuthDomain(profile),
+          menu: this.authService.getUserMenu(profile.email)
+        }).subscribe({
+          next: ({auth, menu}) => {
+          console.log('validateOAuthDomain response:', auth);
+          const { userRole, authToken } = auth;
+          const { accessToken, refreshToken, accessTokenExpiration } = authToken;
+          const { email } = profile;
 
-            //set user role
-            this.authService.setUserRole(userRole);
+          this.authService.setAuthProvider("Google");
+          this.authService.setUsername(email);
+          this.authService.setAccessToken(accessToken);
+          this.authService.setRefreshToken(refreshToken);
+          this.authService.setAccessTokenExpiration(accessTokenExpiration);
+          this.authService.setUserRole(userRole);
 
-            //hacer un fork join para obtener: 
-            // datos generales del usuario
-            // el menú en base al usuario
+          const userMenu = menu;
+          this.authService.setUsermenu(userMenu);
 
-
-            setTimeout(() => {
-              this.stopLoading();
-              this.authService.setGoogleAuthInProgress(false);
-              this.router.navigate(['/home']);
-            }, 500);
-          },
-          error: (error: any) => {
-            console.error('Error en la solicitud:', error);
+          setTimeout(() => {
+            this.stopLoading();
+            this.authService.setGoogleAuthInProgress(false);
+            this.router.navigate(['/home']);
+          }, 500);
+        },
+        error: (error: any) => {
+          console.error('Error en la solicitud:', error);
             return false;
-          }
-        });
+        }});
       }
     });
   }

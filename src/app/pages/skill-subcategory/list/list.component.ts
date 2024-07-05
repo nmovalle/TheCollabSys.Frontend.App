@@ -4,6 +4,8 @@ import { SkillSubcategoryService } from '../skill-subcategory.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SkillCategoryService } from '@app/pages/skill-category/skill-category.service';
 import { Table } from 'primeng/table';
+import { AuthService } from '@app/core/guards/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -19,17 +21,20 @@ export class ListComponent {
   selectedEntities: any[];
   
   cols: any[] = [];
+  permissions: {};
 
   constructor(
     private skillsSubcategoriesService: SkillSubcategoryService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private authService: AuthService,
+    private router: Router
   ) {
     this.cols = [
       { field: 'categoryName', header: 'Category Name' },
       { field: 'subcategoryName', header: 'Subcategory Name' },
-      
     ];
+    this.permissions = this.authService.getPermissions(this.router.url);
   }
 
   confirmDelete(id?: number): void {

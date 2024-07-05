@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Table } from 'primeng/table';
 import { SkillService } from '../skill.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { AuthService } from '@app/core/guards/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -16,17 +18,21 @@ export class ListComponent {
   selectedSkills: any[];
   
   cols: any[] = [];
+  permissions: {};
 
   constructor(
     private skillService: SkillService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private authService: AuthService,
+    private router: Router
   ) {
     this.cols = [
       { field: 'skillName', header: 'Name' },
       { field: 'categoryName', header: 'Category Name' },
       { field: 'subcategoryName', header: 'Subcategory Name' },
     ];
+    this.permissions = this.authService.getPermissions(this.router.url);
   }
 
   deleteSelectedSkills() {

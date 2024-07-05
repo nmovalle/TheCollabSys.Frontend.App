@@ -30,18 +30,24 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                        @if (permissions.add) {
+                            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
                             [routerLink]="'add'"></button>
+                        }
                         <!-- <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
                             [disabled]="!selectedEntities || !selectedEntities.length"></button> -->
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
+                    @if (permissions.import) {
+                        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
                         chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+                    }
+                    @if (permissions.export) {
+                        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
                         (click)="dt.exportCSV()"></button>
+                    }
                 </ng-template>
             </p-toolbar>
 
@@ -85,14 +91,20 @@
                         </td>
                         <td>
                             <div class="flex justify-content-end">
-                                <button pButton pRipple icon="pi pi-eye"
+                                @if (permissions.view) {
+                                    <button pButton pRipple icon="pi pi-eye"
                                     class="p-button-rounded p-button-secondary mr-2"
                                     [routerLink]="'read/' + category.categoryId"></button>
-                                <button pButton pRipple icon="pi pi-pencil"
+                                }
+                                @if (permissions.edit) {
+                                    <button pButton pRipple icon="pi pi-pencil"
                                     class="p-button-rounded p-button-success mr-2"
                                     [routerLink]="'edit/' + category.categoryId"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                }
+                                @if (permissions.delete) {
+                                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
                                     (click)="confirmDelete(category.categoryId)"></button>
+                                }
                             </div>
                         </td>
                     </tr>

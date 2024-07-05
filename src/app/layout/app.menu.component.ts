@@ -1,6 +1,7 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
+import { AuthService } from '@app/core/guards/auth.service';
 
 @Component({
     selector: 'app-menu',
@@ -10,80 +11,19 @@ export class AppMenuComponent implements OnInit {
 
     model: any[] = [];
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(
+        private authService: AuthService
+    ) { }
 
     ngOnInit() {
-        this.model = [
-            {
-                label: 'Home',
-                items: [
-                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/home'] }
-                ]
-            },
-            {
-                label: 'Clients',
-                items: [
-                    { label: 'Clents', icon: 'pi pi-fw pi-id-card', routerLink: ['/clients'] },
-                ]
-            },
-            {
-                label: 'Employers',
-                items: [
-                    { label: 'Employers', icon: 'pi pi-fw pi-id-card', routerLink: ['/employers'] },
-                ]
-            },
-            {
-                label: 'Skills',
-                items: [
-                    { label: 'Skills', icon: 'pi pi-fw pi-id-card', routerLink: ['/skills'] },
-                    { label: 'Categories', icon: 'pi pi-fw pi-id-card', routerLink: ['/skills/categories'] },
-                    { label: 'Sub Categories', icon: 'pi pi-fw pi-id-card', routerLink: ['/skills/subcategories'] },
-                ]
-            },
-            {
-                label: 'Projects',
-                items: [
-                    { label: 'Projects', icon: 'pi pi-fw pi-id-card', routerLink: ['/projects'] },
-                    { label: 'Projects Skills', icon: 'pi pi-fw pi-id-card', routerLink: ['/projects/skills'] },
-                ]
-            },
-            {
-                label: 'Employees',
-                items: [
-                    { label: 'Engineers', icon: 'pi pi-fw pi-id-card', routerLink: ['/engineers'] },
-                    { label: 'Engineers Skills', icon: 'pi pi-fw pi-id-card', routerLink: ['/engineers/skills'] },
-                    { label: 'Engineers Activites', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Engineers Daily Asignment', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Engineers Equipment', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Engineers Rating', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                ]
-            },
-            {
-                label: 'Pages',
-                icon: 'pi pi-fw pi-briefcase',
-                items: [
-                    {
-                        label: 'Landing',
-                        icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
-                    },
-                    {
-                        label: 'Timeline',
-                        icon: 'pi pi-fw pi-calendar',
-                        routerLink: ['/pages/timeline']
-                    },
-                    {
-                        label: 'Not Found',
-                        icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/notfound']
-                    },
-                    {
-                        label: 'Empty',
-                        icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['/pages/empty']
-                    },
-                ]
-            },
-        ];
+        const menu = this.authService.getUsermenu();
+        const dahboard = {
+            label: 'Home',
+            items: [
+                { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/home'] }
+            ]
+        }
+
+        this.model = [dahboard, ...menu];
     }
 }

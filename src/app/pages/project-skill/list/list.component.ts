@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { ProjectSkillService } from '../project-skill.service';
+import { AuthService } from '@app/core/guards/auth.service';
+import { Router } from '@angular/router';
 
 interface expandedRows {
   [key: string]: boolean;
@@ -24,11 +26,14 @@ export class ListComponent {
   colsDetail: any[] = [];
   expandedRows: expandedRows = {};
   isExpanded: boolean = false;
+  permissions: {};
 
   constructor(
     private projectSkillService: ProjectSkillService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private authService: AuthService,
+    private router: Router
   ) {
     this.cols = [
       { field: 'projectName', header: 'Name' }
@@ -38,6 +43,7 @@ export class ListComponent {
       { field: 'skillName', header: 'Skill Name' },
       { field: 'levelId', header: 'Level' },
     ]
+    this.permissions = this.authService.getPermissions(this.router.url);
   }
 
   confirmDelete(id?: number): void {

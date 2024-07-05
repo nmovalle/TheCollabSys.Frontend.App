@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { LoadingService } from '@app/core/guards/loading.service';
 import { UserService } from '@app/core/service/user.service';
 import { AuthService } from '@app/core/guards/auth.service';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -55,6 +56,13 @@ export class LoginComponent implements OnInit {
         this.authService.setRefreshToken(refreshToken);
         this.authService.setAccessTokenExpiration(accessTokenExpiration);
         this.authService.setUserRole(userRole);
+
+        forkJoin({
+          menu: this.authService.getUserMenu(credentials.userName)
+        }).subscribe((menu) => {
+          const userMenu = menu.menu;
+          this.authService.setUsermenu(userMenu);
+        });
 
         this.loading = false;
         this.router.navigate(['/home']);

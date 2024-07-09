@@ -66,6 +66,14 @@ import { RegisterComponent } from './pages/register/register.component';
                     { path: 'skills', loadChildren: () => import('./pages/engineer-skill/engineer-skill.module').then(m => m.EngineerSkillModule) },
                 ]
             },
+            {
+                path: 'menus', component: AppLayoutComponent, canActivate: [authGuard],
+                children: [
+                    { path: '', loadChildren: () => import('./pages/menus/menus.module').then(m => m.MenusModule) },
+                    { path: 'submenus', loadChildren: () => import('./pages/submenus/submenus.module').then(m => m.SubmenusModule) },
+                    { path: 'config', loadChildren: () => import('./pages/menus-config/menus-config.module').then(m => m.MenusConfigModule) },
+                ]
+            },
             { path: '**', redirectTo: '/notfound' },
 
             

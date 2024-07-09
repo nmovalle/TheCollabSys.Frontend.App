@@ -1,0 +1,65 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="w-full text-center font-bold">Menu Details</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button pButton pRipple icon="pi pi-arrow-left" label="Back" class="p-button mr-2" [routerLink]="'/menus/config'"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <ng-template pTemplate="content">
+        <div class="formgrid grid">
+            <div class="field col mb-5">
+                <label for="roleName" class="text-center font-bold">Role</label>
+                <div>{{ dataForm.get('roleName').value }}</div>
+            </div>
+            <div class="field col mb-5">
+                <label for="subMenuName" class="text-center font-bold">Sub Menu</label>
+                <div>{{ dataForm.get('subMenuName').value }}</div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <label for="title" class="w-full font-bold mb-3" style="margin-left: 15px">Permissions</label>
+            <div class="field col mb-5">
+                <label for="view" class="text-center font-bold">View</label>
+                <div>{{ dataForm.get('view').value }}</div>
+            </div>
+            <div class="field col mb-5">
+                <label for="add" class="text-center font-bold">Add</label>
+                <div>{{ dataForm.get('add').value }}</div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col mb-5">
+                <label for="edit" class="text-center font-bold">Edit</label>
+                <div>{{ dataForm.get('edit').value }}</div>
+            </div>
+            <div class="field col mb-5">
+                <label for="delete" class="text-center font-bold">Delete</label>
+                <div>{{ dataForm.get('delete').value }}</div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col mb-5">
+                <label for="export" class="text-center font-bold">Export</label>
+                <div>{{ dataForm.get('export').value }}</div>
+            </div>
+            <div class="field col mb-5">
+                <label for="import" class="text-center font-bold">Import</label>
+                <div>{{ dataForm.get('import').value }}</div>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>
+
+<p-confirmDialog></p-confirmDialog>
+
+<div *ngIf="loading" class="progress-spinner">
+    <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+</div>

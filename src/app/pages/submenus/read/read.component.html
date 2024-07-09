@@ -1,0 +1,50 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="w-full text-center font-bold">Menu Details</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button pButton pRipple icon="pi pi-arrow-left" label="Back" class="p-button mr-2" [routerLink]="'/menus/submenus'"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <ng-template pTemplate="content">
+        <div class="formgrid grid">
+            <div class="field col mb-5">
+                <label for="menuName" class="text-center font-bold">Menu Name</label>
+                <div>{{ dataForm.get('menuName').value }}</div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col mb-5">
+                <label for="subMenuName" class="text-center font-bold">Sub Menu Name</label>
+                <div>{{ dataForm.get('subMenuName').value }}</div>
+            </div>
+            <div class="field col mb-5">
+                <label for="description" class="text-center font-bold">Description</label>
+                <div>{{ dataForm.get('description').value }}</div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col mb-5">
+                <label for="icon" class="text-center font-bold">Icon</label>
+                <div>{{ dataForm.get('icon').value }}</div>
+            </div>
+            <div class="field col mb-5">
+                <label for="routerLink" class="text-center font-bold">Router Link</label>
+                <div>{{ dataForm.get('routerLink').value }}</div>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>
+
+<p-confirmDialog></p-confirmDialog>
+
+<div *ngIf="loading" class="progress-spinner">
+    <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+</div>

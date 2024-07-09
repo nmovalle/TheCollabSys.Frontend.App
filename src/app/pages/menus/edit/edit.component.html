@@ -1,0 +1,66 @@
+<p-panel>
+    <ng-template pTemplate="header">
+      <span class="w-full text-center font-bold">Edit Menu</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button
+                pButton
+                pRipple
+                icon="pi pi-arrow-left"
+                label="Back"
+                class="p-button mr-2"
+                [routerLink]="'/menus'"
+                ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+  
+    <ng-template pTemplate="content">
+        <form [formGroup]="dataForm" (ngSubmit)="onSubmit($event)">
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="menuName" class="text-center font-bold mb-2">Menu Name</label>
+                    <input 
+                        type="text" 
+                        id="menuName" 
+                        formControlName="menuName" 
+                        class="w-full"
+                        name="menuName"
+                        pInputText />
+                        <small id="menuName-help" class="p-error" *ngIf="(menuName.invalid && (menuName.dirty || menuName.touched)) || !menuName.value">
+                            Menu name field is required *
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="description" class="text-center font-bold mb-2">Description</label>
+                    <input 
+                        type="text" 
+                        id="description" 
+                        formControlName="description" 
+                        class="w-full"
+                        name="description"
+                        pInputText />
+                        <small id="description-help" class="p-error" *ngIf="(description.invalid && (description.dirty || description.touched)) || !description.value">
+                            Description field is required *
+                        </small>
+                </div>
+            </div>
+      
+          <div class="mt-4">
+            <button type="submit" pButton label="Save" class="p-button-success"></button>
+          </div>
+        </form>
+    </ng-template>
+  </p-panel>
+  
+<p-confirmDialog></p-confirmDialog>
+@if (loading) {
+    <div class="progress-spinner">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    </div>
+}

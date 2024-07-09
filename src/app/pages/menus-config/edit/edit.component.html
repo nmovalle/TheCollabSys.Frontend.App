@@ -1,0 +1,129 @@
+<p-panel>
+    <ng-template pTemplate="header">
+      <span class="w-full text-center font-bold">Edit Menu</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button
+                pButton
+                pRipple
+                icon="pi pi-arrow-left"
+                label="Back"
+                class="p-button mr-2"
+                [routerLink]="'/menus/config'"
+                ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+  
+    <ng-template pTemplate="content">
+        <form [formGroup]="dataForm" (ngSubmit)="onSubmit($event)">
+            <div class="formgrid grid mb-2">
+                <div class="field col col-6">
+                    <label for="roleName" class="text-center font-bold mb-2">Role</label>
+                    <p-dropdown
+                        name="roleId"
+                        optionValue="id"
+                        [options]="roles"
+                        [style]="{'min-width': '100%'}"
+                        optionLabel="name"
+                        formControlName="roleId"
+                    >
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="formgrid grid mb-2">
+                <div class="field col col-6">
+                    <label for="subMenuName" class="text-center font-bold mb-2">Sub Menu</label>
+                    <p-dropdown
+                        name="subMenuId"
+                        optionValue="subMenuId"
+                        [options]="subMenus"
+                        [style]="{'min-width': '100%'}"
+                        optionLabel="subMenuName"
+                        formControlName="subMenuId"
+                    >
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <label for="title" class="w-full font-bold mb-3" style="margin-left: 15px">Permissions</label>
+                <div class="field" style="margin-left: 15px">
+                    <label for="view" class="w-full font-bold mb-2">View</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="view" 
+                        formControlName="view" 
+                        class="w-full"
+                        name="view"
+                        ></p-inputSwitch>
+                </div>
+                <div class="field">
+                    <label for="add" class="w-full font-bold mb-2">Add</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="add" 
+                        formControlName="add" 
+                        class="w-full"
+                        name="add"
+                        ></p-inputSwitch>
+                </div>
+                <div class="field">
+                    <label for="edit" class="w-full font-bold mb-2">Edit</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="edit" 
+                        formControlName="edit" 
+                        class="w-full"
+                        name="edit"
+                        ></p-inputSwitch>
+                </div>
+                <div class="field">
+                    <label for="delete" class="w-full font-bold mb-2">Delete</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="delete" 
+                        formControlName="delete" 
+                        class="w-full"
+                        name="delete"
+                        ></p-inputSwitch>
+                </div>
+                <div class="field">
+                    <label for="export" class="w-full font-bold mb-2">Export</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="export" 
+                        formControlName="export" 
+                        class="w-full"
+                        name="export"
+                        ></p-inputSwitch>
+                </div>
+                <div class="field">
+                    <label for="import" class="w-full font-bold mb-2">Import</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="import" 
+                        formControlName="import" 
+                        class="w-full"
+                        name="import"
+                        ></p-inputSwitch>
+                </div>
+            </div>
+      
+          <div class="mt-4">
+            <button type="submit" pButton label="Save" class="p-button-success"></button>
+          </div>
+        </form>
+    </ng-template>
+  </p-panel>
+  
+<p-confirmDialog></p-confirmDialog>
+@if (loading) {
+    <div class="progress-spinner">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    </div>
+}

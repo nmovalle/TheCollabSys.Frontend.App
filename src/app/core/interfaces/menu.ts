@@ -23,4 +23,13 @@ export class MenuRoleDetailDTO {
     export: boolean;
     import: boolean;
   }
+
+  export class MenuEntity {
+    menuId?: number;
+    menuName?: string;
+  }
   
+  export class SubMenuEntity {
+    subMenu?: number;
+    subMenuName?: string;
+  }

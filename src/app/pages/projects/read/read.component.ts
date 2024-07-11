@@ -66,7 +66,6 @@ export class ReadComponent {
           if (status == 'success') {
             data.startDate = data.startDate ? new Date(data.startDate) : null;
             data.endDate = data.endDate ? new Date(data.endDate) : null;
-            console.log(data)
             this.dataForm.patchValue(data);
             this.loading = false;
           }

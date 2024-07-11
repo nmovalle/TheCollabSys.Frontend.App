@@ -84,7 +84,6 @@ export class AddComponent {
       this.loading = true;
       this.subMenuService.addSubMenu(data, this.selectedFile).subscribe({
         next: (response: any) => {
-          console.log(response)
           if (response) {
             this.loading = false;
             this.messageService.add({

@@ -58,7 +58,6 @@ export class GoogleApiService {
           menu: this.authService.getUserMenu(profile.email)
         }).subscribe({
           next: ({auth, menu}) => {
-          console.log('validateOAuthDomain response:', auth);
           const { userRole, authToken } = auth;
           const { accessToken, refreshToken, accessTokenExpiration } = authToken;
           const { email } = profile;

@@ -57,7 +57,6 @@ export class EditComponent {
     this.skillCategoryService.getSkillCategories().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data)
         this.categories = response.data;
         this.loading = false;
       },
@@ -77,7 +76,6 @@ export class EditComponent {
     this.skillSubcategoryService.getSkillSubcategories().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data);
         this.subcategories = response.data;
         this.listSubcategories = response.data;
 
@@ -165,7 +163,6 @@ export class EditComponent {
       next: async (response: any) => {
         if (response) {
           const { status, data, message } = response;
-          console.log(data)
           if (status == 'success') {
             this.skillForm.patchValue(data);
             this.loading = false;

@@ -101,7 +101,6 @@ export class AddComponent {
     this.clientService.getClients().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data)
         this.clients = response.data;
         this.loading = false;
       },

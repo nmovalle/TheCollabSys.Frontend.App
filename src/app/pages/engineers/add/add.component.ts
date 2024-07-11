@@ -61,7 +61,6 @@ export class AddComponent {
     this.employerService.getEmployers().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data)
         this.employers = response.data;
         this.loading = false;
       },
@@ -84,7 +83,6 @@ export class AddComponent {
       this.loading = true;
       this.engineerService.addEngineer(data, this.selectedFile).subscribe({
         next: (response: any) => {
-          console.log(response)
           if (response) {
             this.loading = false;
             this.messageService.add({

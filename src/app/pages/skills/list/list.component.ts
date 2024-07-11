@@ -52,11 +52,9 @@ export class ListComponent {
       message: msg,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        console.log("remove...")
         this.deleteSkill(id);
       },
       reject: () => {
-        console.log("reject...")
       }
     });
   }
@@ -89,7 +87,6 @@ export class ListComponent {
     this.skillService.getSkills().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data)
         this.skills = response.data;
       },
       error: () => {

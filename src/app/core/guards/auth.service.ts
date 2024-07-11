@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserRole } from '../constants/types';
 import { MenuRoleDetailDTO } from '../interfaces/menu';
@@ -107,6 +107,17 @@ export class AuthService {
 
   public getUserData(username: string): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/api/auth/GetUserByName/${username}`);
+  }
+
+  public refreshToken(refreshToken: string): Observable<any> {
+    const body = { refreshToken };
+    return this.http.post<any>(`${environment.apiUrl}/api/Token/refreshtoken`, body)
+      .pipe(
+        tap(response => {
+          this.setAccessToken(response.accessToken);
+          this.setRefreshToken(response.refreshToken);
+        })
+      );
   }
 
   setGoogleAuthInProgress(inProgress: boolean) {

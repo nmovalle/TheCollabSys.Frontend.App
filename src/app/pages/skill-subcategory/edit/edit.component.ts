@@ -117,7 +117,6 @@ export class EditComponent {
     this.skillsCategoriesService.getSkillCategories().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data)
         this.categories = response.data;
         this.loading = false;
       },

@@ -35,7 +35,6 @@ export class RegisterComponent {
 
     this.userService.register(user).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.loading = false;
         this.messageService.add({
           severity: 'success',

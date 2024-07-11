@@ -56,7 +56,6 @@ export class ReadComponent {
       next: async (response: any) => {
         if (response) {
           const { status, data, message } = response;
-          console.log(data)
           if (status == 'success') {
             this.employerForm.patchValue(data);
             this.renderImage();

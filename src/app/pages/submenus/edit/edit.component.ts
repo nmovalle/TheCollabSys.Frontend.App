@@ -119,7 +119,6 @@ export class EditComponent {
       next: async (response: any) => {
         if (response) {
           const { status, data, message } = response;
-          console.log(data)
           if (status == 'success') {
             this.dataForm.patchValue(data);
             this.loading = false;

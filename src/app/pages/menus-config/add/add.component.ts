@@ -108,8 +108,6 @@ export class AddComponent {
 
   onSubmit(event) {
     event.preventDefault();
-    debugger;
-
     if (this.dataForm.valid) {
       const data = this.dataForm.value;
 

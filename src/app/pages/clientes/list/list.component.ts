@@ -59,11 +59,9 @@ export class ListComponent implements OnInit {
       message: msg,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        console.log("remove...")
         this.deleteClient(id);
       },
       reject: () => {
-        console.log("reject...")
       }
     });
   }

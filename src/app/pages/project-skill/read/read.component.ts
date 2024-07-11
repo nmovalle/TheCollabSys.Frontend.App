@@ -40,8 +40,6 @@ export class ReadComponent {
 
           const { skills } = data;
           this.targetSkills = skills;
-
-          console.log(this.targetSkills)
         }
 
         this.loading = false;

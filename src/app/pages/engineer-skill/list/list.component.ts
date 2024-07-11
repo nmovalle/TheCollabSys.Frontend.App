@@ -62,11 +62,9 @@ export class ListComponent {
       message: msg,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        console.log("remove...")
         this.deleteEngineerSkill(id);
       },
       reject: () => {
-        console.log("reject...")
       }
     });
   }
@@ -103,7 +101,6 @@ export class ListComponent {
     this.engineerSkillService.getEngineerSkills().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data)
         this.engineersSkills = response.data;
       },
       error: () => {

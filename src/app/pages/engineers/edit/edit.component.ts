@@ -73,7 +73,6 @@ export class EditComponent {
     this.employerService.getEmployers().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data)
         this.employers = response.data;
         this.loading = false;
       },

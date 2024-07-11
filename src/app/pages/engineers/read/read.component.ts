@@ -68,8 +68,6 @@ export class ReadComponent {
             this.dataForm.patchValue(data);
             this.renderImage();
             this.loading = false;
-
-            console.log(this.dataForm.value);
           }
           if (status == 'error') {
             this.loading = false;

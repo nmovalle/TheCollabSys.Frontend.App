@@ -34,7 +34,6 @@ export class EngineerSkillService {
   
   updateEngineerSkill(id:number, data: any, file: File): Observable<void> {
     const formData: FormData = new FormData();
-    console.log(data)
     if (file)
       formData.append('file', file, file.name);
     

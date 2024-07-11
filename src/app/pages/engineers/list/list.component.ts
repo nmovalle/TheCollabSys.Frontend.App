@@ -58,11 +58,9 @@ export class ListComponent {
       message: msg,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        console.log("remove...")
         this.deleteEngineer(id);
       },
       reject: () => {
-        console.log("reject...")
       }
     });
   }
@@ -95,7 +93,6 @@ export class ListComponent {
     this.engineerService.getEngineers().subscribe({
       next: (response: any) => {
         const {data} = response;
-        console.log(data)
         this.engineers = response.data;
       },
       error: () => {

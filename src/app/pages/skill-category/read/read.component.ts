@@ -27,7 +27,6 @@ export class ReadComponent {
         if (response) {
           const { status, data, message } = response;
           if (status == 'success') {
-            console.log(data)
             this.dataForm.patchValue(data);
             this.loading = false;
           }

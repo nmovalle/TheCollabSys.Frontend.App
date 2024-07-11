@@ -199,7 +199,6 @@ export class AddComponent {
 
     this.engineersSkillService.addEngineerSkill(data, null).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.loading = false;
         this.messageService.add({
           severity: 'success',

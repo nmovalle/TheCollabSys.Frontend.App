@@ -47,8 +47,6 @@ export class GuestComponent implements OnInit {
       next: (response: any) => {
         this.proposaleRoles = [{ proposalId:0, proposalName: "Select a proposal role" }, ...response];
         this.selectedProposaleRole = this.proposaleRoles[0];
-
-        console.log(this.proposaleRoles)
       },
       error: () => {
         this.messageService.add({

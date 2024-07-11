@@ -50,11 +50,9 @@ export class ListComponent {
       message: msg,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        console.log("remove...")
         this.deleteEntity(id);
       },
       reject: () => {
-        console.log("reject...")
       }
     });
   }

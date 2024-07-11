@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../guards/auth.service';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -10,15 +10,8 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Verifica si la solicitud ya tiene un encabezado de autorización
-    if (req.headers.has('Authorization')) {
-      // Si ya tiene un encabezado de autorización, simplemente pasa la solicitud al siguiente manejador
-      return next.handle(req);
-    }
-
     // Verifica si la solicitud es parte del proceso de autenticación con Google
     if (this.shouldExcludeToken(req.url)) {
-      // Si es parte del proceso de autenticación con Google, simplemente pasa la solicitud al siguiente manejador
       return next.handle(req);
     }
 
@@ -27,26 +20,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
     // Si hay un token, clona la solicitud y agrega el encabezado de autorización
     if (authToken) {
-      const { userId } = this.authService.getUserRole();
-
-      const headers = req.body instanceof FormData ? {
-        Authorization: `Bearer ${authToken}`,
-        'User-Id': `${userId}`
-      } : {
-        Authorization: `Bearer ${authToken}`,
-        'User-Id': `${userId}`,
-        'Content-Type': req.headers.get('Content-Type') || 'application/json'
-      };
-
-      const authReq = req.clone({
-        setHeaders: headers
-      });
-
-      // Continúa con la solicitud modificada
+      const authReq = this.addToken(req, authToken);
       return next.handle(authReq).pipe(
-        catchError((error: any) => {
-          return this.handleError(error);
-        })
+        catchError((error: HttpErrorResponse) => this.handleError(error, req, next))
       );
     } else {
       // Si no hay token, simplemente pasa la solicitud original al siguiente manejador
@@ -54,24 +30,50 @@ export class AuthInterceptor implements HttpInterceptor {
     }
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.status === 401) {
-      console.error('Unauthorized request:', error.message);
-      // Aquí podrías ejecutar un flujo de re-autenticación o redirigir al usuario
-    } else {
-      console.error('HTTP error:', error);
+  private addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
+    const { userId } = this.authService.getUserRole();
+    const headers = req.body instanceof FormData ? {
+      Authorization: `Bearer ${token}`,
+      'User-Id': `${userId}`
+    } : {
+      Authorization: `Bearer ${token}`,
+      'User-Id': `${userId}`,
+      'Content-Type': req.headers.get('Content-Type') || 'application/json'
+    };
+
+    return req.clone({
+      setHeaders: headers
+    });
+  }
+
+  private handleError(error: HttpErrorResponse, req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (error.status === 401) {      
+      const refreshToken = this.authService.getRefreshToken();
+      if (refreshToken) {
+        return this.authService.refreshToken(refreshToken).pipe(
+          switchMap((response) => {
+            this.authService.setAccessToken(response.accessToken);
+            this.authService.setRefreshToken(response.refreshToken);
+            const authReq = this.addToken(req, response.accessToken);
+            return next.handle(authReq);
+          }),
+          catchError(err => {
+            // Si la solicitud de refresh token falla, maneja el error adecuadamente (redirección a login, etc.)
+            this.authService.logout(); // Opcional: puedes hacer logout del usuario
+            return throwError(err);
+          })
+        );
+      }
     }
+    console.error('HTTP error:', error);
     return throwError(() => error);
   }
 
   private shouldExcludeToken(url: string): boolean {
-    // Lista de URL que se excluyen del proceso de agregación de token
     const excludedUrls = [
       'https://accounts.google.com/.well-known/openid-configuration',
       'https://www.googleapis.com/oauth2/v3/certs'
     ];
-  
-    // Verifica si la URL de la solicitud está en la lista de URL excluidas
     return excludedUrls.some(excludedUrl => url.startsWith(excludedUrl));
   }
 }

@@ -216,7 +216,6 @@ export class EditComponent {
 
     this.projectSkillService.updateProjectSkill(this.projectId, data, null).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.loading = false;
         this.messageService.add({
           severity: 'success',

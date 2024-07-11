@@ -60,7 +60,6 @@ export class AddComponent {
       this.loading = true;
       this.employerService.addEmployer(data, this.selectedFile).subscribe({
         next: (response: any) => {
-          console.log(response)
           if (response) {
             this.loading = false;
             this.messageService.add({

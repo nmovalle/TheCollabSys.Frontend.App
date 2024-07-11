@@ -54,7 +54,6 @@ export class AddComponent {
     this.skillCategoryService.getSkillCategories().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data)
         this.categories = response.data;
         this.categories.unshift({
           categoryId: 0,
@@ -80,7 +79,6 @@ export class AddComponent {
     this.skillSubcategoryService.getSkillSubcategories().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data);
         this.subcategories = response.data;
         this.listSubcategories = response.data;
 
@@ -145,7 +143,6 @@ export class AddComponent {
       this.loading = true;
       this.skillService.addSkill(data, this.selectedFile).subscribe({
         next: (response: any) => {
-          console.log(response)
           if (response) {
             this.loading = false;
             this.messageService.add({

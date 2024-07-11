@@ -127,7 +127,6 @@ export class AddComponent implements OnInit {
 
     this.projectSkillService.addProjectSkill(data, null).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.loading = false;
         this.messageService.add({
           severity: 'success',

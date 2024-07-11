@@ -56,11 +56,9 @@ export class ListComponent {
       message: msg,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        console.log("remove...")
         this.deleteProject(id);
       },
       reject: () => {
-        console.log("reject...")
       }
     });
   }
@@ -93,7 +91,6 @@ export class ListComponent {
     this.projectService.getProjects().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        console.log(data)
         this.projects = response.data;
       },
       error: () => {

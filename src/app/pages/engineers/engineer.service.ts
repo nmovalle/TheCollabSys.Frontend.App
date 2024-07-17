@@ -21,6 +21,10 @@ export class EngineerService {
     return this.http.get<any>(`${environment.apiUrl}/api/Engineers/${id}`);
   }
 
+  getEngineersByProject(projectId: number): Observable<ResponseApi> {
+    return this.http.get<any>(`${environment.apiUrl}/api/Engineers/GetEngineersByProjectSkills/${projectId}`);
+  }
+
   addEngineer(data: any, file: File): Observable<any> {
     const formData: FormData = new FormData();
     

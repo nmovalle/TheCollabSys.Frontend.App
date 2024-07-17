@@ -45,6 +45,7 @@ import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeTableModule } from 'primeng/treetable';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { OrderListModule } from 'primeng/orderlist';
+import { InputMaskModule } from "primeng/inputmask";
 
 @NgModule({
   declarations: [],
@@ -89,7 +90,8 @@ import { OrderListModule } from 'primeng/orderlist';
     TreeSelectModule,
     TreeTableModule,
     VirtualScrollerModule,
-    OrderListModule
+    OrderListModule,
+    InputMaskModule
   ],
 
   exports: [
@@ -134,7 +136,8 @@ import { OrderListModule } from 'primeng/orderlist';
     TreeSelectModule,
     TreeTableModule,
     VirtualScrollerModule,
-    OrderListModule
+    OrderListModule,
+    InputMaskModule
   ],
 
   providers: [ConfirmationService, MessageService]

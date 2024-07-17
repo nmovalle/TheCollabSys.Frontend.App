@@ -57,6 +57,7 @@ import { RegisterComponent } from './pages/register/register.component';
                 children: [
                     { path: '', loadChildren: () => import('./pages/projects/projects.module').then(m => m.ProjectsModule) },
                     { path: 'skills', loadChildren: () => import('./pages/project-skill/project-skill.module').then(m => m.ProjectSkillModule) },
+                    { path: 'assignments', loadChildren: () => import('./pages/project-assignment/project-assignment.module').then(m => m.ProjectAssignmentModule) },
                 ]
             },
             {

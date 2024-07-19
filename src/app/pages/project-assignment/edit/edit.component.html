@@ -20,6 +20,54 @@
         </ng-template>
     </p-toolbar>
 
+    <p-dialog [(visible)]="engineerDialog" [style]="{width: '650px'}" header="Engineer Skills" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="engineerName" class="text-center font-bold mb-2">Engineer</label>
+                    <div>{{ engineerName }}</div>
+                </div>
+                <div class="field col">
+                    <label for="firstName" class="text-center font-bold mb-2">First Name</label>
+                    <div>{{ firstName }}</div>
+                </div>
+                <div class="field col">
+                    <label for="lastName" class="text-center font-bold mb-2">Last Name</label>
+                    <div>{{ lastName }}</div>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="skills" class="text-center font-bold">Skills</label>
+                    <div class="flex justify-content-left align-items-center">
+                        <p-table [value]="engineerSkills" scrollDirection="both" [scrollable]="true" scrollHeight="400px" styleClass="mt-3" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th pFrozenColumn>Skill Name</th>
+                                    <th>Level</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-skill>
+                                <tr>
+                                    <td pFrozenColumn class="font-bold">{{skill.skillName}}</td>
+                                    <td>
+                                        <span>
+                                            <p-rating [(ngModel)]="skill.levelId" [readonly]="true" [cancel]="false"></p-rating>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Ok" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        </ng-template>
+    </p-dialog>
+
     <ng-template pTemplate="content">
         <div *ngIf="loading; else contentTemplate">
             <div class="progress-spinner">
@@ -54,25 +102,7 @@
                                     <div class="flex align-items-center gap-2">
                                         <i class="pi pi-check-circle text-sm"></i>
                                         <span>
-                                            {{ engineer.engineerName }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 flex flex-column gap-2">
-                                    <span class="font-bold">First Name</span>
-                                    <div class="flex align-items-center gap-2">
-                                        <i class="pi pi-check-circle text-sm"></i>
-                                        <span>
-                                            {{ engineer.firstName }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 flex flex-column gap-2">
-                                    <span class="font-bold">Last Name</span>
-                                    <div class="flex align-items-center gap-2">
-                                        <i class="pi pi-check-circle text-sm"></i>
-                                        <span>
-                                            {{ engineer.lastName }}
+                                            {{ engineer.engineerName }} {{ engineer.firstName }} {{ engineer.lastName }}
                                         </span>
                                     </div>
                                 </div>
@@ -80,13 +110,7 @@
                                     <span class="font-bold">Start Date</span>
                                     <div class="flex align-items-center gap-2">
                                         <span>
-                                            <p-inputMask
-                                                inputId="startDate"
-                                                mask="9999/99/99"
-                                                [(ngModel)]="engineer.startDate"
-                                                (focus)="$event.stopPropagation()"
-                                                [style]="{ 'width': '100px' }"
-                                            ></p-inputMask>
+                                            {{ engineer.startDate | date: 'yyyy/MM/dd' }}
                                         </span>
                                     </div>
                                 </div>
@@ -103,6 +127,19 @@
                                             ></p-inputMask>
                                         </span>
                                     </div>
+                                </div>
+                                <div class="flex-1 flex flex-column gap-2">
+                                    <span class="font-bold">Level</span>
+                                    <div class="flex align-items-center gap-2">
+                                        <span>
+                                            <p-rating [(ngModel)]="engineer.rating" [cancel]="false"></p-rating>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex-1 flex flex-column align-items-center gap-2">
+                                    <span class="font-bold">See Details</span>
+                                    <i class="pi pi-eye p-text-secondary cursor-pointer" style="font-size: 2rem; color: rgba(20, 20, 204, 0.74);" 
+                                    (click)="openEngineerDialog(engineer.engineerId);"></i>
                                 </div>
                             </div>
                         </ng-template>

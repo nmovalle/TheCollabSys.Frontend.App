@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { Category } from '@app/pages/skill-category/models/category';
 import { SkillSubcategoryService } from '../skill-subcategory.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { SkillCategoryService } from '@app/pages/skill-category/skill-category.service';
 import { Table } from 'primeng/table';
 import { AuthService } from '@app/core/guards/auth.service';
 import { Router } from '@angular/router';

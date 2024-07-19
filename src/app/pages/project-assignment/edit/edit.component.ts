@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EngineerService } from '@app/pages/engineers/engineer.service';
 import { MessageService } from 'primeng/api';
 import { ProjectAssignmentService } from '../project-assignment.service';
+import { ProjectService } from '@app/pages/projects/project.service';
+import { EngineerSkillService } from '@app/pages/engineer-skill/engineer-skill.service';
 
 @Component({
   selector: 'app-edit',
@@ -12,6 +14,7 @@ export class EditComponent {
   loading: boolean = false;
   projectId: number = 0;
   projectName: string = '';
+  projectStartDate: string = null;
 
   sourceEngineers: iRating[] = [];
   targetEngineers: iRating[] = [];
@@ -21,15 +24,58 @@ export class EditComponent {
   collapsedTree: boolean = true;
   cols: any[] = [];
 
+  engineerDialog: boolean = false;
+  engineerName: string = ''
+  firstName: string = ''
+  lastName: string = ''
+  engineerSkills: iSkillRating[] = [];
+
   constructor(
     private router: Router,
     private messageService: MessageService,
     private engineersService: EngineerService,
+    private engineersSkillsService: EngineerSkillService,
     private projectAssignmentService: ProjectAssignmentService,
+    private projectsService: ProjectService,
     private route: ActivatedRoute
   ) {}
 
+  async openEngineerDialog(engineerId: number): Promise<void> {
+    await this.getEngineersSkills(engineerId);
+    this.engineerDialog = true;
+  }
+
+  hideDialog() {
+    this.engineerDialog = false;
+  }
+
+  async getEngineersSkills(engineerId: number){
+    this.loading = true;
+    this.engineersSkillsService.getEngineerSkill(engineerId).subscribe({
+      next: (response: any) => {        
+        const { data } = response;
+        const { engineerName, firstName, lastName, skills } = data;
+
+        this.engineerName = engineerName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.engineerSkills = skills;
+
+        this.loading = false;
+      },
+      error: (ex) => {
+        this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error getting the engineers skills'
+        });
+      }
+    });
+  }
+
   async loadProjectAssignments(projectId: number) {
+    await this.getProjectDetail(projectId);
     await this.loadAssignments(projectId);
     await this.getProjectAssignments(projectId);
   }
@@ -38,7 +84,7 @@ export class EditComponent {
     this.engineersService.getEngineersByProject(projectId).subscribe({
       next: async (response: any) => {
         const assignmentsData: iRating[] = response.data;
-        const updatedData = assignmentsData.map((item: any) => ({ ...item, startDate: '', endDate: '' }));
+        const updatedData = assignmentsData.map((item: any) => ({ ...item, startDate: this.projectStartDate, endDate: '' }));
         this.originalSource = updatedData;
         this.sourceEngineers = [...this.originalSource];
         this.sourceEngineers = this.sourceEngineers.filter(e =>
@@ -78,6 +124,27 @@ export class EditComponent {
           );
         }
 
+        this.loading = false;
+      },
+      error: (ex) => {
+        this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error getting the projects assignments'
+        });
+      }
+    });
+  }
+
+  async getProjectDetail(projectId: number) {
+    this.loading = true;
+    this.projectId = projectId
+    this.projectsService.getProject(projectId).subscribe({
+      next: (response: any) => {
+        const {data} = response;
+        this.projectStartDate = data.startDate;
+        
         this.loading = false;
       },
       error: (ex) => {
@@ -139,4 +206,11 @@ interface iRating {
   lastName: string;
   startDate: Date;
   endDate: Date;
+  rating: number;
+}
+
+interface iSkillRating {
+  skillId: number;
+  skillName: string;
+  levelId: number;
 }

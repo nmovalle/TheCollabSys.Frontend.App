@@ -82,7 +82,6 @@ export class ReadComponent {
 
           const { assignments } = data;
           this.target = assignments;
-          console.log(assignments)
         }
 
         this.loading = false;

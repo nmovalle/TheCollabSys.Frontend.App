@@ -82,6 +82,12 @@
                         <label for="projectName" class="text-center font-bold mb-2">Project</label>
                         <div>{{ projectName }}</div>
                     </div>
+                    @if (projectStartDate) {
+                        <div class="field col-6">
+                            <label for="projectName" class="text-center font-bold mb-2">Start Date</label>
+                            <div>{{projectStartDate | date: 'MM/dd/yyyy'}}</div>
+                        </div>
+                    }
                     <p-pickList 
                         [source]="sourceEngineers" 
                         [target]="targetEngineers" 

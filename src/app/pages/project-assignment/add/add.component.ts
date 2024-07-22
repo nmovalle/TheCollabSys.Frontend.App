@@ -7,11 +7,13 @@ import { forkJoin } from 'rxjs';
 import { ProjectAssignmentService } from '../project-assignment.service';
 import { EngineerService } from '@app/pages/engineers/engineer.service';
 import { EngineerSkillService } from '@app/pages/engineer-skill/engineer-skill.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
-  styleUrl: './add.component.scss'
+  styleUrl: './add.component.scss',
+  providers: [DatePipe]
 })
 export class AddComponent {
   loading: boolean = false;
@@ -45,7 +47,8 @@ export class AddComponent {
     private engineersSkillsService: EngineerSkillService,
     private projectAssignmentService: ProjectAssignmentService,
     private cdr: ChangeDetectorRef,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -91,9 +94,7 @@ export class AddComponent {
   async getEngineersSkills(engineerId: number){
     this.loading = true;
     this.engineersSkillsService.getEngineerSkill(engineerId).subscribe({
-      next: (response: any) => {
-        debugger;
-        
+      next: (response: any) => {        
         const { data } = response;
         const { engineerName, firstName, lastName, skills } = data;
 
@@ -127,7 +128,7 @@ export class AddComponent {
     this.projectsService.getProject(projectId).subscribe({
       next: (response: any) => {
         const {data} = response;
-        this.projectStartDate = data.startDate;
+        this.projectStartDate = this.datePipe.transform(data.startDate, 'MM/dd/yyyy');
         
         this.loading = false;
       },
@@ -153,7 +154,11 @@ export class AddComponent {
         const { data } = response;
         if (data) {
           const { assignments } = data;
-          this.targetEngineers = assignments;
+          this.targetEngineers = assignments.map(assignment => ({
+            ...assignment,
+            startDate: this.datePipe.transform(assignment.startDate, 'MM/dd/yyyy'),
+            endDate: this.datePipe.transform(assignment.endDate, 'MM/dd/yyyy')
+          }));
 
           this.sourceEngineers = this.sourceEngineers.filter(e =>
             !this.targetEngineers.some(t => t.engineerId === e.engineerId)

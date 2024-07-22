@@ -5,10 +5,12 @@ import { MessageService } from 'primeng/api';
 import { ProjectAssignmentService } from '../project-assignment.service';
 import { ProjectService } from '@app/pages/projects/project.service';
 import { EngineerSkillService } from '@app/pages/engineer-skill/engineer-skill.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
+  providers: [DatePipe]
 })
 export class EditComponent {
   loading: boolean = false;
@@ -37,7 +39,8 @@ export class EditComponent {
     private engineersSkillsService: EngineerSkillService,
     private projectAssignmentService: ProjectAssignmentService,
     private projectsService: ProjectService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private datePipe: DatePipe 
   ) {}
 
   async openEngineerDialog(engineerId: number): Promise<void> {
@@ -117,7 +120,11 @@ export class EditComponent {
         if (data) {
           this.projectName = data.projectName;
           const { assignments } = data;
-          this.targetEngineers = assignments;
+          this.targetEngineers = assignments.map(assignment => ({
+            ...assignment,
+            startDate: this.datePipe.transform(assignment.startDate, 'MM/dd/yyyy'),
+            endDate: this.datePipe.transform(assignment.endDate, 'MM/dd/yyyy')
+          }));
 
           this.sourceEngineers = this.sourceEngineers.filter(e =>
             !this.targetEngineers.some(t => t.engineerId === e.engineerId)
@@ -143,7 +150,7 @@ export class EditComponent {
     this.projectsService.getProject(projectId).subscribe({
       next: (response: any) => {
         const {data} = response;
-        this.projectStartDate = data.startDate;
+        this.projectStartDate = this.datePipe.transform(data.startDate, 'MM/dd/yyyy');
         
         this.loading = false;
       },

@@ -108,7 +108,6 @@ export class ListComponent {
       next: async (response: any) => {
         const {data} = response;
         this.projectAssignments = data;
-        console.log(data)
       },
       error: () => {
         this.messageService.add({

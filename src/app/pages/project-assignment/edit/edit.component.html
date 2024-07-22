@@ -110,7 +110,7 @@
                                     <span class="font-bold">Start Date</span>
                                     <div class="flex align-items-center gap-2">
                                         <span>
-                                            {{ engineer.startDate | date: 'yyyy/MM/dd' }}
+                                            {{ engineer.startDate | date: 'MM/dd/yyyy' }}
                                         </span>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
                                         <span>
                                             <p-inputMask
                                                 inputId="endDate"
-                                                mask="9999/99/99"
+                                                mask="99/99/9999"
                                                 [(ngModel)]="engineer.endDate"
                                                 (focus)="$event.stopPropagation()"
                                                 [style]="{ 'width': '100px' }"

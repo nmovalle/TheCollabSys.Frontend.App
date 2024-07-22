@@ -37,11 +37,11 @@
         <div class="formgrid grid">
             <div class="field col">
                 <label for="startDate" class="text-center font-bold">Start Date</label>
-                <div>{{ dataForm.get('startDate').value | date:'dd/MM/yyyy' }}</div>
+                <div>{{ dataForm.get('startDate').value | date:'MM/dd/yyyy' }}</div>
             </div>
             <div class="field col mb-5">
                 <label for="endDate" class="text-center font-bold">End Date</label>
-                <div>{{ dataForm.get('endDate').value | date:'dd/MM/yyyy' }}</div>
+                <div>{{ dataForm.get('endDate').value | date:'MM/dd/yyyy' }}</div>
             </div>
         </div>
         <div class="formgrid grid">

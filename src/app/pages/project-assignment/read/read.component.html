@@ -99,8 +99,8 @@
                                 <td pFrozenColumn class="font-bold">{{assignment.engineerName}}</td>
                                 <td pFrozenColumn class="font-bold">{{assignment.firstName}}</td>
                                 <td pFrozenColumn class="font-bold">{{assignment.lastName}}</td>
-                                <td pFrozenColumn class="font-bold">{{assignment.startDate | date: 'dd/MM/yyyy'}}</td>
-                                <td pFrozenColumn class="font-bold">{{assignment.endDate | date: 'dd/MM/yyyy'}}</td>
+                                <td pFrozenColumn class="font-bold">{{assignment.startDate | date: 'MM/dd/yyyy'}}</td>
+                                <td pFrozenColumn class="font-bold">{{assignment.endDate | date: 'MM/dd/yyyy'}}</td>
                                 <td pFrozenColumn class="font-bold">
                                     <span>
                                         <p-rating [(ngModel)]="assignment.rating" [cancel]="false"></p-rating>

@@ -94,7 +94,7 @@
                     @if (projectStartDate) {
                         <div class="field col-6">
                             <label for="projectName" class="text-center font-bold mb-2">Start Date</label>
-                            <div>{{projectStartDate | date: 'yyyy/MM/dd'}}</div>
+                            <div>{{projectStartDate | date: 'MM/dd/yyyy'}}</div>
                         </div>
                     }
                     <p-pickList 
@@ -125,7 +125,7 @@
                                         <span class="font-bold">Start Date</span>
                                         <div class="flex align-items-center gap-2">
                                             <span>
-                                                {{ engineer.startDate | date: 'yyyy/MM/dd' }}
+                                                {{ engineer.startDate | date: 'MM/dd/yyyy' }}
                                             </span>
                                         </div>
                                     </div>
@@ -135,7 +135,7 @@
                                             <span>
                                                 <p-inputMask
                                                     inputId="endDate"
-                                                    mask="9999/99/99"
+                                                    mask="99/99/9999"
                                                     [(ngModel)]="engineer.endDate"
                                                     [style]="{ 'width': '100px' }"
                                                 ></p-inputMask>

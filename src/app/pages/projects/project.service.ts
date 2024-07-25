@@ -21,6 +21,10 @@ export class ProjectService {
     return this.http.get<any>(`${environment.apiUrl}/api/Projects/${id}`);
   }
 
+  getProjectKPIs(): Observable<ResponseApi> {
+    return this.http.get<any>(`${environment.apiUrl}/api/Projects/kpis`);
+  }
+
   addProject(data: any, file: File): Observable<any> {
     const formData: FormData = new FormData();
     

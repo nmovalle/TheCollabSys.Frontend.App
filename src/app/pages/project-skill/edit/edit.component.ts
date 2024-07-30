@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, TreeNode } from 'primeng/api';
 import { ProjectSkillService } from '../project-skill.service';
@@ -10,7 +10,7 @@ import { SkillCategoryService } from '@app/pages/skill-category/skill-category.s
   selector: 'app-edit',
   templateUrl: './edit.component.html'
 })
-export class EditComponent {
+export class EditComponent implements OnInit {
   loading: boolean = false;
   projectId: number = 0;
   projectName: string = '';

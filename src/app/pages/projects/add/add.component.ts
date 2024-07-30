@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -10,7 +10,7 @@ import { Client } from '@app/pages/clientes/models/client';
   selector: 'app-add',
   templateUrl: './add.component.html',
 })
-export class AddComponent {
+export class AddComponent implements OnInit {
   loading: boolean = false;
   dataForm!: FormGroup;
 

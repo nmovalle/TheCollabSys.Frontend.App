@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -8,7 +8,7 @@ import { SkillSubcategoryService } from '../skill-subcategory.service';
   selector: 'app-read',
   templateUrl: './read.component.html',
 })
-export class ReadComponent {
+export class ReadComponent implements OnInit {
   loading: boolean = false;
   id: number | null = null;
   dataForm!: FormGroup;

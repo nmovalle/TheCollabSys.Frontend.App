@@ -57,6 +57,10 @@ import { RegisterComponent } from './pages/register/register.component';
                   console.error('Error al cargar el módulo Employers', err);
                   return Promise.reject(err);
                 }) },
+                { path: 'assignments', loadChildren: () => import('./pages/employer-project-assignment/employer-project-assignment.module').then(m => m.EmployerProjectAssignmentModule).catch(err => {
+                  console.error('Error al cargar el módulo EmployerProjectAssignment', err);
+                  return Promise.reject(err);
+                }) },
               ]
             },
             {

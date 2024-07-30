@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -8,7 +8,7 @@ import { SubmenuService } from '../submenu.service';
   selector: 'app-read',
   templateUrl: './read.component.html',
 })
-export class ReadComponent {
+export class ReadComponent implements OnInit {
   loading: boolean = false;
   id: number | null = null;
   imageURL: string = null;

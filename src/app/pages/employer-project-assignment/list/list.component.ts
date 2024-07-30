@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '@app/core/guards/auth.service';
+import { EmployerProjectAssignmentService } from '../employer-project-assignment.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ProjectAssignmentService } from '../project-assignment.service';
+import { AuthService } from '@app/core/guards/auth.service';
+import { Router } from '@angular/router';
 import { Table } from 'primeng/table';
 
 interface expandedRows {
@@ -15,12 +15,12 @@ interface expandedRows {
   styleUrl: './list.component.scss'
 })
 export class ListComponent implements OnInit {
-  deleteProjectAssignmentDialog: boolean = false;
-  deleteProjectAssignmentsDialog: boolean = false;
+  deleteDialog: boolean = false;
+  deletesDialog: boolean = false;
 
-  projectAssignments!: any[];
-  projectAssignment = {} as any;
-  selectedProjectAssignments: any[];
+  assignments!: any[];
+  assignment = {} as any;
+  selectedAssignments: any[];
   
   cols: any[] = [];
   colsDetail: any[] = [];
@@ -29,27 +29,25 @@ export class ListComponent implements OnInit {
   permissions: {};
 
   constructor(
-    private projectAssignmentService: ProjectAssignmentService,
+    private employerProjectAssignmentService: EmployerProjectAssignmentService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private authService: AuthService,
     private router: Router
   ) {
     this.cols = [
-      { field: 'projectName', header: 'Project' }
+      { field: 'employerName', header: 'Project' }
     ];
 
     this.colsDetail = [
-      { field: 'engineerName', header: 'Engineer Name' },
-      { field: 'firstName', header: 'First Name' },
-      { field: 'lastName', header: 'Last Name' },
-      { field: 'email', header: 'Email' },
-      { field: 'phone', header: 'Phone' },
-      // { field: 'image', header: 'Image' },
-      // { field: 'rating', header: 'Rating' },
+      { field: 'projectName', header: 'Project Name' },
+      { field: 'clientName', header: 'Client' },
+      { field: 'projectDescription', header: 'Project Description' },
+      // { field: 'numberPositionTobeFill', header: 'Email' },
+      { field: 'dateCreated', header: 'Created Date' },
       { field: 'startDate', header: 'Start Date' },
       { field: 'endDate', header: 'End Date' },
-
+      { field: 'dateAssigned', header: 'Assigned Date' },
     ]
 
     this.permissions = this.authService.getPermissions(this.router.url);
@@ -59,7 +57,7 @@ export class ListComponent implements OnInit {
     const hdr = "Confirm"
     let msg = "Are you sure you want to delete this record?"
 
-    if(!id && this.selectedProjectAssignments.length > 0) {
+    if(!id && this.selectedAssignments.length > 0) {
       msg = "Are you sure you want to delete these records?"
     }
 
@@ -68,64 +66,60 @@ export class ListComponent implements OnInit {
       message: msg,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.deleteProjectAssignment(id);
+        this.deleteAssignment(id);
       },
       reject: () => {
       }
     });
   }
 
-  deleteSelectedProjectAssignments() {
-    this.deleteProjectAssignmentsDialog = true;
+  deleteSelectedAssignments() {
+    this.deletesDialog = true;
   }
 
-  deleteProjectAssignment(id: number) {
-    this.deleteProjectAssignmentDialog = true;
-    this.projectAssignmentService.deleteProjectAssignment(id).subscribe({
+  deleteAssignment(id: number) {
+    this.deleteDialog = true;
+    this.employerProjectAssignmentService.deleteEmployerProjectAssignment(id).subscribe({
       next: async () => {
-        this.projectAssignments = this.projectAssignments.filter(c => c.projectId !== id);
+        this.assignments = this.assignments.filter(c => c.employerId !== id);
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'The project assignment was successfully removed'
+          detail: 'The assignment was successfully removed'
         });
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error deleting the project assignment'
+          detail: 'There was an error deleting the assignment'
         });
       },
       complete: () => {
-        this.deleteProjectAssignmentDialog = false;
+        this.deleteDialog = false;
       }
     });
   }
 
-  getProjectAssignments() {
-    this.projectAssignmentService.getProjectAssignments().subscribe({
+  getAssignments() {
+    this.employerProjectAssignmentService.getEmployerProjectAssignments().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.projectAssignments = data;
+        this.assignments = data;
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error getting the project assignments'
+          detail: 'There was an error getting the assignments'
         });
       }
     });    
   }
 
-  ngOnInit() {
-    this.getProjectAssignments();
-  }
-
   expandAll() {
     if (!this.isExpanded) {
-        this.projectAssignments.forEach(p => p && p.projectId ? this.expandedRows[p.projectId] = true : '');
+        this.assignments.forEach(p => p && p.employerId ? this.expandedRows[p.employerId] = true : '');
 
     } else {
         this.expandedRows = {};
@@ -135,5 +129,9 @@ export class ListComponent implements OnInit {
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+
+  ngOnInit() {
+    this.getAssignments();
   }
 }

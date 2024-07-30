@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -11,7 +11,7 @@ import { ResponseApi } from '@app/core/interfaces/response-api';
   selector: 'app-edit',
   templateUrl: './edit.component.html',
 })
-export class EditComponent {
+export class EditComponent implements OnInit {
   loading: boolean = false;
   id: number | null = null;
   dataForm!: FormGroup;

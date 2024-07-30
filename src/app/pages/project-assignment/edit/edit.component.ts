@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EngineerService } from '@app/pages/engineers/engineer.service';
 import { MessageService } from 'primeng/api';
@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './edit.component.html',
   providers: [DatePipe]
 })
-export class EditComponent {
+export class EditComponent implements OnInit {
   loading: boolean = false;
   projectId: number = 0;
   projectName: string = '';

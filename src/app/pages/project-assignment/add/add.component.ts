@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProjectService } from '@app/pages/projects/project.service';
@@ -15,7 +15,7 @@ import { DatePipe } from '@angular/common';
   styleUrl: './add.component.scss',
   providers: [DatePipe]
 })
-export class AddComponent {
+export class AddComponent implements OnInit {
   loading: boolean = false;
   projectId: number = 0;
 

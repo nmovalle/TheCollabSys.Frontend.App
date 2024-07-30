@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EngineerService } from '@app/pages/engineers/engineer.service';
@@ -12,7 +12,7 @@ import { SkillCategoryService } from '@app/pages/skill-category/skill-category.s
   selector: 'app-add',
   templateUrl: './add.component.html',
 })
-export class AddComponent {
+export class AddComponent implements OnInit {
   loading: boolean = false;
   engineerId: number = 0;
   engineers: any[] = [];

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MenuEntity } from '@app/core/interfaces/menu';
@@ -11,7 +11,7 @@ import { SubmenuService } from '../submenu.service';
   templateUrl: './add.component.html',
   styleUrl: './add.component.scss'
 })
-export class AddComponent {
+export class AddComponent implements OnInit {
   loading: boolean = false;
   dataForm!: FormGroup;
 

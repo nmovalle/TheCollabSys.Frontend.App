@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ProjectAssignmentService } from '../project-assignment.service';
@@ -8,7 +8,7 @@ import { EngineerSkillService } from '@app/pages/engineer-skill/engineer-skill.s
   selector: 'app-read',
   templateUrl: './read.component.html',
 })
-export class ReadComponent {
+export class ReadComponent implements OnInit {
   loading: boolean = false;
   projectId: number = 0;
   projectName: string = '';

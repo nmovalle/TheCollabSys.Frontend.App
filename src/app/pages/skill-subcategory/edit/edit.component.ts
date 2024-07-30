@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '@app/pages/skill-category/models/category';
@@ -10,7 +10,7 @@ import { SkillSubcategoryService } from '../skill-subcategory.service';
   selector: 'app-edit',
   templateUrl: './edit.component.html',
 })
-export class EditComponent {
+export class EditComponent implements OnInit {
   loading: boolean = false;
   id: number | null = null;
   dataForm!: FormGroup;

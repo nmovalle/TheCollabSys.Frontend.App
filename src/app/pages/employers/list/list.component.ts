@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EmployerService } from '../employer.service';
 import { Table } from 'primeng/table';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   selector: 'app-list',
   templateUrl: './list.component.html',
 })
-export class ListComponent {
+export class ListComponent implements OnInit {
   deleteEmployerDialog: boolean = false;
   deleteEmployersDialog: boolean = false;
 

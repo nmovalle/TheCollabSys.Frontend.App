@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Table } from 'primeng/table';
 import { SubmenuService } from '../submenu.service';
-import { MenuService } from '@app/layout/app.menu.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from '@app/core/guards/auth.service';
 import { Router } from '@angular/router';
@@ -10,7 +9,7 @@ import { Router } from '@angular/router';
   selector: 'app-list',
   templateUrl: './list.component.html',
 })
-export class ListComponent {
+export class ListComponent implements OnInit {
   deleteEntityDialog: boolean = false;
   deleteEntitiesDialog: boolean = false;
 

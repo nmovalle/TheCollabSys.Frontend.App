@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { ProjectSkillService } from '../project-skill.service';
@@ -14,7 +14,7 @@ interface expandedRows {
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
-export class ListComponent {
+export class ListComponent implements OnInit {
   deleteProjectDialog: boolean = false;
   deleteProjectsDialog: boolean = false;
 

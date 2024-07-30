@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SkillSubcategoryService } from '../skill-subcategory.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
-export class ListComponent {
+export class ListComponent implements OnInit {
   deleteEntityDialog: boolean = false;
   deleteEntitiesDialog: boolean = false;
 

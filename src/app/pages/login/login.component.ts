@@ -8,6 +8,7 @@ import { LoadingService } from '@app/core/guards/loading.service';
 import { UserService } from '@app/core/service/user.service';
 import { AuthService } from '@app/core/guards/auth.service';
 import { forkJoin } from 'rxjs';
+import { MenuRoleDetailDTO } from '@app/core/interfaces/menu';
 
 
 @Component({
@@ -59,13 +60,13 @@ export class LoginComponent implements OnInit {
 
         forkJoin({
           menu: this.authService.getUserMenu(credentials.userName)
-        }).subscribe((menu) => {
-          const userMenu = menu.menu;
+        }).subscribe((menu) => {          
+          const userMenu = menu.menu as MenuRoleDetailDTO[];
           this.authService.setUsermenu(userMenu);
+          this.router.navigate(['/home']);
         });
 
         this.loading = false;
-        this.router.navigate(['/home']);
       },
       error: () => {
         this.loading = false;
@@ -74,7 +75,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit() {    
     this.loadingService.loading$.subscribe(loading => {
       this.loading = loading;
     });

@@ -20,6 +20,10 @@ export class UserService {
     return this.http.post(`${environment.apiUrl}/api/User/register`, user);
   }
 
+  simpleRegister(user: any) {
+    return this.http.post(`${environment.apiUrl}/api/User/simple-register`, user);
+  }
+
   login(credentials: any) {
     return this.http.post(`${environment.apiUrl}/api/User/login`, credentials);
   }

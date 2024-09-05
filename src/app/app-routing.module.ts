@@ -8,6 +8,9 @@ import { GuestComponent } from './pages/guest/guest.component';
 import { IdentifyComponent } from './pages/identify/identify.component';
 import { ForgotComponent } from './pages/forgot/forgot.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { AccessCodeComponent } from './pages/register-domain/access-code/access-code.component';
+import { DomainComponent } from './pages/register-domain/domain/domain.component';
+import { ValidateInvitationComponent } from './pages/validate-invitation/validate-invitation/validate-invitation.component';
 
 @NgModule({
     imports: [
@@ -17,6 +20,9 @@ import { RegisterComponent } from './pages/register/register.component';
             { path: 'forgot/:id', component: ForgotComponent },
             { path: 'identify', component: IdentifyComponent },
             { path: 'register', component: RegisterComponent },
+            { path: 'access-code', component: AccessCodeComponent },
+            { path: 'domain', component: DomainComponent },
+            { path: 'validate-invitation/:token', component: ValidateInvitationComponent },
             {
               path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule).catch(err => {
                 console.error('Error al cargar el módulo Auth', err);
@@ -123,6 +129,14 @@ import { RegisterComponent } from './pages/register/register.component';
                 }) },
                 { path: 'config', loadChildren: () => import('./pages/menus-config/menus-config.module').then(m => m.MenusConfigModule).catch(err => {
                   console.error('Error al cargar el módulo MenusConfig', err);
+                  return Promise.reject(err);
+                }) },
+              ]
+            },{
+              path: 'config', component: AppLayoutComponent, canActivate: [authGuard],
+              children: [
+                { path: 'invitations', loadChildren: () => import('./pages/config/invitation/invitation.module').then(m => m.InvitationModule).catch(err => {
+                  console.error('Error al cargar el módulo Config Invitations', err);
                   return Promise.reject(err);
                 }) },
               ]

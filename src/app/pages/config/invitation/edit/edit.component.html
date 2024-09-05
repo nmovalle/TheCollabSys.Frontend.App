@@ -1,0 +1,103 @@
+<p-panel>
+    <ng-template pTemplate="header">
+      <span class="w-full text-center font-bold">Send Invitation</span>
+    </ng-template>
+
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <button
+                pButton
+                pRipple
+                icon="pi pi-arrow-left"
+                label="Back"
+                class="p-button mr-2"
+                [routerLink]="'/config/invitations'"
+                ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+  
+    <ng-template pTemplate="content">
+        <form [formGroup]="dataForm" (ngSubmit)="onSubmit($event)">
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="email" class="text-center font-bold mb-2">Email</label>
+                    <input 
+                        type="text" 
+                        id="email" 
+                        formControlName="email" 
+                        class="w-full"
+                        name="email"
+                        pInputText />
+                        <small id="email-help" class="p-error" *ngIf="(email.invalid && (email.dirty || email.touched)) || !email.value">
+                            <ng-container *ngIf="email.errors.required">
+                                Email field is required *
+                            </ng-container>
+                            <ng-container *ngIf="email.errors.email && !email.errors.required">
+                                Invalid email format *
+                            </ng-container>
+                        </small>
+                </div>
+                <div class="field col">
+                    <label for="domain" class="text-center font-bold mb-2">Domain</label>
+                    <input 
+                        type="text" 
+                        id="domain" 
+                        formControlName="domain" 
+                        class="w-full"
+                        name="domain"
+                        pInputText />
+                </div>
+            </div>
+            <div class="formgrid grid mb-2">
+                <div class="field col">
+                    <label for="roleId" class="text-center font-bold mb-2">Role</label>
+                    <p-dropdown
+                        name="roleId"
+                        optionValue="id"
+                        [options]="roles"
+                        [style]="{'min-width': '100%'}"
+                        optionLabel="name"
+                        formControlName="roleId">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field" style="margin-left: 15px">
+                    <label for="isExternal" class="w-full font-bold mb-2">Is External</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="isExternal" 
+                        formControlName="isExternal" 
+                        class="w-full"
+                        name="isExternal"
+                        ></p-inputSwitch>
+                </div>
+                <div class="field">
+                    <label for="isBlackList" class="w-full font-bold mb-2">Is Black List</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="isBlackList" 
+                        formControlName="isBlackList" 
+                        class="w-full"
+                        name="isBlackList"
+                        ></p-inputSwitch>
+                </div>
+            </div>
+      
+          <div class="mt-4">
+            <button type="submit" pButton label="Send" class="p-button-success"></button>
+          </div>
+        </form>
+    </ng-template>
+  </p-panel>
+  
+<p-confirmDialog></p-confirmDialog>
+@if (loading) {
+    <div class="progress-spinner">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    </div>
+}

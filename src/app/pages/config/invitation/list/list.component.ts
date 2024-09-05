@@ -1,46 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { Table } from 'primeng/table';
-import { SubmenuService } from '../submenu.service';
+import { Component } from '@angular/core';
+import { InvitationService } from '../invitation.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from '@app/core/guards/auth.service';
 import { Router } from '@angular/router';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
+  styleUrl: './list.component.scss'
 })
-export class ListComponent implements OnInit {
-  deleteEntityDialog: boolean = false;
-  deleteEntitiesDialog: boolean = false;
+export class ListComponent {
+  deleteDialog: boolean = false;
+  deletesDialog: boolean = false;
 
-  submenus!: any[];
-  submenu = {} as any;
-  selectedEntities: any[];
+  invitations!: any[];
+  invitation = {} as any;
+  selectedInvitations: any[];
   
   cols: any[] = [];
   permissions: {};
 
   constructor(
-    private subMenuService: SubmenuService,
+    private invitationService: InvitationService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private authService: AuthService,
     private router: Router
   ) {
     this.cols = [
-      { field: 'menuName', header: 'Menu Name' },
-      { field: 'subMenuName', header: 'Submenu Name' },
-      { field: 'description', header: 'Description' },
-      { field: 'routerLink', header: 'Router Link' },
+      { field: 'email', header: 'Email' },
+      { field: 'token', header: 'Token' },
+      { field: 'expirationDate', header: 'Expiration Date' },
+      { field: 'status', header: 'Status' },
+      { field: 'roleName', header: 'Role' },
+      { field: 'isExternal', header: 'Is External' },
+      { field: 'isBlackList', header: 'Is Black List' },
     ];
     this.permissions = this.authService.getPermissions(this.router.url);
+  }
+
+  deleteSelectedInvitations() {
+    this.deletesDialog = true;
   }
 
   confirmDelete(id?: number): void {
     const hdr = "Confirm"
     let msg = "Are you sure you want to delete this record?"
 
-    if(!id && this.selectedEntities.length > 0) {
+    if(!id && this.selectedInvitations.length > 0) {
       msg = "Are you sure you want to delete these records?"
     }
 
@@ -49,59 +57,55 @@ export class ListComponent implements OnInit {
       message: msg,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.deleteEntity(id);
+        this.deleteInvitation(id);
       },
       reject: () => {
       }
     });
   }
 
-  deleteSelected() {
-    this.deleteEntitiesDialog = true;
-  }
-
-  deleteEntity(id: number) {
-    this.deleteEntityDialog = true;
-    this.subMenuService.deleteSubMenu(id).subscribe({
+  deleteInvitation(invitationId: number) {
+    this.deleteDialog = true;
+    this.invitationService.deleteInvitation(invitationId).subscribe({
       next: async () => {
-        this.submenus = this.submenus.filter(c => c.subMenuId !== id);
+        this.invitations = this.invitations.filter(c => c.id !== invitationId);
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'The sub menu was successfully removed'
+          detail: 'The invitation was successfully removed'
         });
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error deleting the sub menu'
+          detail: 'There was an error deleting the invitation'
         });
       },
       complete: () => {
-        this.deleteEntityDialog = false;
+        this.deleteDialog = false;
       }
     });
   }
 
-  async getSubMenus() {
-    this.subMenuService.getSubMenus().subscribe({
-      next: async (response: any) => {
+  getInvitations() {
+    this.invitationService.getInvitations().subscribe({
+      next: (response: any) => {
         const {data} = response;
-        this.submenus = data;
+        this.invitations = response.data;
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error getting the sub menus'
+          detail: 'There was an error getting the invitations'
         });
       }
     });    
   }
 
   ngOnInit() {
-    this.getSubMenus();
+    this.getInvitations();
   }
 
   onGlobalFilter(table: Table, event: Event) {

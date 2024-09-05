@@ -41,10 +41,13 @@
                     <p-dropdown
                         name="clientId"
                         optionValue="clientID"
+                        optionLabel="clientName"
                         [options]="clients"
                         [style]="{'min-width': '100%'}"
-                        optionLabel="clientName"
                         formControlName="clientId"
+                        [filter]="true"
+                        filterBy="clientName"
+                        placeholder="Choose a client"
                     >
                     </p-dropdown>
                 </div>

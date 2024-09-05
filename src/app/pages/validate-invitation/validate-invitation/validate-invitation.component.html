@@ -4,26 +4,12 @@
             <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
                 <div class="text-center mb-5">
                     <div class="text-900 text-3xl font-medium mb-3">Welcome to The Collabsys!</div>
-                    <span class="text-600 font-medium">Please, register to log in</span>
                 </div>
                 <p-toast></p-toast>
                 <div>
-                    <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                    <input id="email1" [(ngModel)]="email" type="text" placeholder="Email address" pInputText class="w-full md:w-30rem mb-5" style="padding:1rem">
-
-                    <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
-                    <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem"></p-password>
-
-                    <button 
-                        pButton 
-                        pRipple 
-                        label="Register" 
-                        class="block w-full p-3 text-xl mb-5 p-button-success"
-                        (click)="register()"
-                        ></button>
+                    <h5>The most powerful resource selection software!</h5>
                 </div>
                 <div class="text-center mb-5">
-                    <span class="text-600 font-medium">Or back to Log In: </span>
                 </div>
                 <div>
                     <button 
@@ -31,8 +17,8 @@
                         pRipple 
                         label="Log In" 
                         class="block w-full p-3 text-xl"
-                        (click)="this.router.navigate(['/'])"
-                        ></button>
+                        (click)="goTo('/');">
+                    </button>
                 </div>
             </div>
         </div>

@@ -8,7 +8,9 @@ import { Location } from '@angular/common';
 import { LoadingService } from '@app/core/guards/loading.service';
 import { HttpClient } from '@angular/common/http';
 import { GoogleUserInfo } from '../interfaces/google-user-info';
-import { AuthService } from './auth.service';
+import { AuthService, MenuError } from './auth.service';
+import { MenuRoleDetailDTO } from '../interfaces/menu';
+import { AuthFlowService } from './auth-flow.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,8 @@ export class GoogleApiService {
     private router: Router,
     private location: Location,
     private loadingService: LoadingService,
-    private authService: AuthService
+    private authService: AuthService,
+    private authFlowService: AuthFlowService
   ) { 
     this.initConfiguration();
   }
@@ -52,36 +55,12 @@ export class GoogleApiService {
       if (event.type === 'token_received') {
         this.startLoading();
         const profile = this.getProfile();
-
-        forkJoin({
-          auth: this.authService.validateOAuthDomain(profile),
-          menu: this.authService.getUserMenu(profile.email)
-        }).subscribe({
-          next: ({auth, menu}) => {
-          const { userRole, authToken } = auth;
-          const { accessToken, refreshToken, accessTokenExpiration } = authToken;
-          const { email } = profile;
-
-          this.authService.setAuthProvider("Google");
-          this.authService.setUsername(email);
-          this.authService.setAccessToken(accessToken);
-          this.authService.setRefreshToken(refreshToken);
-          this.authService.setAccessTokenExpiration(accessTokenExpiration);
-          this.authService.setUserRole(userRole);
-
-          const userMenu = menu;
-          this.authService.setUsermenu(userMenu);
-
-          setTimeout(() => {
-            this.stopLoading();
-            this.authService.setGoogleAuthInProgress(false);
-            this.router.navigate(['/home']);
-          }, 500);
-        },
-        error: (error: any) => {
-          console.error('Error en la solicitud:', error);
-            return false;
-        }});
+        debugger;
+        this.authFlowService.executeAuthFlow(
+          () => this.authService.validateOAuthDomain(profile),
+          profile.email,
+          () => this.stopLoading()
+        );
       }
     });
   }

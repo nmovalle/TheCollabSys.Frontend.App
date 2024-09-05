@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { CommonModule, HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 // Components
 import { AppComponent } from './app.component';
@@ -26,10 +26,13 @@ import { MessageService } from 'primeng/api';
 // Interceptor
 import { AuthInterceptor } from './core/modules/auth-interceptor.interceptor';
 import { GuestComponent } from './pages/guest/guest.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IdentifyComponent } from './pages/identify/identify.component';
 import { ForgotComponent } from './pages/forgot/forgot.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { DomainComponent } from './pages/register-domain/domain/domain.component';
+import { AccessCodeComponent } from './pages/register-domain/access-code/access-code.component';
+import { ValidateInvitationComponent } from './pages/validate-invitation/validate-invitation/validate-invitation.component';
 
 @NgModule({
     declarations: [
@@ -39,14 +42,19 @@ import { RegisterComponent } from './pages/register/register.component';
         GuestComponent,
         IdentifyComponent,
         ForgotComponent,
-        RegisterComponent
+        RegisterComponent,
+        AccessCodeComponent,
+        DomainComponent,
+        ValidateInvitationComponent
     ],
     imports: [
         AppRoutingModule, 
         AppLayoutModule,
         PrimengModule,
         OAuthModule.forRoot(),
-        FormsModule
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

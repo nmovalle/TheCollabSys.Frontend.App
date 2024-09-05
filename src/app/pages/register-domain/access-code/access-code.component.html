@@ -1,0 +1,81 @@
+<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-column align-items-center justify-content-center">
+        <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
+                <div class="text-center mb-5">
+                    <div class="text-900 text-3xl font-medium mb-3">Welcome to The Collabsys!</div>
+                    <p class="text-600 font-medium">
+                        We have sent an access code to your
+                    </p>
+                    <p class="text-600 font-medium">
+                        email address: 
+                        <a [href]="'mailto:' + email" class="text-blue-500 hover:underline">
+                            {{ email }}
+                        </a>. 
+                    </p>
+                </div>
+                <p-toast></p-toast>
+                <div>
+                    <label for="accessCode" class="block text-900 text-xl font-medium mb-2 text-center">Enter your access code:</label>
+                    <div class="flex gap-2 justify-content-center mb-2">
+                        @for (digit of accessCodeDigits; track $index) {
+                            <input 
+                                type="text" 
+                                maxlength="1"
+                                class="text-center"
+                                [style]="{width: '3vw', height: '3vw', 'font-size': '2vw'}"
+                                [(ngModel)]="accessCodeDigits[$index]"
+                                (input)="moveFocus($index, $event)"
+                                (focus)="selectAllText($event)"
+                                (keypress)="validateInput($event)"
+                                pInputText />
+                        }
+                    </div>
+                    @if(showTimer) {
+                        <div class="text-center mb-5">
+                            <span class="text-600 font-medium">Code expires in:
+                                @if(awaitingAccessCode) {
+                                    <!-- <strong> loading </strong> -->
+                                    <i class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                                }@else {
+                                    <strong>{{ formattedTimer }}</strong> minutes
+                                }
+                            </span>
+                        </div>
+                    }
+                    <button 
+                        pButton 
+                        pRipple 
+                        label="Resend Code" 
+                        class="block w-full p-3 text-xl mb-5 mt-5"
+                        (click)="resend()"
+                    ></button>
+                    <!-- <button 
+                        pButton 
+                        pRipple 
+                        label="Stop Timer" 
+                        class="block w-full p-3 text-xl mb-5 mt-5"
+                        (click)="stopTimer()"
+                    ></button> -->
+                </div>
+                <div class="text-center mb-5">
+                    <span class="text-600 font-medium">Or back to Log In: </span>
+                </div>
+                <div>
+                    <button 
+                        pButton 
+                        pRipple 
+                        label="Log In" 
+                        class="block w-full p-3 text-xl"
+                        (click)="goTo('/');"
+                    ></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (loading) {
+    <div class="progress-spinner">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    </div>
+}

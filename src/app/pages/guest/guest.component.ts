@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '@app/core/guards/auth.service';
+import { AuthService, MenuError } from '@app/core/guards/auth.service';
 import { GoogleApiService } from '@app/core/guards/google-api.service';
+import { MenuRoleDetailDTO } from '@app/core/interfaces/menu';
 import { ProposalRole, Role } from '@app/core/interfaces/role';
 import { RoleService } from '@app/core/service/role.service';
 import { UserService } from '@app/core/service/user.service';
@@ -76,10 +77,10 @@ export class GuestComponent implements OnInit {
     });
   }
 
-  updateUserRole(username: string, newRoleId: string) {
+  async updateUserRole(username: string, newRoleId: string) {
     this.loading = true;
     this.userService.updateUserRole(username, newRoleId).subscribe({
-      next: (response: any) => {
+      next: async (response: any) => {
         const { userRole, authToken } = response;
         const { accessToken, refreshToken, accessTokenExpiration } = authToken;
 
@@ -95,14 +96,36 @@ export class GuestComponent implements OnInit {
           detail: 'The user role was successfully updated'
         });
 
-        this.router.navigate(['home'], { replaceUrl: true });
+        await this.getUserMenu(username);
       },
-      error: () => {
+      error: async () => {
         this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: 'There was an error updating user role'
+        });
+      }
+    });
+  }
+
+  async getUserMenu(username: string): Promise<void> {
+    this.authService.getUserMenu(username).subscribe({
+      next: async (response: any) => {
+        debugger;
+        if ((response as MenuError).error) {
+          console.error('Error en menu:', (response as MenuError).message);
+          return;
+        }
+        const userMenu = response as MenuRoleDetailDTO[];
+        this.authService.setUsermenu(userMenu);
+        this.router.navigate(['home'], { replaceUrl: true });
+      },
+      error: async () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error getting the user menu'
         });
       }
     });

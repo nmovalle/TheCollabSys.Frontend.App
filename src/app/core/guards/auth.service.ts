@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserRole } from '../constants/types';
 import { MenuRoleDetailDTO } from '../interfaces/menu';
@@ -94,19 +94,89 @@ export class AuthService {
   }
 
   public validateOAuthDomain(user: any): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/api/auth/validate-oauth-domain`, user);
+    return this.http.post<any>(`${environment.apiUrl}/api/auth/validate-oauth-domain`, user).pipe(
+      catchError(error => {
+        console.error('Error en validateOAuthDomain:', error);
+        const errorResponse = error.error || { message: 'Unknown error', email: null };
+        return of({
+          error: true,
+          status: error.status,
+          message: errorResponse.message,
+          type: errorResponse.type,
+          AccessCodeGenerated: errorResponse.AccessCodeGenerated || false,
+          email: errorResponse.email || null,
+          userId: errorResponse.userId || null,
+          domain: user.hd
+        } as AuthError);
+      })
+    );
   }
-
+  
   public login(username: string): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/api/auth/login`, username);
+    // return this.http.post<any>(`${environment.apiUrl}/api/auth/login`, username);
+    return this.http.post<any>(`${environment.apiUrl}/api/auth/login`, username).pipe(
+      catchError(error => {
+        console.error('Error en validateOAuthDomain:', error);
+        const errorResponse = error.error || { message: 'Unknown error', email: null };
+        return of({
+          error: true,
+          status: error.status,
+          message: errorResponse.message,
+        } as AuthError);
+      })
+    );
   }
 
-  public getUserMenu(username: string): Observable<MenuRoleDetailDTO[]> {
-    return this.http.get<MenuRoleDetailDTO[]>(`${environment.apiUrl}/api/auth/menus/${username}`);
+  public authDomain(userid: string): Observable<any> {
+    const body = { userId: userid };
+    return this.http.post<any>(`${environment.apiUrl}/api/Token/token-domain`, body).pipe(
+      catchError(error => {
+        console.error('Error en validateOAuthDomain:', error);
+        const errorResponse = error.error || { message: 'Unknown error', email: null };
+        return of({
+          error: true,
+          status: error.status,
+          message: errorResponse.message,
+        } as AuthError);
+      })
+    );
+  }
+
+  public getUserMenu(username: string): Observable<MenuRoleDetailDTO[] | MenuError> {
+    return this.http.get<MenuRoleDetailDTO[]>(`${environment.apiUrl}/api/auth/menus/${username}`).pipe(
+      catchError(error => {
+        console.error('Error en getUserMenu:', error);
+        return of({ error: true, status: error.status, message: error.message } as MenuError);
+      })
+    );
   }
 
   public getUserData(username: string): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/api/auth/GetUserByName/${username}`);
+  }
+
+  public resendAccessCode(email: string): Observable<any> {
+    const body = { email };
+    return this.http.post<any>(`${environment.apiUrl}/api/AccessCode/resend`, body);
+  }
+
+  public validateAccessCode(email: string, code: string): Observable<ValidateAccessCode> {
+    const body = { email, code };
+  
+    return this.http.post<ValidateAccessCode>(`${environment.apiUrl}/api/AccessCode/validate`, body).pipe(
+      catchError(error => {
+        console.error('Error en validateAccessCode:', error);
+  
+        const errorResponse = error.error || { message: 'Unknown error', email: null, accessCode: null };
+        return of({
+          error: true,
+          status: error.status,
+          message: errorResponse.message,
+          accessCode: errorResponse.accessCode,
+          email: errorResponse.email || null
+        });
+      })
+    );
   }
 
   public refreshToken(refreshToken: string): Observable<any> {
@@ -160,4 +230,30 @@ export class AuthService {
     }
     return null;
   };
+}
+
+
+export interface AuthError {
+  error: boolean;
+  status: number;
+  message: string;
+  type: string;
+  userId: string;
+  AccessCodeGenerated?: boolean;
+  email: string;
+  domain: string;
+}
+
+export interface MenuError {
+  error: boolean;
+  status: number;
+  message: string;
+}
+
+export interface ValidateAccessCode {
+  error: boolean;
+  status: number;
+  message: string;
+  accessCode?: string;
+  email?: string;
 }

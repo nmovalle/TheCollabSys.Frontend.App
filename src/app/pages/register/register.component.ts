@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@app/core/service/user.service';
 import { MessageService } from 'primeng/api';
+import { InvitationService } from '../config/invitation/invitation.service';
 
 @Component({
   selector: 'app-register',
@@ -10,43 +11,53 @@ import { MessageService } from 'primeng/api';
 export class RegisterComponent {
   loading: boolean = false;
   email!: string;
-  password!: string;
 
   constructor(
     private userService: UserService,
+    private invitationService: InvitationService,
     private messageService: MessageService,
     public router: Router
   ) {
     
   }
 
-  register() {
-    if (!this.email || !this.password) {
-      this.messageService.add({severity:'error', summary:'Error', detail:'Email and Password are required'});
+  async sendRequest(): Promise<void> {
+    if (!this.email) {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Email field is required'});
       return;
     }
-
     this.loading = true;
-    const user = {
-      userName: this.email,
-      email: this.email,
-      password: this.password
-    };
-
-    this.userService.register(user).subscribe({
+    this.invitationService.request(this.email).subscribe({
       next: (response: any) => {
         this.loading = false;
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'The user was successfully registered'
+          detail: 'Your request to join Collabsys has been sent to our support team. We will reach out to you shortly.'
         });
-        this.router.navigate(['/']);
       },
       error: () => {
         this.loading = false;
-        this.messageService.add({severity:'error', summary:'Error', detail:'An error was ocurred while registering the user'});
+        this.messageService.add({severity:'error', summary:'Error', detail:'An error was ocurred while sending the invitation request.'});
       }
     });
+
+    
+
+    // this.userService.register(user).subscribe({
+    //   next: (response: any) => {
+    //     this.loading = false;
+    //     this.messageService.add({
+    //       severity: 'success',
+    //       summary: 'Success',
+    //       detail: 'The user was successfully registered'
+    //     });
+    //     this.router.navigate(['/']);
+    //   },
+    //   error: () => {
+    //     this.loading = false;
+    //     this.messageService.add({severity:'error', summary:'Error', detail:'An error was ocurred while registering the user'});
+    //   }
+    // });
   }
 }

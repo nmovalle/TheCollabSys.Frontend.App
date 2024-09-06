@@ -53,4 +53,9 @@ export class InvitationService {
   validate(token: string): Observable<ResponseApi> {
     return this.http.get<any>(`${environment.apiUrl}/api/Invitation/validate?token=${token}`);
   }
+
+  request(email: string): Observable<any> {
+    const body = { email };
+    return this.http.post<any>(`${environment.apiUrl}/api/Invitation/request`, body);
+  }
 }

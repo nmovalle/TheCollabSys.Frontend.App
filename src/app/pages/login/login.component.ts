@@ -59,13 +59,23 @@ export class LoginComponent implements OnInit {
         this.authService.setUserRole(userRole);
 
         forkJoin({
-          menu: this.authService.getUserMenu(credentials.userName)
-        }).subscribe((menu) => {          
-          const userMenu = menu.menu as MenuRoleDetailDTO[];
-          this.authService.setUsermenu(userMenu);
-          this.router.navigate(['/home']);
-        });
+          menu: this.authService.getUserMenu(credentials.userName),
+          passwordConfirmed: this.userService.getUserPasswordConfirmed(credentials.userName)
+        }).subscribe(({ menu, passwordConfirmed }) => {
+          const { data } = passwordConfirmed;
+          const isPasswordConfirmed = data.passwordConfirmed;
 
+          const userMenu = menu as MenuRoleDetailDTO[];
+          this.authService.setUsermenu(userMenu);
+          
+          if (!isPasswordConfirmed) {
+            this.authService.setChangePasswordConfirmed(true);
+            return this.router.navigate([`/change-password/${userRole.userId}`], { replaceUrl: true });
+          }
+        
+          return this.router.navigate(['/home']);
+        });
+        
         this.loading = false;
       },
       error: () => {

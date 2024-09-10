@@ -14,6 +14,11 @@ export const authGuard: CanActivateFn = (route, state) => {
       return false;
     }
 
+    if (authService.getChangePasswordConfirmed()) {
+      router.navigate([`/change-password/${userRole.userId}`], { replaceUrl: true });
+      return false;
+    }
+
     if (state.url === '/home') return true;
     else {      
       const usermenu = authService.getUsermenu();

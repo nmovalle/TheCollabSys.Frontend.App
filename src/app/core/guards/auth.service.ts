@@ -85,6 +85,15 @@ export class AuthService {
     return null;
   }
 
+  public setChangePasswordConfirmed(isFirstTime: boolean) {
+    localStorage.setItem('passwordConfirmed', isFirstTime.toString());
+  }
+
+  public getChangePasswordConfirmed(): boolean {
+    const value = localStorage.getItem('passwordConfirmed');
+    return value === 'true';
+  }
+
   public cleanLocalStorage() {
     localStorage.clear();
   }

@@ -107,7 +107,6 @@ export class AddComponent implements OnInit {
     const domainValue = event.target.value;
     return new Promise<boolean>(async (resolve, reject) => {
       try {
-        debugger;
         const response: any = await this.domainSerice.getByDomain(domainValue).toPromise();
         const { data } = response;
         this.domainMasterId = data.id;

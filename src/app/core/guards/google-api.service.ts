@@ -55,7 +55,6 @@ export class GoogleApiService {
       if (event.type === 'token_received') {
         this.startLoading();
         const profile = this.getProfile();
-        debugger;
         this.authFlowService.executeAuthFlow(
           () => this.authService.validateOAuthDomain(profile),
           profile.email,

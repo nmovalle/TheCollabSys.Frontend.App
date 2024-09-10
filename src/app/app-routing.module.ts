@@ -11,6 +11,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { AccessCodeComponent } from './pages/register-domain/access-code/access-code.component';
 import { DomainComponent } from './pages/register-domain/domain/domain.component';
 import { ValidateInvitationComponent } from './pages/validate-invitation/validate-invitation/validate-invitation.component';
+import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 
 @NgModule({
     imports: [
@@ -18,6 +19,7 @@ import { ValidateInvitationComponent } from './pages/validate-invitation/validat
             { path: '', component: LoginComponent },
             { path: 'guest', component: GuestComponent },
             { path: 'forgot/:id', component: ForgotComponent },
+            { path: 'change-password/:id', component: ChangePasswordComponent },
             { path: 'identify', component: IdentifyComponent },
             { path: 'register', component: RegisterComponent },
             { path: 'access-code', component: AccessCodeComponent },

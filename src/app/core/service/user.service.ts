@@ -16,6 +16,10 @@ export class UserService {
     return this.http.get<any>(`${environment.apiUrl}/api/User/GetUserByName/${username}`);
   }
 
+  getUserPasswordConfirmed(username: string) {
+    return this.http.get<any>(`${environment.apiUrl}/api/WireList/GetUserPasswordConfirmed/${username}`);
+  }
+
   register(user: any) {
     return this.http.post(`${environment.apiUrl}/api/User/register`, user);
   }

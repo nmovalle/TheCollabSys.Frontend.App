@@ -112,7 +112,6 @@ export class GuestComponent implements OnInit {
   async getUserMenu(username: string): Promise<void> {
     this.authService.getUserMenu(username).subscribe({
       next: async (response: any) => {
-        debugger;
         if ((response as MenuError).error) {
           console.error('Error en menu:', (response as MenuError).message);
           return;

@@ -33,6 +33,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { DomainComponent } from './pages/register-domain/domain/domain.component';
 import { AccessCodeComponent } from './pages/register-domain/access-code/access-code.component';
 import { ValidateInvitationComponent } from './pages/validate-invitation/validate-invitation/validate-invitation.component';
+import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { ValidateInvitationComponent } from './pages/validate-invitation/validat
         GuestComponent,
         IdentifyComponent,
         ForgotComponent,
+        ChangePasswordComponent,
         RegisterComponent,
         AccessCodeComponent,
         DomainComponent,

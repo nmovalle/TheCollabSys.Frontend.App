@@ -32,12 +32,15 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
     const { userId } = this.authService.getUserRole();
+    const { companyId } = this.authService.getUserCompany();
     const headers = req.body instanceof FormData ? {
       Authorization: `Bearer ${token}`,
-      'User-Id': `${userId}`
+      'User-Id': `${userId}`,
+      'Company-Id': `${companyId}`,
     } : {
       Authorization: `Bearer ${token}`,
       'User-Id': `${userId}`,
+      'Company-Id': `${companyId}`,
       'Content-Type': req.headers.get('Content-Type') || 'application/json'
     };
 

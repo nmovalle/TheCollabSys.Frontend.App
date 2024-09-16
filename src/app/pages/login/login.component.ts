@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
     };
     this.userService.login(credentials).subscribe({
       next: (response: any) => {
-        const { userRole, authToken } = response;
+        const { userRole, authToken, userCompany } = response;
         const { accessToken, refreshToken, accessTokenExpiration } = authToken;
 
         this.authService.setAuthProvider("Credentials");
@@ -57,6 +57,7 @@ export class LoginComponent implements OnInit {
         this.authService.setRefreshToken(refreshToken);
         this.authService.setAccessTokenExpiration(accessTokenExpiration);
         this.authService.setUserRole(userRole);
+        this.authService.setUserCompany(userCompany);
 
         forkJoin({
           menu: this.authService.getUserMenu(credentials.userName),

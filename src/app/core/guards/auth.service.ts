@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UserRole } from '../constants/types';
+import { UserCompany, UserRole } from '../constants/types';
 import { MenuRoleDetailDTO } from '../interfaces/menu';
 
 @Injectable({
@@ -67,6 +67,19 @@ export class AuthService {
     const userRole = localStorage.getItem('userRole');
     if (userRole) {
       return JSON.parse(userRole);
+    }
+
+    return null;
+  }
+
+  public setUserCompany(userCompany: UserCompany) {
+    localStorage.setItem('userCompany', JSON.stringify(userCompany));
+  }
+  
+  public getUserCompany(): UserCompany | null {
+    const userCompany = localStorage.getItem('userCompany');
+    if (userCompany) {
+      return JSON.parse(userCompany);
     }
 
     return null;

@@ -57,8 +57,10 @@ export class AuthFlowService {
   }
 
   private processSuccessfulAuth(auth: any, username: any, menu: any, stopLoadingCallback: () => void): void {
-    const { userRole, authToken } = auth;
+    const { userRole, authToken, userCompany } = auth;
     const { accessToken, refreshToken, accessTokenExpiration } = authToken;
+
+    console.log(userCompany);
 
     this.authService.setAuthProvider("Google");
     this.authService.setUsername(username);
@@ -66,6 +68,7 @@ export class AuthFlowService {
     this.authService.setRefreshToken(refreshToken);
     this.authService.setAccessTokenExpiration(accessTokenExpiration);
     this.authService.setUserRole(userRole);
+    this.authService.setUserCompany(userCompany);
 
     const userMenu = menu as MenuRoleDetailDTO[];
     this.authService.setUsermenu(userMenu);

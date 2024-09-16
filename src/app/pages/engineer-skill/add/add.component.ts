@@ -166,6 +166,7 @@ export class AddComponent implements OnInit {
       subcategoryIds: uniqueIds.subcategoryIds
     };
     
+    console.log(dto)
     this.skillsService.getSkillsByCategories(dto).subscribe({
       next: (response: any) => {
         const skillData: iSkillRating[] = response.data;

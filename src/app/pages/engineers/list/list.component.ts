@@ -93,16 +93,17 @@ export class ListComponent implements OnInit {
     this.engineerService.getEngineers().subscribe({
       next: (response: any) => {
         const {data} = response;
-        this.engineers = response.data;
+        this.engineers = data;
       },
-      error: () => {
+      error: (ex) => {
+        const {error} = ex;
         this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error getting the engineers'
+          severity: 'info',
+          summary: 'Not Found',
+          detail: error.message
         });
       }
-    });    
+    });
   }
 
   ngOnInit() {

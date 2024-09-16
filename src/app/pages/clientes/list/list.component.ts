@@ -96,11 +96,12 @@ export class ListComponent implements OnInit {
         const {data} = response;
         this.clients = response.data;
       },
-      error: () => {
+      error: (ex) => {
+        const {error} = ex;
         this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error getting the customer'
+          severity: 'info',
+          summary: 'Not Found',
+          detail: error.message
         });
       }
     });    

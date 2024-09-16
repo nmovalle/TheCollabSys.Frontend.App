@@ -90,13 +90,14 @@ export class ListComponent implements OnInit {
     this.employerService.getEmployers().subscribe({
       next: (response: any) => {
         const {data} = response;
-        this.employers = response.data;
+        this.employers = data;
       },
-      error: () => {
+      error: (ex) => {
+        const {error} = ex;
         this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error getting the employer'
+          severity: 'info',
+          summary: 'Not Found',
+          detail: error.message
         });
       }
     });    

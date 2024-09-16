@@ -81,13 +81,14 @@ export class GuestComponent implements OnInit {
     this.loading = true;
     this.userService.updateUserRole(username, newRoleId).subscribe({
       next: async (response: any) => {
-        const { userRole, authToken } = response;
+        const { userRole, authToken, userCompany } = response;
         const { accessToken, refreshToken, accessTokenExpiration } = authToken;
 
         this.authService.setAccessToken(accessToken);
         this.authService.setRefreshToken(refreshToken);
         this.authService.setAccessTokenExpiration(accessTokenExpiration);
         this.authService.setUserRole(userRole);
+        this.authService.setUserCompany(userCompany);
 
         this.loading = false;
         this.messageService.add({

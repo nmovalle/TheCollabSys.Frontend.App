@@ -109,11 +109,12 @@ export class ListComponent implements OnInit {
         const {data} = response;
         this.projectAssignments = data;
       },
-      error: () => {
+      error: (ex) => {
+        const {error} = ex;
         this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error getting the project assignments'
+          severity: 'info',
+          summary: 'Not Found',
+          detail: error.message
         });
       }
     });    

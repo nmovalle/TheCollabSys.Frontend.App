@@ -43,7 +43,6 @@ export class ListComponent implements OnInit {
       { field: 'projectName', header: 'Project Name' },
       { field: 'clientName', header: 'Client' },
       { field: 'projectDescription', header: 'Project Description' },
-      // { field: 'numberPositionTobeFill', header: 'Email' },
       { field: 'dateCreated', header: 'Created Date' },
       { field: 'startDate', header: 'Start Date' },
       { field: 'endDate', header: 'End Date' },
@@ -107,11 +106,12 @@ export class ListComponent implements OnInit {
         const {data} = response;
         this.assignments = data;
       },
-      error: () => {
+      error: (ex) => {
+        const {error} = ex;
         this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error getting the assignments'
+          severity: 'info',
+          summary: 'Not Found',
+          detail: error.message
         });
       }
     });    

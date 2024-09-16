@@ -3,3 +3,9 @@ export type UserRole = {
     roleName: string;
     userId: string;
 }
+
+export type UserCompany = {
+    userCompanyId: number;
+    userId: string;
+    companyId: number;
+}

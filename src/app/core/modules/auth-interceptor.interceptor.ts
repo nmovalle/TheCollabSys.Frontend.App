@@ -3,6 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { AuthService } from '../guards/auth.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -36,13 +37,16 @@ export class AuthInterceptor implements HttpInterceptor {
     const headers = req.body instanceof FormData ? {
       Authorization: `Bearer ${token}`,
       'User-Id': `${userId}`,
-      'Company-Id': `${companyId}`,
     } : {
       Authorization: `Bearer ${token}`,
       'User-Id': `${userId}`,
-      'Company-Id': `${companyId}`,
       'Content-Type': req.headers.get('Content-Type') || 'application/json'
     };
+
+    if (this.shouldIncludeCompanyId(req.url)) {
+      const { companyId } = this.authService.getUserCompany();
+      headers['Company-Id'] = `${companyId}`;
+    }
 
     return req.clone({
       setHeaders: headers
@@ -78,5 +82,12 @@ export class AuthInterceptor implements HttpInterceptor {
       'https://www.googleapis.com/oauth2/v3/certs'
     ];
     return excludedUrls.some(excludedUrl => url.startsWith(excludedUrl));
+  }
+
+  private shouldIncludeCompanyId(url: string): boolean {
+    const excludeCompanyIdUrls = [
+      `${environment.apiUrl}/api/Company`,
+    ];
+    return !excludeCompanyIdUrls.some(excludedUrl => url.startsWith(excludedUrl));
   }
 }

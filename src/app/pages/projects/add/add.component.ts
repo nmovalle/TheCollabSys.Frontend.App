@@ -5,6 +5,9 @@ import { MessageService } from 'primeng/api';
 import { ClientService } from '@app/pages/clientes/services/client.service';
 import { ProjectService } from '../project.service';
 import { Client } from '@app/pages/clientes/models/client';
+import { iSkillRating } from '@app/core/components/skills/skills.component';
+import { LoadingService } from '@app/core/guards/loading.service';
+import { ProjectSkillService } from '@app/pages/project-skill/project-skill.service';
 
 @Component({
   selector: 'app-add',
@@ -15,13 +18,20 @@ export class AddComponent implements OnInit {
   dataForm!: FormGroup;
 
   clients!: Client[];
+  displayAddClientDialog: boolean = false;
+
+  projectSkills: iSkillRating[] = [];
+
+  projectSavedId: number = null;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private messageService: MessageService,
     private projectService: ProjectService,
-    private clientService: ClientService
+    private projectSkillService: ProjectSkillService,
+    private clientService: ClientService,
+    private loadingService: LoadingService,
   ) {
   }
 
@@ -61,31 +71,20 @@ export class AddComponent implements OnInit {
     return this.dataForm.get('statusId') as FormControl;
   }
 
-  onSubmit(event) {
+  async onSubmit(event): Promise<void> {
     event.preventDefault();
+
+    this.loading = false;
     if (this.dataForm.valid) {
       const data = this.dataForm.value;
 
-      this.loading = true;
-      this.projectService.addProject(data, null).subscribe({
-        next: async (response: any) => {
-          this.loading = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Record was successfully updated.'
-          });
-          this.router.navigate(['/projects'], { replaceUrl: true });
-        },
-        error: () => {
-          this.loading = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'An error occurred while updating the record.'
-          });
-        }
-      });
+      await this.saveProject(data);
+      await this.saveProjectSkills();
+
+      this.router.navigate(['/projects'], { replaceUrl: true });
+
+      this.loading = false;
+      
     } else {
       this.loading = false;
       this.messageService.add({
@@ -96,27 +95,127 @@ export class AddComponent implements OnInit {
     }
   }
 
+  async saveProject(data: any): Promise<void> {
+    this.loading = false;
+    return new Promise<void>((resolve, reject) => {
+      this.projectService.addProject(data, null).subscribe({
+        next: (response: any) => {
+          const { data } = response;
+          this.projectSavedId = data.projectId;
+          
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'The project was successfully registered.'
+          });
+
+          this.loading = false;
+          resolve();
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'An error occurred while creating the project.'
+          });
+          reject();
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
+    });
+  }
+
+  async saveProjectSkills(): Promise<void> {
+    this.loading = false;
+    const data = {
+      projectId: this.projectSavedId,
+      skills: this.projectSkills
+    };
+    return new Promise<void>((resolve, reject) => {
+      this.projectSkillService.addProjectSkill(data, null).subscribe({
+        next: (response: any) => {          
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'The project skills was successfully registered.'
+          });
+          this.loading = false;
+          resolve();
+        },
+        error: (err) => {
+          const {error} = err;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error
+          });
+          reject();
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
+    });
+  }
+
+
   getClients() {
     this.loading = true;
     this.clientService.getClients().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.clients = response.data;
+        this.clients = [...data, { clientName: 'Create one', clientId: 0 }];
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
+        const {error} = err;
         this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error getting the customer'
+          detail: error
         });
       }
     });    
   }
 
+  addClientToList(newClient: any) {
+    this.clients.splice(this.clients.length - 1, 0, newClient);
+  }
+
+  updateClientInForm(newClient: any) {
+    this.dataForm.patchValue({
+      clientId: newClient.clientId
+    });
+  }
+
+  closeClientDialog() {
+    this.displayAddClientDialog = false;
+  }
   
+  onClientChange(event: any) {
+    if (event.value === 0) {
+      this.displayAddClientDialog = true;
+    }
+  }
+  
+  handleClientCreated(newClient: any) {
+    this.addClientToList(newClient);
+    this.updateClientInForm(newClient);
+    this.closeClientDialog();
+  }
+
+  handleSkillsCreated(newSkills: iSkillRating[]) {
+    this.projectSkills = [...newSkills];
+  }
+
   ngOnInit(): void {
+    this.loadingService.loading$.subscribe(loading => {
+      this.loading = loading;
+    });
+
     this.dataForm = this.fb.group({
       projectId: [0],
       projectName: [null, Validators.required],
@@ -125,12 +224,13 @@ export class AddComponent implements OnInit {
       numberPositionTobeFill: [null, [Validators.required, Validators.pattern('[0-9]')]],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
-      statusId: [null, Validators.required],
+      statusId: [1],
       dateCreated: [null],
       dateUpdate: [null],
       userId: [null]
     });
 
+    this.dataForm.get('clientId')?.markAsTouched();
     this.getClients();
   }
 }

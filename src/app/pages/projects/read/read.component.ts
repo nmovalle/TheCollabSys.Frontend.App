@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ProjectService } from '../project.service';
+import { ProjectSkillService } from '@app/pages/project-skill/project-skill.service';
+import { iSkillRating } from '@app/core/components/skills/skills.component';
 
 @Component({
   selector: 'app-read',
@@ -12,50 +14,16 @@ export class ReadComponent implements OnInit {
   loading: boolean = false;
   id: number | null = null;
   dataForm!: FormGroup;
+
+  targetSkills: iSkillRating[] = [];
   
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private projectSkillService: ProjectSkillService,
   ) {
-    
-  }
-
-  get projectId() {
-    return this.dataForm.get('projectId') as FormControl;
-  }
-
-  get projectName() {
-    return this.dataForm.get('projectName') as FormControl;
-  }
-
-  get clientId() {
-    return this.dataForm.get('clientId') as FormControl;
-  }
-
-  get clientName() {
-    return this.dataForm.get('clientName') as FormControl;
-  }
-
-  get projectDescription() {
-    return this.dataForm.get('projectDescription') as FormControl;
-  }
-
-  get numberPositionTobeFill() {
-    return this.dataForm.get('numberPositionTobeFill') as FormControl;
-  }
-
-  get startDate() {
-    return this.dataForm.get('startDate') as FormControl;
-  }
-
-  get endDate() {
-    return this.dataForm.get('endDate') as FormControl;
-  }
-
-  get statusId() {
-    return this.dataForm.get('statusId') as FormControl;
   }
 
   getProject(id: number) {
@@ -86,12 +54,38 @@ export class ReadComponent implements OnInit {
           });
         }
       },
-      error: () => {
+      error: (err) => {
+        const {error} = err;
         this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'An error occurred while getting the project.'
+          detail: error
+        });
+      }
+    });
+  }
+
+  async getProjectSkills(projectId: number) {
+    this.loading = true;
+    this.projectSkillService.getProjectSkill(projectId).subscribe({
+      next: (response: any) => {
+        const { data } = response;
+        if (data) {
+
+          const { skills } = data;
+          this.targetSkills = skills;
+        }
+
+        this.loading = false;
+      },
+      error: (err) => {
+        const {error} = err;
+        this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error
         });
       }
     });
@@ -108,6 +102,7 @@ export class ReadComponent implements OnInit {
       startDate: [null],
       endDate: [null],
       statusId: [null],
+      statusName: [null],
       dateCreated: [null],
       dateUpdate: [null],
       userId: [null]
@@ -118,6 +113,7 @@ export class ReadComponent implements OnInit {
       if (id != null) {
         this.id = +id;
         this.getProject(this.id);
+        this.getProjectSkills(this.id);
       }
     });
   }

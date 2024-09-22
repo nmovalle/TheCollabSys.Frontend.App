@@ -5,7 +5,7 @@ import { ProjectSkillService } from '../project-skill.service';
 import { AuthService } from '@app/core/guards/auth.service';
 import { Router } from '@angular/router';
 
-interface expandedRows {
+export interface expandedRows {
   [key: string]: boolean;
 }
 

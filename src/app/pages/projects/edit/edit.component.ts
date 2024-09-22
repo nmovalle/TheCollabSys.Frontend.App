@@ -5,6 +5,10 @@ import { MessageService } from 'primeng/api';
 import { ProjectService } from '../project.service';
 import { ClientService } from '@app/pages/clientes/services/client.service';
 import { Client } from '@app/pages/clientes/models/client';
+import { StatusService } from '@app/core/service/status.service';
+import { StatusDTO } from '@app/core/interfaces/status';
+import { iSkillRating } from '@app/core/components/skills/skills.component';
+import { ProjectSkillService } from '@app/pages/project-skill/project-skill.service';
 
 @Component({
   selector: 'app-edit',
@@ -16,14 +20,23 @@ export class EditComponent implements OnInit {
   dataForm!: FormGroup;
 
   clients!: Client[];
+  displayAddClientDialog: boolean = false;
+
+  status!: StatusDTO[];
+  projectSavedId: number = null;
   
+
+  projectSkills: iSkillRating[] = [];
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
     private projectService: ProjectService,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private statusServie: StatusService,
+    private projectSkillService: ProjectSkillService
   ) {
   }
 
@@ -63,32 +76,21 @@ export class EditComponent implements OnInit {
     return this.dataForm.get('statusId') as FormControl;
   }
 
-  onSubmit(event) {
+  async onSubmit(event): Promise<void> {
+    this.loading = true;
     event.preventDefault();
+
+    debugger;
     if (this.dataForm.valid) {
       const data = this.dataForm.value;
       data.projectId = this.id;
 
-      this.loading = true;
-      this.projectService.updateProject(data.projectId, data, null).subscribe({
-        next: async (response: any) => {
-          this.loading = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Record was successfully updated.'
-          });
-          this.router.navigate(['/projects'], { replaceUrl: true });
-        },
-        error: () => {
-          this.loading = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'An error occurred while updating the record.'
-          });
-        }
-      });
+      await this.saveProject(data.projectId, data);
+      await this.saveProjectSkills();
+
+      this.loading = false;
+      this.router.navigate(['/projects'], { replaceUrl: true });
+      
     } else {
       this.loading = false;
       this.messageService.add({
@@ -99,8 +101,73 @@ export class EditComponent implements OnInit {
     }
   }
 
-  getProject(id: number) {
-    this.projectService.getProject(this.id).subscribe({
+  async saveProject(id: number, data: any): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.projectService.updateProject(id, data, null).subscribe({
+        next: async (response: any) => {
+          const { data } = response;
+          this.projectSavedId = data.projectId;
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Record was successfully updated.'
+          });
+          this.loading = false;
+          resolve();
+        },
+        error: async(err) => {
+          const {error} = err;
+          this.loading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error
+          });
+          reject();
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
+    });    
+  }
+
+  async saveProjectSkills(): Promise<void> {
+    this.loading = false;
+    const data = {
+      projectId: this.projectSavedId,
+      skills: this.projectSkills
+    };
+    return new Promise<void>((resolve, reject) => {
+      this.projectSkillService.addProjectSkill(data, null).subscribe({
+        next: (response: any) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'The project skills was successfully registered.'
+          });
+          this.loading = false;
+          resolve();
+        },
+        error: (err) => {
+          const {error} = err;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error
+          });
+          reject();
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
+    });
+  }
+
+  async getProject(id: number) {
+    this.projectService.getProject(id).subscribe({
       next: async (response: any) => {
         if (response) {
           const { status, data, message } = response;
@@ -127,37 +194,114 @@ export class EditComponent implements OnInit {
           });
         }
       },
-      error: () => {
+      error: async (err) => {
+        const {error} = err;
         this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'An error occurred while getting the project.'
+          detail: error
         });
       }
     });
   }
 
-  getClients() {
+  async getClients() {
     this.loading = true;
     this.clientService.getClients().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.clients = response.data;
+        this.clients = [...data, { clientName: 'Create one', clientId: 0 }];
         this.loading = false;
       },
-      error: () => {
+      error: async (err) => {
+        const {error} = err;
         this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error getting the customer'
+          detail: error
+        });
+      }
+    });
+  }
+
+  async getProjectSkills(id: number) {
+    this.loading = true;
+    this.projectSkillService.getProjectSkill(id).subscribe({
+      next: async (response: any) => {
+        const { data } = response;
+        if (data) {
+          const { skills } = data;
+          this.projectSkills = skills;
+        }
+        this.loading = false;
+      },
+      error: async (err) => {
+        this.loading = false;
+        const { error } = err;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error
+        });
+      }
+    });
+  }
+  
+
+  addClientToList(newClient: any) {
+    this.clients.splice(this.clients.length - 1, 0, newClient);
+  }
+
+  updateClientInForm(newClient: any) {
+    this.dataForm.patchValue({
+      clientId: newClient.clientId
+    });
+  }
+
+  closeClientDialog() {
+    this.displayAddClientDialog = false;
+  }
+  
+  onClientChange(event: any) {
+    if (event.value === 0) {
+      this.displayAddClientDialog = true;
+    }
+  }
+  
+  handleClientCreated(newClient: any) {
+    this.addClientToList(newClient);
+    this.updateClientInForm(newClient);
+    this.closeClientDialog();
+  }
+
+  handleSkillsCreated(newSkills: iSkillRating[]) {
+    console.log("skill recibido:", newSkills)
+    this.projectSkills = [...newSkills];
+  }
+
+  async getStatus() {
+    this.loading = true;
+    this.statusServie.getByType("Projects").subscribe({
+      next: async (response: any) => {
+        const {data} = response;
+        this.status = data;
+        this.loading = false;
+      },
+      error: async (err) => {
+        const {error} = err;
+        this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error
         });
       }
     });    
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.dataForm = this.fb.group({
       projectId: [0],
       projectName: [null, Validators.required],
@@ -173,14 +317,18 @@ export class EditComponent implements OnInit {
       userId: [null]
     });
 
-    this.route.paramMap.subscribe(params => {
+    this.getClients();
+    this.getStatus();
+
+    this.dataForm.get('clientId')?.markAsTouched();
+
+    this.route.paramMap.subscribe(async params => {
       const id = params.get('id');
       if (id != null) {
         this.id = +id;
-        this.getProject(this.id);
+        await this.getProject(this.id);
+        await this.getProjectSkills(this.id);
       }
     });
-
-    this.getClients();
   }
 }

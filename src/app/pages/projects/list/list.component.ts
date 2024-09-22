@@ -4,6 +4,7 @@ import { ProjectService } from '../project.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from '@app/core/guards/auth.service';
 import { Router } from '@angular/router';
+import { expandedRows } from '@app/pages/project-skill/list/list.component';
 
 @Component({
   selector: 'app-list',
@@ -13,11 +14,16 @@ export class ListComponent implements OnInit {
   deleteProjectDialog: boolean = false;
   deleteProjectsDialog: boolean = false;
 
-  projects!: any[];
+  projectsSkills!: any[];
   project = {} as any;
   selectedProjects: any[];
   
   cols: any[] = [];
+  colsDetail: any[] = [];
+
+  expandedRows: expandedRows = {};
+  isExpanded: boolean = false;
+  
   permissions: {};
 
   constructor(
@@ -34,8 +40,13 @@ export class ListComponent implements OnInit {
       { field: 'numberPositionTobeFill', header: 'Number Position To Be Fill' },
       { field: 'startDate', header: 'Start Created' },
       { field: 'endDate', header: 'End Created' },
-      { field: 'statusId', header: 'Status' },
+      { field: 'statusName', header: 'Status' },
     ];
+
+    this.colsDetail = [
+      { field: 'skillName', header: 'Skill Name' },
+      { field: 'levelId', header: 'Level' },
+    ]
     this.permissions = this.authService.getPermissions(this.router.url);
   }
 
@@ -67,7 +78,7 @@ export class ListComponent implements OnInit {
     this.deleteProjectDialog = true;
     this.projectService.deleteProject(id).subscribe({
       next: async () => {
-        this.projects = this.projects.filter(c => c.projectId !== id);
+        this.projectsSkills = this.projectsSkills.filter(c => c.projectId !== id);
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
@@ -88,10 +99,10 @@ export class ListComponent implements OnInit {
   }
 
   getProjects() {
-    this.projectService.getProjects().subscribe({
+    this.projectService.getProjectsDetail().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.projects = response.data;
+        this.projectsSkills = response.data;
       },
       error: (ex) => {
         const {error} = ex;
@@ -106,6 +117,16 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.getProjects();
+  }
+
+  expandAll() {
+    if (!this.isExpanded) {
+        this.projectsSkills.forEach(p => p && p.projectId ? this.expandedRows[p.projectId] = true : '');
+
+    } else {
+        this.expandedRows = {};
+    }
+    this.isExpanded = !this.isExpanded;
   }
 
   onGlobalFilter(table: Table, event: Event) {

@@ -17,6 +17,10 @@ export class ProjectService {
     return this.http.get<any>(`${environment.apiUrl}/api/Projects`);
   }
 
+  getProjectsDetail(): Observable<ResponseApi> {
+    return this.http.get<any>(`${environment.apiUrl}/api/Projects/GetDetail`);
+  }
+
   getProject(id: number): Observable<ResponseApi> {
     return this.http.get<any>(`${environment.apiUrl}/api/Projects/${id}`);
   }

@@ -1,0 +1,58 @@
+<h5>Categories</h5>
+
+<ng-container *ngTemplateOutlet="contentTemplateSkills"></ng-container>
+<ng-container *ngTemplateOutlet="contentTemplateTree"></ng-container>
+
+<ng-template #contentTemplateSkills>
+    <div class="col-12">
+        <p-tree 
+            [value]="skillsTree" 
+            selectionMode="checkbox" 
+            [(selection)]="selectedTree"
+            (onNodeSelect)="onNodeSelect($event)"
+            (onNodeUnselect)="onNodeUnselect($event)"
+            >
+        </p-tree>
+    </div>
+</ng-template>
+
+<ng-template #contentTemplateTree>
+    <p-pickList 
+        [source]="sourceSkills" 
+        [target]="targetSkills" 
+        sourceHeader="Available" 
+        targetHeader="Selected" 
+        [dragdrop]="true" 
+        [responsive]="true" 
+        [sourceStyle]="{ height: '30rem' }"
+        [targetStyle]="{ height: '30rem' }" 
+        filterBy="skillName" 
+        sourceFilterPlaceholder="Search by name" 
+        targetFilterPlaceholder="Search by name" 
+        breakpoint="1400px"
+        (onMoveToTarget)="onMoveToTarget($event)"
+        (onMoveToSource)="onMoveToSource($event)"
+        >
+            <ng-template let-skill pTemplate="item">
+                <div class="flex flex-wrap align-items-center">
+                    <div class="flex-1 flex flex-column gap-2">
+                        <span class="font-bold">Skill</span>
+                        <div class="flex align-items-center gap-2">
+                            <i class="pi pi-check-circle text-sm"></i>
+                            <span>
+                                {{ skill.skillName }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-column gap-2">
+                        <span class="font-bold">Level</span>
+                        <div class="flex align-items-center gap-2">
+                            <span>
+                                <p-rating [(ngModel)]="skill.levelId" [cancel]="false"></p-rating>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+    </p-pickList>
+</ng-template>

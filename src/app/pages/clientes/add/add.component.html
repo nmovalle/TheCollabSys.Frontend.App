@@ -3,22 +3,24 @@
       <span class="w-full text-center font-bold">Add New Customer</span>
     </ng-template>
 
-    <p-toast></p-toast>
+    @if (!isDialog) {
+        <p-toast></p-toast>
 
-    <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-            <div class="my-2">
-                <button
-                pButton
-                pRipple
-                icon="pi pi-arrow-left"
-                label="Back"
-                class="p-button mr-2"
-                [routerLink]="'/clients'"
-                ></button>
-            </div>
-        </ng-template>
-    </p-toolbar>
+        <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+                <div class="my-2">
+                    <button
+                    pButton
+                    pRipple
+                    icon="pi pi-arrow-left"
+                    label="Back"
+                    class="p-button mr-2"
+                    [routerLink]="'/clients'"
+                    ></button>
+                </div>
+            </ng-template>
+        </p-toolbar>
+    }
   
     <ng-template pTemplate="content">
         <form [formGroup]="clientForm" (ngSubmit)="onSubmit($event)">

@@ -8,21 +8,24 @@ import { EditComponent } from './edit/edit.component';
 import { ReadComponent } from './read/read.component';
 import { PrimengModule } from '@app/core/modules/primeng.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { ClientsModule } from '../clientes/clients.module';
+import { SkillsComponent } from '@app/core/components/skills/skills.component';
 
 @NgModule({
   declarations: [
     ListComponent,
     AddComponent,
     EditComponent,
-    ReadComponent
+    ReadComponent,
   ],
   imports: [
     CommonModule,
     PrimengModule,
     FormsModule,
     ReactiveFormsModule,
-    ProjectsRoutingModule
+    ProjectsRoutingModule,
+    ClientsModule,
+    SkillsComponent
   ]
 })
 export class ProjectsModule { }

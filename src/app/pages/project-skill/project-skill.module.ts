@@ -9,8 +9,6 @@ import { ReadComponent } from './read/read.component';
 import { PrimengModule } from '@app/core/modules/primeng.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-
-
 @NgModule({
   declarations: [
     ListComponent,

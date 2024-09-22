@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ClientService } from '../services/client.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-add',
+  selector: 'app-client-add',
   templateUrl: './add.component.html',
 })
 export class AddComponent implements OnInit {
+  @Input() isDialog: boolean = false;
+  @Output() onClientCreated: EventEmitter<any> = new EventEmitter();
+  @Output() onClose: EventEmitter<void> = new EventEmitter();
+  
   loading: boolean = false;
   clientForm!: FormGroup;
 
@@ -19,7 +23,7 @@ export class AddComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private messageService: MessageService,
-    private clientService: ClientService
+    private clientService: ClientService,
   ) {
   }
 
@@ -57,12 +61,14 @@ export class AddComponent implements OnInit {
 
   onSubmit(event) {
     event.preventDefault();
-    if (this.clientForm.valid) {
-      const data = this.clientForm.value;
+    event.stopPropagation();
 
+    if (this.clientForm.valid) {
+      const obj = this.clientForm.value;
       this.loading = true;
-      this.clientService.addClient(data, this.selectedFile).subscribe({
+      this.clientService.addClient(obj, this.selectedFile).subscribe({
         next: (response: any) => {
+          const {data} = response;
           if (response) {
             this.loading = false;
             this.messageService.add({
@@ -70,7 +76,13 @@ export class AddComponent implements OnInit {
               summary: 'Success',
               detail: 'Record was successfully added.'
             });
-            this.router.navigate(['/clients'], { replaceUrl: true });
+
+            if(this.isDialog) {
+              this.onClientCreated.emit(data);
+            }
+            if(!this.isDialog) {
+              this.router.navigate(['/clients'], { replaceUrl: true });
+            }
           } else {
             this.loading = false;
             this.messageService.add({

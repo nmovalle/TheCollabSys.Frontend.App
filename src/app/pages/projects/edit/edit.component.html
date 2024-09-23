@@ -104,7 +104,9 @@
                         name="startDate"
                         [style]="{'min-width': '100%'}"
                         class="ng-invalid ng-dirty" 
-                        [showIcon]="true">
+                        [showIcon]="true"
+                        dateFormat="mm/dd/yy"
+                        >
                     </p-calendar>
                     <small id="startDate-help" class="p-error" *ngIf="(startDate.invalid && (startDate.dirty || startDate.touched)) || !startDate.value">
                         Start Date field is required *
@@ -118,7 +120,9 @@
                         name="endDate"
                         [style]="{'min-width': '100%'}"
                         class="ng-invalid ng-dirty" 
-                        [showIcon]="true">
+                        [showIcon]="true"
+                        dateFormat="mm/dd/yy"
+                        >
                     </p-calendar>
                         <small id="endDate-help" class="p-error" *ngIf="(endDate.invalid && (endDate.dirty || endDate.touched)) || !endDate.value">
                             End Date field is required *

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ProjectService } from '../project.service';
@@ -15,17 +15,15 @@ import { ProjectSkillService } from '@app/pages/project-skill/project-skill.serv
   templateUrl: './edit.component.html',
 })
 export class EditComponent implements OnInit {
-  loading: boolean = false;
+  loading = false;
   id: number | null = null;
   dataForm!: FormGroup;
-
-  clients!: Client[];
-  displayAddClientDialog: boolean = false;
-
-  status!: StatusDTO[];
-  projectSavedId: number = null;
   
-
+  clients: Client[] = [];
+  displayAddClientDialog = false;
+  
+  status: StatusDTO[] = [];
+  projectSavedId: number | null = null;
   projectSkills: iSkillRating[] = [];
 
   constructor(
@@ -35,70 +33,67 @@ export class EditComponent implements OnInit {
     private messageService: MessageService,
     private projectService: ProjectService,
     private clientService: ClientService,
-    private statusServie: StatusService,
+    private statusService: StatusService,
     private projectSkillService: ProjectSkillService
-  ) {
-  }
+  ) {}
 
-  get projectId() {
-    return this.dataForm.get('projectId') as FormControl;
-  }
-
-  get projectName() {
-    return this.dataForm.get('projectName') as FormControl;
-  }
-
-  get clientId() {
-    return this.dataForm.get('clientId') as FormControl;
-  }
-
-  get clientName() {
-    return this.dataForm.get('clientName') as FormControl;
-  }
-
-  get projectDescription() {
-    return this.dataForm.get('projectDescription') as FormControl;
-  }
-
-  get numberPositionTobeFill() {
-    return this.dataForm.get('numberPositionTobeFill') as FormControl;
-  }
-
-  get startDate() {
-    return this.dataForm.get('startDate') as FormControl;
-  }
-
-  get endDate() {
-    return this.dataForm.get('endDate') as FormControl;
-  }
-
-  get statusId() {
-    return this.dataForm.get('statusId') as FormControl;
-  }
+  get projectId() { return this.dataForm.get('projectId') as FormControl; }
+  get projectName() { return this.dataForm.get('projectName') as FormControl; }
+  get clientId() { return this.dataForm.get('clientId') as FormControl; }
+  get clientName() { return this.dataForm.get('clientName') as FormControl; }
+  get projectDescription() { return this.dataForm.get('projectDescription') as FormControl; }
+  get numberPositionTobeFill() { return this.dataForm.get('numberPositionTobeFill') as FormControl; }
+  get startDate() { return this.dataForm.get('startDate') as FormControl; }
+  get endDate() { return this.dataForm.get('endDate') as FormControl; }
+  get statusId() { return this.dataForm.get('statusId') as FormControl; }
 
   async onSubmit(event): Promise<void> {
-    this.loading = true;
     event.preventDefault();
 
-    debugger;
-    if (this.dataForm.valid) {
-      const data = this.dataForm.value;
-      data.projectId = this.id;
+    console.log(this.projectSkills)
 
-      await this.saveProject(data.projectId, data);
-      await this.saveProjectSkills();
-
-      this.loading = false;
-      this.router.navigate(['/projects'], { replaceUrl: true });
-      
-    } else {
-      this.loading = false;
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'The form is not valid. Please fill the required fields.'
+    if (this.dataForm.invalid) {
+      Object.keys(this.dataForm.controls).forEach(field => {
+        const control = this.dataForm.get(field);
+        control?.markAsTouched({ onlySelf: true });
+  
+        if (control?.invalid) {
+          let errorMessage = this.getErrorMessage(field);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Validation Error',
+            detail: errorMessage
+          });
+        }
       });
+  
+      if (this.dataForm.hasError('dateRangeInvalid')) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Validation Error',
+          detail: 'End Date cannot be earlier than Start Date.'
+        });
+      }
+  
+      if (this.dataForm.hasError('projectSkillsRequired')) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Validation Error',
+          detail: 'Project skills is required. Please add at least one skill.'
+        });
+      }
+  
+      return;
     }
+
+    this.loading = true;
+    const data = this.dataForm.value;
+    data.projectId = this.id;
+    await this.saveProject(data.projectId, data);
+    await this.saveProjectSkills();
+
+    this.router.navigate(['/projects'], { replaceUrl: true });
+    this.loading = false;
   }
 
   async saveProject(id: number, data: any): Promise<void> {
@@ -277,13 +272,14 @@ export class EditComponent implements OnInit {
   }
 
   handleSkillsCreated(newSkills: iSkillRating[]) {
-    console.log("skill recibido:", newSkills)
     this.projectSkills = [...newSkills];
+    this.dataForm.get('projectSkills')?.setValue(this.projectSkills);
+    this.dataForm.get('projectSkills')?.updateValueAndValidity();
   }
 
   async getStatus() {
     this.loading = true;
-    this.statusServie.getByType("Projects").subscribe({
+    this.statusService.getByType("Projects").subscribe({
       next: async (response: any) => {
         const {data} = response;
         this.status = data;
@@ -301,20 +297,68 @@ export class EditComponent implements OnInit {
     });    
   }
 
+  isFieldInvalid(field: string): boolean {
+    const control = this.dataForm.get(field);
+    return control && control.invalid && (control.dirty || control.touched);
+  }
+
+  getErrorMessage(field: string): string {
+    const control = this.dataForm.get(field);
+
+    if (control?.hasError('required')) {
+      return `${this.getFieldName(field)} is required.`;
+    }
+
+    if (control?.hasError('pattern')) {
+      return `${this.getFieldName(field)} must be a valid number greater than 0.`;
+    }
+
+    return `${this.getFieldName(field)} is invalid.`;
+  }
+  
+  getFieldName(field: string): string {
+    const fieldNames: { [key: string]: string } = {
+      projectName: 'Project Name',
+      clientId: 'Client',
+      projectDescription: 'Project Description',
+      numberPositionTobeFill: 'Number of Positions',
+      startDate: 'Start Date',
+      endDate: 'End Date',
+    };
+
+    return fieldNames[field] || field;
+  }
+
+  dateRangeValidator(control: AbstractControl): ValidationErrors | null {
+    const startDate = control.get('startDate')?.value;
+    const endDate = control.get('endDate')?.value;
+
+    if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+      return { dateRangeInvalid: true };
+    }
+    return null;
+  }
+
+  projectSkillsValidator(control: AbstractControl): ValidationErrors | null {
+    if (this.projectSkills && Array.isArray(this.projectSkills) && this.projectSkills.length === 0) {
+      return { projectSkillsRequired: true };
+    }
+    return null;
+  }
+
   async ngOnInit(): Promise<void> {
     this.dataForm = this.fb.group({
       projectId: [0],
       projectName: [null, Validators.required],
       clientId: [null, Validators.required],
-      clientName: [null, Validators.required],
       projectDescription: [null, Validators.required],
-      numberPositionTobeFill: [null, [Validators.required, Validators.pattern('[0-9]')]],
+      numberPositionTobeFill: [null, [Validators.required, Validators.pattern('^[1-9][0-9]*$')]],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
-      statusId: [null, Validators.required],
-      dateCreated: [null],
-      dateUpdate: [null],
-      userId: [null]
+      statusId: [1],
+      projectSkills: [this.projectSkills]
+    }, {
+      validators: [this.dateRangeValidator.bind(this), this.projectSkillsValidator.bind(this)]
     });
 
     this.getClients();

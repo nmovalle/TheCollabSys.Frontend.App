@@ -214,6 +214,15 @@ export class SkillsComponent implements OnInit, OnChanges {
     this.onSkillsCreated.emit(this.targetSkills);
   }
 
+  onMoveAllToTarget(event: any) {
+    this.onSkillsCreated.emit(this.targetSkills);
+  }
+  
+  onMoveAllToSource(event: any) {
+    this.targetSkills = [];
+    this.onSkillsCreated.emit(this.targetSkills);
+  }
+
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     if (changes['parentSkills'] && changes['parentSkills'].currentValue) {
       this.targetSkills = [...this.parentSkills];

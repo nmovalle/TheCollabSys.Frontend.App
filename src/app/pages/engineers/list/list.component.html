@@ -34,8 +34,6 @@
                             <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
                             [routerLink]="'add'"></button>
                         }
-                        <!-- <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
-                            [disabled]="!selectedEngineers || !selectedEngineers.length"></button> -->
                     </div>
                 </ng-template>
 
@@ -51,18 +49,37 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="engineers" [columns]="cols" responsiveLayout="scroll" [rows]="10"
-                [globalFilterFields]="['engineerId','engineerName','employerName','firstName', 'lastName','phone', 'email', 'dateCreated', 'dateUpdate', 'isActive']"
-                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+            <p-table
+                #dt
+                [value]="engineerSkills"
+                [columns]="cols"
+                responsiveLayout="scroll"
+                [rows]="10"
+                [globalFilterFields]="['engineerId','employerName','firstName', 'lastName','phone', 'email', 'dateCreated', 'dateUpdate', 'isActive']"
+                [paginator]="true"
+                [rowsPerPageOptions]="[10, 20, 30]"
+                [showCurrentPageReport]="true"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [(selection)]="selectedEngineers" selectionMode="multiple" [rowHover]="true" dataKey="engineerId">
+                [(selection)]="selectedEngineers"
+                selectionMode="multiple"
+                [rowHover]="true"
+                dataKey="engineerId"
+                [expandedRowKeys]="expandedRows"
+            >
                 <ng-template pTemplate="caption">
+                    <div class="flex table-header"></div>
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <button pButton icon="pi pi-fw {{isExpanded ? 'pi-minus' : 'pi-plus'}}" label="{{ isExpanded ? 'Collapse All' : 'Expand All' }}" (click)="expandAll()"></button>
                         <h5 class="m-0">Manage Engineers</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
-                                class="w-full sm:w-auto" />
+                            <input
+                                pInputText
+                                type="text"
+                                (input)="onGlobalFilter(dt, $event)"
+                                placeholder="Search..."
+                                class="w-full sm:w-auto"
+                            />
                         </span>
                     </div>
                 </ng-template>
@@ -71,6 +88,7 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
+                        <th style="width: 3rem"></th>
                         <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                             {{ col.header }}
                             <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -79,13 +97,14 @@
                     </tr>
                 </ng-template>
 
-                <ng-template pTemplate="body" let-engineer>
+                <ng-template pTemplate="body" let-engineer let-expanded="expanded">
                     <tr>
                         <td>
                             <p-tableCheckbox [value]="engineer"></p-tableCheckbox>
                         </td>
+                        <td><button type="button" pButton pRipple [pRowToggler]="engineer" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down': 'pi pi-chevron-right'"></button></td>
                         <td style="width:14%; min-width:10rem;">
-                            {{engineer.engineerName}}
+                            {{engineer.employerName}}
                         </td>
                         <td style="width:14%; min-width:8rem;">
                             {{engineer.firstName}}
@@ -95,9 +114,6 @@
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             {{engineer.phone}}
-                        </td>
-                        <td style="width:14%; min-width:10rem;">
-                            {{engineer.employerName}}
                         </td>
                         <td style="width:14%; min-width: 10rem;">
                             {{engineer.email}}
@@ -131,9 +147,47 @@
                         </td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="rowexpansion" let-engineers>
+                    <tr>
+                        <td colspan="5">
+                            <div class="p-3">
+                                <p-table
+                                    [value]="engineers.skills"
+                                    dataKey="id"
+                                    responsiveLayout="scroll"
+                                    [columns]="colsDetail">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" [pSortableColumn]="col.field"> {{ col.header }} <p-sortIcon [field]="col.field"></p-sortIcon></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-skill>
+                                        <tr>
+                                            <td class="fixed-width-large">
+                                                <div class="flex justify-content-between">
+                                                    {{ skill.skillName }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="flex justify-content-between">
+                                                    <span>
+                                                        <p-rating [(ngModel)]="skill.levelId" [readonly]="true" [cancel]="false"></p-rating>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr><td colspan="6">There are no skills for this engineer yet.</td></tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        There are {{engineers ? engineers.length : 0}} engineers
+                        There are {{ engineerSkills ? engineerSkills.length : 0 }} engineer skills
                     </div>
                 </ng-template>
             </p-table>

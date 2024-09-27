@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { EmployerService } from '../employer.service';
 
 @Component({
-  selector: 'app-add',
+  selector: 'app-employer-add',
   templateUrl: './add.component.html',
 })
 export class AddComponent implements OnInit {
+  @Input() isDialog: boolean = false;
+  @Output() onEmployerCreated: EventEmitter<any> = new EventEmitter();
+  @Output() onClose: EventEmitter<void> = new EventEmitter();
+
   loading: boolean = false;
   employerForm!: FormGroup;
 
@@ -54,12 +58,15 @@ export class AddComponent implements OnInit {
 
   onSubmit(event) {
     event.preventDefault();
+    event.stopPropagation();
+    
     if (this.employerForm.valid) {
-      const data = this.employerForm.value;
+      const obj = this.employerForm.value;
 
       this.loading = true;
-      this.employerService.addEmployer(data, this.selectedFile).subscribe({
+      this.employerService.addEmployer(obj, this.selectedFile).subscribe({
         next: (response: any) => {
+          const {data} = response;
           if (response) {
             this.loading = false;
             this.messageService.add({
@@ -67,7 +74,15 @@ export class AddComponent implements OnInit {
               summary: 'Success',
               detail: 'Record was successfully added.'
             });
-            this.router.navigate(['/employers'], { replaceUrl: true });
+
+            if(this.isDialog) {
+              this.resetForm();
+              this.onEmployerCreated.emit(data);
+            }
+            if(!this.isDialog) {
+              this.router.navigate(['/employers'], { replaceUrl: true });
+            }
+            
           } else {
             this.loading = false;
             this.messageService.add({
@@ -105,6 +120,12 @@ export class AddComponent implements OnInit {
   
   renderImage() {
     this.imageURL = URL.createObjectURL(this.selectedFile);
+  }
+
+  resetForm() {
+    this.employerForm.reset();
+    this.selectedFile = null;
+    this.imageURL = null;
   }
 
   ngOnInit(): void {

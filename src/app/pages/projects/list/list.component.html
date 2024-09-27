@@ -102,6 +102,10 @@
                         <td><p-tableCheckbox [value]="project"></p-tableCheckbox></td>
                         <td><button type="button" pButton pRipple [pRowToggler]="project" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down': 'pi pi-chevron-right'"></button></td>
                         <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Folio</span>
+                            {{project.folio}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Name</span>
                             {{project.projectName}}
                         </td>

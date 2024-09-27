@@ -16,10 +16,6 @@
     <ng-template pTemplate="content">
         <div class="formgrid grid">
             <div class="field col mb-5">
-                <label for="engineerName" class="text-center font-bold">Engineer Name</label>
-                <div>{{ dataForm.get('engineerName').value }}</div>
-            </div>
-            <div class="field col">
                 <label for="employerName" class="text-center font-bold">Employeer Name</label>
                 <div>{{ dataForm.get('employerName').value }}</div>
             </div>
@@ -61,6 +57,32 @@
             <div class="field col mb-5">
                 <label for="isActive" class="text-center font-bold">Active</label>
                 <div>{{ dataForm.get('isActive').value }}</div>
+            </div>
+        </div>
+
+        <div class="formgrid grid">
+            <div class="field col">
+                <h5>Skills</h5>
+                <div class="flex justify-content-left align-items-center">
+                    <p-table [value]="targetSkills" scrollDirection="both" [scrollable]="true" scrollHeight="400px" styleClass="mt-3" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pFrozenColumn>Skill Name</th>
+                                <th>Level</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-skill>
+                            <tr>
+                                <td pFrozenColumn class="font-bold">{{skill.skillName}}</td>
+                                <td>
+                                    <span>
+                                        <p-rating [(ngModel)]="skill.levelId" [readonly]="true" [cancel]="false"></p-rating>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
             </div>
         </div>
     </ng-template>

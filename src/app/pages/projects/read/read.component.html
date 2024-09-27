@@ -15,6 +15,12 @@
 
     <ng-template pTemplate="content">
         <div class="formgrid grid">
+            <div class="field col">
+                <label for="folio" class="text-center font-bold mb-2">Folio</label>
+                <div>{{ dataForm.get('folio').value }}</div>
+            </div>
+        </div>
+        <div class="formgrid grid">
             <div class="field col mb-5">
                 <label for="projectName" class="text-center font-bold">Project Name</label>
                 <div>{{ dataForm.get('projectName').value }}</div>

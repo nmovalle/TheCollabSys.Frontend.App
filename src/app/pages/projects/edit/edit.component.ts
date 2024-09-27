@@ -37,6 +37,7 @@ export class EditComponent implements OnInit {
     private projectSkillService: ProjectSkillService
   ) {}
 
+  get getFolio() { return this.dataForm.get('folio') as FormControl; }
   get projectId() { return this.dataForm.get('projectId') as FormControl; }
   get projectName() { return this.dataForm.get('projectName') as FormControl; }
   get clientId() { return this.dataForm.get('clientId') as FormControl; }
@@ -229,6 +230,9 @@ export class EditComponent implements OnInit {
         if (data) {
           const { skills } = data;
           this.projectSkills = skills;
+
+          this.dataForm.get('projectSkills')?.setValue(this.projectSkills);
+          this.dataForm.get('projectSkills')?.updateValueAndValidity();
         }
         this.loading = false;
       },
@@ -348,6 +352,7 @@ export class EditComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.dataForm = this.fb.group({
+      folio: [null],
       projectId: [0],
       projectName: [null, Validators.required],
       clientId: [null, Validators.required],
@@ -358,21 +363,26 @@ export class EditComponent implements OnInit {
       statusId: [1],
       projectSkills: [this.projectSkills]
     }, {
-      validators: [this.dateRangeValidator.bind(this), this.projectSkillsValidator.bind(this)]
+      validators: [this.dateRangeValidator.bind(this)]
     });
-
+  
     this.getClients();
     this.getStatus();
-
+  
     this.dataForm.get('clientId')?.markAsTouched();
-
+  
     this.route.paramMap.subscribe(async params => {
       const id = params.get('id');
       if (id != null) {
         this.id = +id;
         await this.getProject(this.id);
         await this.getProjectSkills(this.id);
+  
+        // Una vez que los skills se hayan cargado, aplica el validador del form
+        this.dataForm.setValidators([this.dateRangeValidator.bind(this), this.projectSkillsValidator.bind(this)]);
+        this.dataForm.updateValueAndValidity();
       }
     });
   }
+  
 }

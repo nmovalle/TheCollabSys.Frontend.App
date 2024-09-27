@@ -23,6 +23,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     EmployersRoutingModule
+  ],
+  exports: [
+    AddComponent
   ]
 })
 export class EmployersModule { }

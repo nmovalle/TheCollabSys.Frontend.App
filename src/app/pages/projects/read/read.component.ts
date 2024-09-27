@@ -93,6 +93,7 @@ export class ReadComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataForm = this.fb.group({
+      folio: [null],
       projectId: [0],
       projectName: [null],
       clientId: [null],

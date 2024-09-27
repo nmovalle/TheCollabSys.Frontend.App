@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { EngineerService } from '../engineer.service';
+import { iSkillRating } from '@app/core/components/skills/skills.component';
+import { EngineerSkillService } from '@app/pages/engineer-skill/engineer-skill.service';
 
 @Component({
   selector: 'app-read',
@@ -13,13 +15,16 @@ export class ReadComponent implements OnInit {
   id: number | null = null;
   dataForm!: FormGroup;
   imageURL: string = null;
+
+  targetSkills: iSkillRating[] = [];
   
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
-    private engineerService: EngineerService
+    private engineerService: EngineerService,
+    private engineersSkillsService: EngineerSkillService
   ) {
   }
 
@@ -96,6 +101,31 @@ export class ReadComponent implements OnInit {
       }
     });
   }
+
+  async getSkills(engineerId: number) {
+    this.loading = true;
+    this.engineersSkillsService.getEngineerSkill(engineerId).subscribe({
+      next: (response: any) => {
+        const { data } = response;
+        if (data) {
+
+          const { skills } = data;
+          this.targetSkills = skills;
+        }
+
+        this.loading = false;
+      },
+      error: (err) => {
+        const {error} = err;
+        this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error
+        });
+      }
+    });
+  }
   
   renderImage() {
     const { filetype, image } = this;
@@ -124,6 +154,7 @@ export class ReadComponent implements OnInit {
       if (id != null) {
         this.id = +id;
         this.getEngineer(this.id);
+        this.getSkills(this.id);
       }
     });
   }

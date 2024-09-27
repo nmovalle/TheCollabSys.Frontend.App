@@ -4,6 +4,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { AuthService } from '@app/core/guards/auth.service';
 import { Router } from '@angular/router';
+import { expandedRows } from '@app/pages/project-skill/list/list.component';
 
 @Component({
   selector: 'app-list',
@@ -13,11 +14,17 @@ export class ListComponent implements OnInit {
   deleteEngineerDialog: boolean = false;
   deleteEngineersDialog: boolean = false;
 
+  engineerSkills!: any[];
   engineers!: any[];
   engineer = {} as any;
   selectedEngineers: any[];
   
   cols: any[] = [];
+  colsDetail: any[] = [];
+
+  expandedRows: expandedRows = {};
+  isExpanded: boolean = false;
+  
   permissions: {};
 
   constructor(
@@ -28,16 +35,20 @@ export class ListComponent implements OnInit {
     private router: Router
   ) {
     this.cols = [
-      { field: 'engineerName', header: 'Name' },
+      { field: 'employerName', header: 'Employer' },
       { field: 'firstName', header: 'First Name' },
       { field: 'lastName', header: 'Last Name' },
       { field: 'phone', header: 'Phone' },
-      { field: 'employerName', header: 'Employer Name' },
       { field: 'email', header: 'Email' },
       { field: 'dateCreated', header: 'Date Created' },
       { field: 'dateUpdate', header: 'Date Updated' },
       { field: 'isActive', header: 'Active' },
     ];
+
+    this.colsDetail = [
+      { field: 'skillName', header: 'Skill Name' },
+      { field: 'levelId', header: 'Level' },
+    ]
     this.permissions = this.authService.getPermissions(this.router.url);
   }
 
@@ -90,10 +101,10 @@ export class ListComponent implements OnInit {
   }
 
   getEngineers() {
-    this.engineerService.getEngineers().subscribe({
+    this.engineerService.getEngineersDetail().subscribe({
       next: (response: any) => {
         const {data} = response;
-        this.engineers = data;
+        this.engineerSkills = data;
       },
       error: (ex) => {
         const {error} = ex;
@@ -108,6 +119,16 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.getEngineers();
+  }
+
+  expandAll() {
+    if (!this.isExpanded) {
+        this.engineerSkills.forEach(p => p && p.engineerId ? this.expandedRows[p.engineerId] = true : '');
+
+    } else {
+        this.expandedRows = {};
+    }
+    this.isExpanded = !this.isExpanded;
   }
 
   onGlobalFilter(table: Table, event: Event) {

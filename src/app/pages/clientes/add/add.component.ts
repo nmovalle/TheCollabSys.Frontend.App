@@ -78,6 +78,7 @@ export class AddComponent implements OnInit {
             });
 
             if(this.isDialog) {
+              this.resetForm();
               this.onClientCreated.emit(data);
             }
             if(!this.isDialog) {
@@ -120,6 +121,12 @@ export class AddComponent implements OnInit {
   
   renderImage() {
     this.imagenURL = URL.createObjectURL(this.selectedFile);
+  }
+
+  resetForm() {
+    this.clientForm.reset();
+    this.selectedFile = null;
+    this.imagenURL = null;
   }
 
   ngOnInit(): void {

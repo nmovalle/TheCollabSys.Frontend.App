@@ -17,6 +17,10 @@ export class EngineerService {
     return this.http.get<any>(`${environment.apiUrl}/api/Engineers`);
   }
 
+  getEngineersDetail(): Observable<ResponseApi> {
+    return this.http.get<any>(`${environment.apiUrl}/api/Engineers/GetDetail`);
+  }
+
   getEngineer(id: number): Observable<ResponseApi> {
     return this.http.get<any>(`${environment.apiUrl}/api/Engineers/${id}`);
   }

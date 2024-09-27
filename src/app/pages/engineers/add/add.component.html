@@ -5,6 +5,14 @@
 
     <p-toast></p-toast>
 
+    <p-dialog [(visible)]="displayAddEmployerDialog" header="Create New Client" [modal]="true" [closable]="true" [style]="{width: '50vw'}">
+        <app-employer-add 
+            [isDialog]="true" 
+            (onEmployerCreated)="handleEmployerCreated($event)" 
+            (onClose)="closeEmployerDialog()"
+            ></app-employer-add>
+    </p-dialog>
+
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
             <div class="my-2">
@@ -28,29 +36,25 @@
                     <p-dropdown
                         name="employerId"
                         optionValue="employerId"
+                        optionLabel="employerName"
                         [options]="employers"
                         [style]="{'min-width': '100%'}"
-                        optionLabel="employerName"
+                        [filter]="true"
+                        [checkmark]="true"
+                        [showClear]="true" 
                         formControlName="employerId"
+                        filterBy="employerName"
+                        placeholder="Choose an employer"
+                        (onChange)="onEmployerChange($event)"
                     >
                     </p-dropdown>
+                    <div *ngIf="dataForm.get('employerId')?.touched && (dataForm.get('employerId')?.invalid || dataForm.get('employerId')?.value == 0)">
+                        <small class="p-error">Employer selection is required</small>
+                    </div>
                 </div>
             </div>
 
             <div class="formgrid grid">
-                <div class="field col-6 md:col-6">
-                    <label for="engineerName" class="text-center font-bold mb-2">Engineer Name</label>
-                    <input 
-                        type="text" 
-                        id="engineerName" 
-                        formControlName="engineerName" 
-                        class="w-full"
-                        name="engineerName"
-                        pInputText />
-                        <small id="engineerName-help" class="p-error" *ngIf="(engineerName.invalid && (engineerName.dirty || engineerName.touched)) || !engineerName.value">
-                            Engineer name field is required *
-                        </small>
-                </div>
                 <div class="field col">
                     <label for="firstName" class="text-center font-bold mb-2">First Name</label>
                     <input 
@@ -64,9 +68,6 @@
                             Address name field is required *
                         </small>
                 </div>
-            </div>
-
-            <div class="formgrid grid">
                 <div class="field col">
                     <label for="lastName" class="text-center font-bold mb-2">Last Name</label>
                     <input 
@@ -80,6 +81,9 @@
                             Last name field is required *
                         </small>
                 </div>
+            </div>
+
+            <div class="formgrid grid">
                 <div class="field col">
                     <label for="phone" class="text-center font-bold mb-2">Phone</label>
                     <input 
@@ -98,9 +102,6 @@
                             </ng-container>
                         </small>
                 </div>
-            </div>
-
-            <div class="formgrid grid">
                 <div class="field col">
                     <label for="email" class="text-center font-bold mb-2">Email</label>
                     <input 
@@ -119,16 +120,6 @@
                             </ng-container>
                         </small>
                 </div>
-                <div class="field col">
-                    <label for="isActive" class="w-full font-bold mb-2">Active</label>
-                    <p-inputSwitch 
-                        class="w-full"
-                        id="isActive" 
-                        formControlName="isActive" 
-                        class="w-full"
-                        name="isActive"
-                        ></p-inputSwitch>
-                </div>     
             </div>
 
             <div class="formgrid grid">
@@ -155,8 +146,23 @@
                             </p-image>
                         </div>
                     }
-                </div>           
+                </div>       
+                <div class="field col">
+                    <label for="isActive" class="w-full font-bold mb-2">Active</label>
+                    <p-inputSwitch 
+                        class="w-full"
+                        id="isActive" 
+                        formControlName="isActive" 
+                        class="w-full"
+                        name="isActive"
+                        ></p-inputSwitch>
+                </div>     
             </div>
+
+            <app-skills
+                [parentSkills]="engineerSkills"
+                (onSkillsCreated)="handleSkillsCreated($event)"
+            ></app-skills>
       
           <div class="mt-4">
             <button type="submit" pButton label="Save" class="p-button-success"></button>

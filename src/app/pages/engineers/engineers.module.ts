@@ -8,6 +8,8 @@ import { EditComponent } from './edit/edit.component';
 import { ReadComponent } from './read/read.component';
 import { PrimengModule } from '@app/core/modules/primeng.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EmployersModule } from '../employers/employers.module';
+import { SkillsComponent } from '@app/core/components/skills/skills.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     PrimengModule,
     FormsModule,
     ReactiveFormsModule,
-    EngineersRoutingModule
+    EngineersRoutingModule,
+    EmployersModule,
+    SkillsComponent
   ]
 })
 export class EngineersModule { }

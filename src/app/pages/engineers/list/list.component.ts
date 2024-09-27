@@ -35,7 +35,7 @@ export class ListComponent implements OnInit {
     private router: Router
   ) {
     this.cols = [
-      { field: 'employerName', header: 'Employer' },
+      { field: 'employerName', header: 'Member' },
       { field: 'firstName', header: 'First Name' },
       { field: 'lastName', header: 'Last Name' },
       { field: 'phone', header: 'Phone' },

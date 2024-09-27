@@ -17,6 +17,7 @@ export class AppMenuComponent implements OnInit {
 
     ngOnInit() {        
         const menu = this.authService.getUsermenu();
+        console.log(menu);
         const dahboard = {
             label: 'Home',
             items: [

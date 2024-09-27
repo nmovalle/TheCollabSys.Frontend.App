@@ -32,7 +32,7 @@
         <form [formGroup]="dataForm" (ngSubmit)="onSubmit($event)">
             <div class="formgrid grid">
                 <div class="field col">
-                    <label for="employerName" class="text-center font-bold mb-2">Employer</label>
+                    <label for="employerName" class="text-center font-bold mb-2">Member</label>
                     <p-dropdown
                         name="employerId"
                         optionValue="employerId"
@@ -44,12 +44,12 @@
                         [showClear]="true" 
                         formControlName="employerId"
                         filterBy="employerName"
-                        placeholder="Choose an employer"
+                        placeholder="Choose a member"
                         (onChange)="onEmployerChange($event)"
                     >
                     </p-dropdown>
                     <div *ngIf="dataForm.get('employerId')?.touched && (dataForm.get('employerId')?.invalid || dataForm.get('employerId')?.value == 0)">
-                        <small class="p-error">Employer selection is required</small>
+                        <small class="p-error">Member selection is required</small>
                     </div>
                 </div>
             </div>

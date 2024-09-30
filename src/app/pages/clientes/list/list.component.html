@@ -117,16 +117,16 @@
                                 @if (permissions.view) {
                                     <button pButton pRipple icon="pi pi-eye"
                                         class="p-button-rounded p-button-secondary mr-2"
-                                        [routerLink]="'read/' + client.clientID"></button>
+                                        [routerLink]="'read/' + client.clientId"></button>
                                 }
                                 @if (permissions.edit) {
                                     <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button-rounded p-button-success mr-2"
-                                        [routerLink]="'edit/' + client.clientID"></button>
+                                        [routerLink]="'edit/' + client.clientId"></button>
                                 }
                                 @if (permissions.delete) {
                                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                                    (click)="confirmDelete(client.clientID)"></button>
+                                    (click)="confirmDelete(client.clientId)"></button>
                                 }
                             </div>
                         </td>

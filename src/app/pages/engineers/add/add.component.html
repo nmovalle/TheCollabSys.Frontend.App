@@ -5,7 +5,7 @@
 
     <p-toast></p-toast>
 
-    <p-dialog [(visible)]="displayAddEmployerDialog" header="Create New Client" [modal]="true" [closable]="true" [style]="{width: '50vw'}">
+    <p-dialog [(visible)]="displayAddEmployerDialog" header="Create New Member" [modal]="true" [closable]="true" [style]="{width: '50vw'}">
         <app-employer-add 
             [isDialog]="true" 
             (onEmployerCreated)="handleEmployerCreated($event)" 

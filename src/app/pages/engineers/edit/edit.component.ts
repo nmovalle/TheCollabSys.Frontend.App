@@ -245,6 +245,7 @@ export class EditComponent implements OnInit {
   }
   
   renderImage() {
+    debugger;
     if (this.isUpload) {
       this.imagenURL = URL.createObjectURL(this.selectedFile);
     } else {
@@ -331,6 +332,8 @@ export class EditComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[1-9]\d{0,2}[ -]?(\(?\d{1,3}?\)?)[ -]?\d{3}[ -]?\d{4}$/)]],
       isActive: [true, [Validators.required]],
+      image: [null],
+      filetype: [null],
       engineerSkills: [this.engineerSkills]
     }, {
       validators: [this.engineerSkillsValidator.bind(this)]

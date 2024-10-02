@@ -182,7 +182,7 @@ export class AddComponent implements OnInit {
     this.clientService.getClients().subscribe({
       next: (response: any) => {
         const { data } = response;
-        this.clients = [...data, { clientName: 'Create one', clientId: 0 }];
+        this.clients = [{ clientName: 'Create one', clientId: 0 },...data];
         this.loading = false;
       },
       error: (err) => {
@@ -302,5 +302,11 @@ export class AddComponent implements OnInit {
 
     this.dataForm.get('clientId')?.markAsTouched();
     this.getClients();
+  }
+
+  onCreateClient(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.displayAddClientDialog = true;
   }
 }

@@ -54,7 +54,7 @@ export class EditComponent implements OnInit {
     this.employerService.getEmployers().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.employers = [...data, { employerName: 'Create one', employerId: 0 }];
+        this.employers = [{ employerName: 'Create one', employerId: 0 }, ...data];
         this.loading = false;
       },
       error: (err) => {
@@ -245,7 +245,6 @@ export class EditComponent implements OnInit {
   }
   
   renderImage() {
-    debugger;
     if (this.isUpload) {
       this.imagenURL = URL.createObjectURL(this.selectedFile);
     } else {
@@ -322,6 +321,12 @@ export class EditComponent implements OnInit {
       return { engineerSkillsRequired: true };
     }
     return null;
+  }
+
+  onCreateEmployer(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.displayAddEmployerDialog = true;
   }
 
   async ngOnInit(): Promise<void> {

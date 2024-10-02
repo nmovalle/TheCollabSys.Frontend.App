@@ -207,7 +207,7 @@ export class EditComponent implements OnInit {
     this.clientService.getClients().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.clients = [...data, { clientName: 'Create one', clientId: 0 }];
+        this.clients = [{ clientName: 'Create one', clientId: 0 }, ...data];
         this.loading = false;
       },
       error: async (err) => {
@@ -384,5 +384,10 @@ export class EditComponent implements OnInit {
       }
     });
   }
-  
+
+  onCreateClient(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.displayAddClientDialog = true;
+  }
 }

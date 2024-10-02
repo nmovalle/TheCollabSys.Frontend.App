@@ -72,7 +72,7 @@ export class AddComponent implements OnInit {
     this.employerService.getEmployers().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.employers = [...data, { employerName: 'Create one', employerId: 0 }];
+        this.employers = [{ employerName: 'Create one', employerId: 0 }, ...data];
         this.loading = false;
       },
       error: (err) => {
@@ -265,6 +265,12 @@ export class AddComponent implements OnInit {
       return { engineerSkillsRequired: true };
     }
     return null;
+  }
+
+  onCreateEmployer(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.displayAddEmployerDialog = true;
   }
 
   ngOnInit(): void {

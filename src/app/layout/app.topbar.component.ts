@@ -15,14 +15,20 @@ export class AppTopBarComponent {
     @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
     @ViewChild('topbarmenu') menu!: ElementRef;
 
+    public UserName!: string;
+
     constructor(
         public layoutService: LayoutService, 
         public googleService: GoogleApiService,
         private authService: AuthService,
         private router: Router
-    ) { }
+    ) { 
+        const username = this.authService.getUsername();
+        this.UserName = username;
+        console.log(username);
+    }
 
-    logout() {        
+    logout() {
         const authProvider = this.authService.getAuthProvider();
         switch (authProvider) {
           case "Google":

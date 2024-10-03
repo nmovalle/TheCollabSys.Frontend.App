@@ -61,7 +61,38 @@
                         filterBy="clientName"
                         placeholder="Choose a client"
                         (onChange)="onClientChange($event)"
-                    >
+                        >
+                        <ng-template let-option pTemplate="item">
+                            <li [ngClass]="{'p-element p-ripple p-button-success': option.clientName === 'Create one'}">
+                                @if (option.clientName == 'Create one') {
+                                    <ng-container *ngIf="option.clientName === 'Create one'">
+                                        <button 
+                                            pButton 
+                                            pRipple 
+                                            label="Create one" 
+                                            icon="pi pi-plus" 
+                                            class="p-button-success mr-2"
+                                            (click)="onCreateClient($event)"
+                                        ></button>
+                                    </ng-container>
+                                } @else {
+                                    {{ option.clientName }}
+                                }
+                            </li>
+                        </ng-template>
+
+                        <ng-template pTemplate="empty">
+                            <li class="p-element p-ripple p-button-success">
+                                <button 
+                                        pButton 
+                                        pRipple 
+                                        label="Create one" 
+                                        icon="pi pi-plus" 
+                                        class="p-button-success mr-2"
+                                        (click)="onCreateClient($event)"
+                                    ></button>
+                            </li>
+                        </ng-template>
                     </p-dropdown>
                     <div *ngIf="dataForm.get('clientId')?.touched && (dataForm.get('clientId')?.invalid || dataForm.get('clientId')?.value == 0)">
                         <small class="p-error">Client selection is required</small>

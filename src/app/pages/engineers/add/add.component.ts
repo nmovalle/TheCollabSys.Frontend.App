@@ -76,13 +76,22 @@ export class AddComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        const {error} = err;
+        const { status, error } = err;
         this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error
-        });
+        if (status === 404) {
+          this.employers = [{ employerName: 'Create one', employerId: 0 }];
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Info - Members',
+            detail: error.message
+          });
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message || 'An unexpected error occurred.'
+          });
+        }
       }
     });    
   }
@@ -200,7 +209,7 @@ export class AddComponent implements OnInit {
   }
 
   addEmployerToList(newEmployer: any) {
-    this.employers.splice(this.employers.length - 1, 0, newEmployer);
+    this.employers.splice(1, 0, newEmployer);
   }
 
   updateEmployerInForm(newEmployer: any) {

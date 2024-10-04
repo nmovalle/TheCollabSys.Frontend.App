@@ -37,7 +37,7 @@ export class ListComponent implements OnInit {
       { field: 'folio', header: 'Folio' },
       { field: 'projectName', header: 'Project Name' },
       { field: 'clientName', header: 'Client Name' },
-      { field: 'projectDescription', header: 'Project Description' },
+      // { field: 'projectDescription', header: 'Project Description' },
       { field: 'numberPositionTobeFill', header: 'Number Position To Be Fill' },
       { field: 'startDate', header: 'Start Created' },
       { field: 'endDate', header: 'End Created' },

@@ -97,7 +97,21 @@
             <div class="formgrid grid">
                 <div class="field col">
                     <label for="projectDescription" class="text-center font-bold mb-2">Description</label>
-                    <input 
+                    <textarea 
+                        rows="5"
+                        cols="30" 
+                        pInputTextarea 
+                        class="w-full"
+                        id="projectDescription" 
+                        formControlName="projectDescription" 
+                        name="projectDescription"
+                        >
+                    </textarea>
+                    <small id="projectDescription-help" class="p-error" *ngIf="(projectDescription.invalid && (projectDescription.dirty || projectDescription.touched)) || !projectDescription.value">
+                        Project description field is required *
+                    </small>
+
+                    <!-- <input 
                         type="text" 
                         id="projectDescription" 
                         formControlName="projectDescription" 
@@ -106,7 +120,7 @@
                         pInputText />
                         <small id="projectDescription-help" class="p-error" *ngIf="(projectDescription.invalid && (projectDescription.dirty || projectDescription.touched)) || !projectDescription.value">
                             Project description field is required *
-                        </small>
+                        </small> -->
                 </div>
                 <div class="field col">
                     <label for="numberPositionTobeFill" class="text-center font-bold mb-2">Number Position</label>

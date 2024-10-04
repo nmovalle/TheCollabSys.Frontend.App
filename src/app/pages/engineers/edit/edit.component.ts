@@ -256,7 +256,7 @@ export class EditComponent implements OnInit {
   }
 
   addEmployerToList(newEmployer: any) {
-    this.employers.splice(this.employers.length - 1, 0, newEmployer);
+    this.employers.splice(1, 0, newEmployer);
   }
 
   updateEmployerInForm(newEmployer: any) {

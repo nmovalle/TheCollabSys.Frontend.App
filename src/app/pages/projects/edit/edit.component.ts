@@ -250,7 +250,7 @@ export class EditComponent implements OnInit {
   
 
   addClientToList(newClient: any) {
-    this.clients.splice(this.clients.length - 1, 0, newClient);
+    this.clients.splice(1, 0, newClient);
   }
 
   updateClientInForm(newClient: any) {

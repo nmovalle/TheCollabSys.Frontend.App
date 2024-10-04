@@ -17,7 +17,7 @@ export class AddComponent implements OnInit {
   loading: boolean = false;
   dataForm!: FormGroup;
 
-  clients!: Client[];
+  clients: Client[] = [];;
   displayAddClientDialog: boolean = false;
 
   projectSkills: iSkillRating[] = [];
@@ -186,19 +186,28 @@ export class AddComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        const { error } = err;
+        const { status, error } = err;
         this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error
-        });
+        if (status === 404) {
+          this.clients = [{ clientName: 'Create one', clientId: 0 }];
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Info - Clients',
+            detail: error.message
+          });
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message || 'An unexpected error occurred.'
+          });
+        }
       }
     });
   }
 
   addClientToList(newClient: any) {
-    this.clients.splice(this.clients.length - 1, 0, newClient);
+    this.clients.splice(1, 0, newClient);
   }
 
   updateClientInForm(newClient: any) {

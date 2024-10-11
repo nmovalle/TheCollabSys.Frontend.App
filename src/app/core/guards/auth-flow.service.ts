@@ -60,8 +60,6 @@ export class AuthFlowService {
     const { userRole, authToken, userCompany } = auth;
     const { accessToken, refreshToken, accessTokenExpiration } = authToken;
 
-    console.log(userCompany);
-
     this.authService.setAuthProvider("Google");
     this.authService.setUsername(username);
     this.authService.setAccessToken(accessToken);

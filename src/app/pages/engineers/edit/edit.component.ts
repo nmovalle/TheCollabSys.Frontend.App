@@ -8,6 +8,8 @@ import { EmployerService } from '@app/pages/employers/employer.service';
 import { ResponseApi } from '@app/core/interfaces/response-api';
 import { iSkillRating } from '@app/core/components/skills/skills.component';
 import { EngineerSkillService } from '@app/pages/engineer-skill/engineer-skill.service';
+import { AuthService } from '@app/core/guards/auth.service';
+import { UserRole } from '@app/core/constants/types';
 
 @Component({
   selector: 'app-edit',
@@ -28,6 +30,7 @@ export class EditComponent implements OnInit {
   engineerSkills: iSkillRating[] = [];
   engineerSavedId: number | null = null;
   
+  disabledMember: boolean = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -36,7 +39,11 @@ export class EditComponent implements OnInit {
     private engineerService: EngineerService,
     private employerService: EmployerService,
     private engineersSkillService: EngineerSkillService,
+    private authService: AuthService,
   ) {
+    const userRole = this.authService.getUserRole();
+    const engineerRole = ['ENGINEER', 'FREELANCE', 'GUEST'];
+    this.disabledMember = engineerRole.includes(userRole.roleName.toUpperCase());
   }
 
   get engineerId() {return this.dataForm.get('engineerId') as FormControl;}
@@ -331,7 +338,7 @@ export class EditComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.dataForm = this.fb.group({
-      employerId: ['', Validators.required],
+      employerId: [{ value: '', disabled: this.disabledMember }, Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],

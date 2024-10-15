@@ -75,13 +75,15 @@ export class AddComponent implements OnInit {
   async getRoles() {
     this.roleService.getRoles().subscribe({
       next: async (response: any) => {
-        this.roles = response;
+        const {data} = response;
+        this.roles = data;
       },
-      error: () => {
+      error: async (err) => {
+        const {error} = err;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error getting roles'
+          detail: error
         });
       }
     });

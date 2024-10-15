@@ -42,19 +42,6 @@
                             </ng-container>
                         </small>
                 </div>
-                <div class="field col">
-                    <label for="domain" class="text-center font-bold mb-2">Domain</label>
-                    <input 
-                        type="text" 
-                        id="domain" 
-                        formControlName="domain" 
-                        class="w-full"
-                        name="domain"
-                        pInputText
-                        (blur)="existsDomain($event);" />
-                </div>
-            </div>
-            <div class="formgrid grid mb-2">
                 <div class="field col col-6">
                     <label for="roleName" class="text-center font-bold mb-2">Role</label>
                     <p-dropdown
@@ -67,6 +54,19 @@
                         (onChange)="onRoleChange($event)"
                     >
                     </p-dropdown>
+                </div>
+            </div>
+            <div class="formgrid grid mb-2">
+                <div class="field col">
+                    <label for="domain" class="text-center font-bold mb-2">Domain</label>
+                    <input 
+                        type="text" 
+                        id="domain" 
+                        formControlName="domain" 
+                        class="w-full"
+                        name="domain"
+                        pInputText
+                        (blur)="existsDomain($event);" />
                 </div>
             </div>
             <div class="formgrid grid">

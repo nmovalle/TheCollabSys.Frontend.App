@@ -42,6 +42,20 @@
                         </small>
                 </div>
                 <div class="field col">
+                    <label for="roleName" class="text-center font-bold mb-2">Role</label>
+                    <p-dropdown
+                        name="roleId"
+                        optionValue="id"
+                        formControlName="roleId"
+                        [options]="roles"
+                        [style]="{'min-width': '100%'}"
+                        optionLabel="name"
+                        >
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="formgrid grid mb-2">
+                <div class="field col">
                     <label for="domain" class="text-center font-bold mb-2">Domain</label>
                     <input 
                         type="text" 
@@ -50,19 +64,6 @@
                         class="w-full"
                         name="domain"
                         pInputText />
-                </div>
-            </div>
-            <div class="formgrid grid mb-2">
-                <div class="field col">
-                    <label for="roleId" class="text-center font-bold mb-2">Role</label>
-                    <p-dropdown
-                        name="roleId"
-                        optionValue="id"
-                        [options]="roles"
-                        [style]="{'min-width': '100%'}"
-                        optionLabel="name"
-                        formControlName="roleId">
-                    </p-dropdown>
                 </div>
             </div>
             <div class="formgrid grid">

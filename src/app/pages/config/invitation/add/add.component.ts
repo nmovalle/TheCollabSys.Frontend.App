@@ -99,13 +99,14 @@ export class AddComponent implements OnInit {
   async getRoles() {
     this.roleService.getRoles().subscribe({
       next: async (response: any) => {
+        const {data} = response;
         let filteredRoles = [];
   
         if (this.userRole.toUpperCase() === this.allowedRoles[0]) { //SUPERADMIN
-          filteredRoles = response.filter(role => this.allowedRoles.includes(role.normalizedName));
+          filteredRoles = data.filter(role => this.allowedRoles.includes(role.normalizedName));
         } 
         else if (this.userRole.toUpperCase() === this.allowedRoles[1]) { //EMPLOYEROWNER
-          filteredRoles = response.filter(role => 
+          filteredRoles = data.filter(role => 
             role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2]
           );
         }

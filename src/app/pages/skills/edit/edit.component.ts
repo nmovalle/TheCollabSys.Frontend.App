@@ -57,7 +57,7 @@ export class EditComponent implements OnInit {
     this.skillCategoryService.getSkillCategories().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.categories = response.data;
+        this.categories = data;
         this.loading = false;
       },
       error: () => {
@@ -76,7 +76,7 @@ export class EditComponent implements OnInit {
     this.skillSubcategoryService.getSkillSubcategories().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.subcategories = response.data;
+        this.subcategories = data;
         this.listSubcategories = response.data;
 
         this.listSubcategories.unshift({

@@ -5,6 +5,7 @@ import { Role } from '@app/core/interfaces/role';
 import { MessageService } from 'primeng/api';
 import { InvitationService } from '../invitation.service';
 import { RoleService } from '@app/core/service/role.service';
+import { AuthService } from '@app/core/guards/auth.service';
 
 @Component({
   selector: 'app-edit',
@@ -19,15 +20,21 @@ export class EditComponent implements OnInit {
   imagenURL: string = null;
 
   roles!: Role[];
-  
+  allowedRoles = ['SUPERADMIN', 'EMPLOYEROWNER', 'ENGINEER', 'FREELANCE', 'GUEST'];
+  userRole: string = null;
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
     private invitationService: InvitationService,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private authService: AuthService
   ) {
+    const user = this.authService.getUserRole();
+    const {roleName} = user;
+    this.userRole = roleName;
   }
 
   get email() {
@@ -40,10 +47,6 @@ export class EditComponent implements OnInit {
 
   get isExternal() {
     return this.dataForm.get('isExternal') as FormControl;
-  }
-
-  get roleId() {
-    return this.dataForm.get('roleId') as FormControl;
   }
 
   get isBlackList() {
@@ -65,14 +68,26 @@ export class EditComponent implements OnInit {
   async getRoles() {
     this.roleService.getRoles().subscribe({
       next: async (response: any) => {
-        this.roles = response;
-        console.log(this.roles);
+        const {data} = response;
+        let filteredRoles = [];
+  
+        if (this.userRole.toUpperCase() === this.allowedRoles[0]) { //SUPERADMIN
+          filteredRoles = data.filter(role => this.allowedRoles.includes(role.normalizedName));
+        } 
+        else if (this.userRole.toUpperCase() === this.allowedRoles[1]) { //EMPLOYEROWNER
+          filteredRoles = data.filter(role => 
+            role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2]
+          );
+        }
+  
+        this.roles = filteredRoles;
       },
-      error: () => {
+      error: async (err) => {
+        const {error} = err;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error getting roles'
+          detail: error
         });
       }
     });
@@ -119,13 +134,12 @@ export class EditComponent implements OnInit {
         if (response) {
           const { status, data, message } = response;
           if (status == 'success') {
-            console.log(data)
+            console.log("data: ",JSON.stringify(data));
             this.dataForm.patchValue({
               ...data,
-              roleId: data.roleId
+              roleId: String(data.roleId), // Aseguramos que el roleId sea un string
             });
-            this.roleId.setValue(data.roleId);
-            console.log(JSON.stringify(this.dataForm.value))
+            
             this.loading = false;
           }
           if (status == 'error') {

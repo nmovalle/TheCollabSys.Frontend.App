@@ -7,6 +7,7 @@ import { Employer } from '@app/pages/employers/models/employer';
 import { EmployerService } from '@app/pages/employers/employer.service';
 import { iSkillRating } from '@app/core/components/skills/skills.component';
 import { EngineerSkillService } from '@app/pages/engineer-skill/engineer-skill.service';
+import { AuthService } from '@app/core/guards/auth.service';
 
 @Component({
   selector: 'app-add',
@@ -25,6 +26,7 @@ export class AddComponent implements OnInit {
   engineerSkills: iSkillRating[] = [];
   engineerSavedId: number | null = null;
 
+  disabledMember: boolean = false;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -32,7 +34,11 @@ export class AddComponent implements OnInit {
     private engineerService: EngineerService,
     private employerService: EmployerService,
     private engineersSkillService: EngineerSkillService,
+    private authService: AuthService,
   ) {
+    const userRole = this.authService.getUserRole();
+    const engineerRole = ['ENGINEER', 'FREELANCE', 'GUEST'];
+    this.disabledMember = engineerRole.includes(userRole.roleName.toUpperCase());
   }
 
   get engineerId() {
@@ -73,6 +79,12 @@ export class AddComponent implements OnInit {
       next: async (response: any) => {
         const {data} = response;
         this.employers = [{ employerName: 'Create one', employerId: 0 }, ...data];
+        
+        if (this.disabledMember && this.employers.length > 1) {
+          this.dataForm.patchValue({
+            employerId: this.employers[1].employerId
+          });
+        }
         this.loading = false;
       },
       error: (err) => {
@@ -284,7 +296,7 @@ export class AddComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataForm = this.fb.group({
-      employerId: ['', Validators.required],
+      employerId: [{ value: '', disabled: this.disabledMember }, Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],

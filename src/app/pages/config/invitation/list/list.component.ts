@@ -94,14 +94,15 @@ export class ListComponent {
         const {data} = response;
         this.invitations = response.data;
       },
-      error: () => {
+      error: (ex) => {
+        const {error} = ex;
         this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error getting the invitations'
+          severity: 'info',
+          summary: 'Not Found',
+          detail: error.message
         });
       }
-    });    
+    });
   }
 
   ngOnInit() {

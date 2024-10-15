@@ -6,6 +6,7 @@ import { InvitationService } from '../invitation.service';
 import { RoleService } from '@app/core/service/role.service';
 import { Role } from '@app/core/interfaces/role';
 import { RegisterDomainService } from '@app/pages/register-domain/register-domain.service';
+import { AuthService } from '@app/core/guards/auth.service';
 
 @Component({
   selector: 'app-add',
@@ -20,10 +21,13 @@ export class AddComponent implements OnInit {
   imageURL: string = null;
 
   roles!: Role[];
+  allowedRoles = ['SUPERADMIN', 'EMPLOYEROWNER', 'ENGINEER', 'FREELANCE', 'GUEST'];
 
   thereDomain = false;
   domainMasterId: number = null;
   companyId: number = null;
+
+  userRole: string = null;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -31,7 +35,11 @@ export class AddComponent implements OnInit {
     private invitationService: InvitationService,
     private roleService: RoleService,
     private domainSerice: RegisterDomainService,
+    private authService: AuthService
   ) {
+    const user = this.authService.getUserRole();
+    const {roleName} = user;
+    this.userRole = roleName;
   }
 
   get id() {
@@ -91,19 +99,55 @@ export class AddComponent implements OnInit {
   async getRoles() {
     this.roleService.getRoles().subscribe({
       next: async (response: any) => {
-        this.roles = response;
+        const {data} = response;
+        let filteredRoles = [];
+  
+        if (this.userRole.toUpperCase() === this.allowedRoles[0]) { //SUPERADMIN
+          filteredRoles = data.filter(role => this.allowedRoles.includes(role.normalizedName));
+        } 
+        else if (this.userRole.toUpperCase() === this.allowedRoles[1]) { //EMPLOYEROWNER
+          filteredRoles = data.filter(role => 
+            role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2]
+          );
+        }
+  
+        this.roles = filteredRoles;
       },
-      error: () => {
+      error: async (err) => {
+        const {error} = err;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error getting roles'
+          detail: error
+        });
+      }
+    });
+  }
+  
+
+  async getDomain() {
+    this.authService.getDomainByUsername().subscribe({
+      next: async (response: any) => {
+        const {data} = response;
+        this.dataForm.patchValue({
+          domain: data.domain
+        });
+        this.domainMasterId = data.id;
+        this.thereDomain = true;
+      },
+      error: async (err) => {
+        const {error} = err;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error
         });
       }
     });
   }
 
   async existsDomain(event: any): Promise<boolean> {
+    this.domainMasterId = null;
     const domainValue = event.target.value;
     return new Promise<boolean>(async (resolve, reject) => {
       try {
@@ -261,6 +305,20 @@ export class AddComponent implements OnInit {
     }
   }
 
+  onRoleChange(event: any) {
+    const selectedRole = event.value;
+    const roleName = this.roles.find(role => role.id === selectedRole)?.normalizedName;
+  
+    if (roleName === 'EMPLOYEROWNER' || roleName === 'SUPERADMIN') {
+      this.dataForm.patchValue({ domain: '' });
+      this.domainMasterId = null;
+      this.thereDomain = false;
+    } else {
+      this.getDomain();
+    }
+  }
+  
+
   updateFormValidators(): void {
     if (this.thereDomain) {
       this.dataForm.get('companyId').clearValidators();
@@ -305,6 +363,7 @@ export class AddComponent implements OnInit {
       active: [true]
     });
 
+    this.getDomain();
     this.getRoles();
     this.updateFormValidators();
   }

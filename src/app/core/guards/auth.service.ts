@@ -4,6 +4,7 @@ import { catchError, Observable, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserCompany, UserRole } from '../constants/types';
 import { MenuRoleDetailDTO } from '../interfaces/menu';
+import { ResponseApi } from '../interfaces/response-api';
 
 @Injectable({
   providedIn: 'root'
@@ -113,6 +114,11 @@ export class AuthService {
 
   public logout() {
     this.cleanLocalStorage();
+  }
+
+  getDomainByUsername(): Observable<ResponseApi> {
+    const username = this.getUsername();
+    return this.http.get<any>(`${environment.apiUrl}/api/Domain/GetByUsername/${username}`);
   }
 
   public validateOAuthDomain(user: any): Observable<any> {

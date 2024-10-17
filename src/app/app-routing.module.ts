@@ -143,6 +143,19 @@ import { ChangePasswordComponent } from './pages/change-password/change-password
                 }) },
               ]
             },
+            {
+              path: 'user', component: AppLayoutComponent, canActivate: [authGuard],
+              children: [
+                { path: '', loadChildren: () => import('./pages/user/user.module').then(m => m.UserModule).catch(err => {
+                  console.error('Error al cargar el módulo Users', err);
+                  return Promise.reject(err);
+                }) },
+                { path: 'role', loadChildren: () => import('./pages/user-role/user-role.module').then(m => m.UserRoleModule).catch(err => {
+                  console.error('Error al cargar el módulo User Roles', err);
+                  return Promise.reject(err);
+                }) },
+              ]
+            },
             { path: '**', redirectTo: '/notfound' },
           ], { useHash: false, scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })          
     ],

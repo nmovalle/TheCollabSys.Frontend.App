@@ -13,16 +13,16 @@
     </button>
 
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-        <span class="welcome-text">Welcome, <span class="underline">{{UserName}}</span></span>
+        <!-- Contenedor para la imagen de perfil, nombre de usuario y rol -->
+        <div class="user-info">
+            <img [src]="userProfileImageUrl" alt="User Avatar" class="user-avatar">
+            <div class="user-details">
+                <span class="user-name">{{UserName}}</span>
+                <span class="user-role">{{UserRole}}</span>
+            </div>
+        </div>
 
-        <!-- <button class="p-link layout-topbar-button">
-            <i class="pi pi-calendar"></i>
-            <span>Calendar</span>
-        </button>
-        <button class="p-link layout-topbar-button">
-            <i class="pi pi-user"></i>
-            <span>Profile</span>
-        </button> -->
+        <!-- Botón de logout -->
         <button class="p-link layout-topbar-button" (click)="logout()">
             <i class="pi pi-sign-out"></i>
             <span>Logout</span>

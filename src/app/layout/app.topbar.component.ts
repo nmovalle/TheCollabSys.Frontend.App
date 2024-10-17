@@ -7,7 +7,8 @@ import { AuthService } from '@app/core/guards/auth.service';
 
 @Component({
     selector: 'app-topbar',
-    templateUrl: './app.topbar.component.html'
+    templateUrl: './app.topbar.component.html',
+    styleUrls: ['./app.topbar.component.css']
 })
 export class AppTopBarComponent {
     items!: MenuItem[];
@@ -15,8 +16,9 @@ export class AppTopBarComponent {
     @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
     @ViewChild('topbarmenu') menu!: ElementRef;
 
-    public UserName!: string;
-
+    UserName!: string;
+    UserRole!: string;
+    userProfileImageUrl: string = 'assets/layout/images/default-avatar.png'
     constructor(
         public layoutService: LayoutService, 
         public googleService: GoogleApiService,
@@ -24,8 +26,11 @@ export class AppTopBarComponent {
         private router: Router
     ) { 
         const username = this.authService.getUsername();
+        const userRole = this.authService.getUserRole();
+        const {roleName} = userRole;
+
         this.UserName = username;
-        console.log(username);
+        this.UserRole = roleName;
     }
 
     logout() {

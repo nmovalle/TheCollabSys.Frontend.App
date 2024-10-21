@@ -62,8 +62,9 @@ export class GuestComponent implements OnInit {
   getRoles() {
     this.roleService.getRoles().subscribe({
       next: (response: any) => {
-        this.roles = [{ id: 0, name: "Select a role" }, ...response];
-        this.originalRoles = [...response];
+        const {data} = response;
+        this.roles = [{ id: 0, name: "Select a role" }, ...data];
+        this.originalRoles = [...data];
         this.selectedRole = this.roles[0];
         
       },

@@ -21,6 +21,7 @@ export class EditComponent implements OnInit {
   roles!: Role[];
   userRole: string = null;
 
+  allowedRoles = ['SUPERADMIN', 'MEMBEROWNER', 'ENGINEER', 'MEMBERSUPERVISOR', 'FREELANCE', 'GUEST'];
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -39,7 +40,18 @@ export class EditComponent implements OnInit {
     this.roleService.getRoles().subscribe({
       next: async (response: any) => {
         const {data} = response;
-        this.roles = data;
+
+        let filteredRoles = [];
+        if (this.userRole.toUpperCase() === this.allowedRoles[0]) { //SUPERADMIN
+          filteredRoles = data.filter(role => this.allowedRoles.includes(role.normalizedName));
+        } 
+        else if (this.userRole.toUpperCase() === this.allowedRoles[1]) { //EMPLOYEROWNER
+          filteredRoles = data.filter(role => 
+            role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2] || role.normalizedName === this.allowedRoles[3]
+          );
+        }
+
+        this.roles = filteredRoles;
       },
       error: async (err) => {
         const {error} = err;

@@ -21,7 +21,7 @@ export class AddComponent implements OnInit {
   imageURL: string = null;
 
   roles!: Role[];
-  allowedRoles = ['SUPERADMIN', 'EMPLOYEROWNER', 'ENGINEER', 'FREELANCE', 'GUEST'];
+  allowedRoles = ['SUPERADMIN', 'MEMBEROWNER', 'ENGINEER', 'MEMBERSUPERVISOR', 'FREELANCE', 'GUEST'];
 
   thereDomain = false;
   domainMasterId: number = null;
@@ -107,7 +107,7 @@ export class AddComponent implements OnInit {
         } 
         else if (this.userRole.toUpperCase() === this.allowedRoles[1]) { //EMPLOYEROWNER
           filteredRoles = data.filter(role => 
-            role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2]
+            role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2] || role.normalizedName === this.allowedRoles[3]
           );
         }
   
@@ -309,7 +309,7 @@ export class AddComponent implements OnInit {
     const selectedRole = event.value;
     const roleName = this.roles.find(role => role.id === selectedRole)?.normalizedName;
   
-    if (roleName === 'EMPLOYEROWNER' || roleName === 'SUPERADMIN') {
+    if (roleName === this.allowedRoles[1] || roleName === this.allowedRoles[0]) {
       this.dataForm.patchValue({ domain: '' });
       this.domainMasterId = null;
       this.thereDomain = false;
@@ -345,6 +345,22 @@ export class AddComponent implements OnInit {
     this.dataForm.get('zipCode').updateValueAndValidity();
     this.dataForm.get('phone').updateValueAndValidity();
     this.dataForm.get('active').updateValueAndValidity();
+  }
+
+  onEmailInput(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+    const atIndex = inputValue.indexOf('@');
+    
+    if (atIndex !== -1) {
+      const domainPart = inputValue.split('@')[1];
+      if (domainPart) {
+        this.dataForm.patchValue({ domain: domainPart });
+      } else {
+        this.dataForm.patchValue({ domain: '' });
+      }
+    } else {
+      this.dataForm.patchValue({ domain: '' });
+    }
   }
   
   async ngOnInit(): Promise<void> {

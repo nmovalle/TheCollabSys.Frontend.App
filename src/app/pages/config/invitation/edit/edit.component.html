@@ -31,7 +31,9 @@
                         formControlName="email" 
                         class="w-full"
                         name="email"
-                        pInputText />
+                        pInputText 
+                        (input)="onEmailInput($event)"
+                        />
                         <small id="email-help" class="p-error" *ngIf="(email.invalid && (email.dirty || email.touched)) || !email.value">
                             <ng-container *ngIf="email.errors.required">
                                 Email field is required *
@@ -77,16 +79,18 @@
                         name="isExternal"
                         ></p-inputSwitch>
                 </div>
-                <div class="field">
-                    <label for="isBlackList" class="w-full font-bold mb-2">Is Black List</label>
-                    <p-inputSwitch 
-                        class="w-full"
-                        id="isBlackList" 
-                        formControlName="isBlackList" 
-                        class="w-full"
-                        name="isBlackList"
-                        ></p-inputSwitch>
-                </div>
+                @if (userRole.toUpperCase() == allowedRoles[0]) {
+                    <div class="field">
+                        <label for="isBlackList" class="w-full font-bold mb-2">Is Black List</label>
+                        <p-inputSwitch 
+                            class="w-full"
+                            id="isBlackList" 
+                            formControlName="isBlackList" 
+                            class="w-full"
+                            name="isBlackList"
+                            ></p-inputSwitch>
+                    </div>
+                }
             </div>
       
           <div class="mt-4">

@@ -20,7 +20,7 @@ export class EditComponent implements OnInit {
   imagenURL: string = null;
 
   roles!: Role[];
-  allowedRoles = ['SUPERADMIN', 'EMPLOYEROWNER', 'ENGINEER', 'FREELANCE', 'GUEST'];
+  allowedRoles = ['SUPERADMIN', 'MEMBEROWNER', 'ENGINEER', 'MEMBERSUPERVISOR', 'FREELANCE', 'GUEST'];
   userRole: string = null;
 
   constructor(
@@ -74,9 +74,9 @@ export class EditComponent implements OnInit {
         if (this.userRole.toUpperCase() === this.allowedRoles[0]) { //SUPERADMIN
           filteredRoles = data.filter(role => this.allowedRoles.includes(role.normalizedName));
         } 
-        else if (this.userRole.toUpperCase() === this.allowedRoles[1]) { //EMPLOYEROWNER
+        else if (this.userRole.toUpperCase() === this.allowedRoles[1]) { //MEMBEROWNER
           filteredRoles = data.filter(role => 
-            role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2]
+            role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2] || role.normalizedName === this.allowedRoles[3]
           );
         }
   
@@ -168,6 +168,22 @@ export class EditComponent implements OnInit {
         });
       }
     });
+  }
+
+  onEmailInput(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+    const atIndex = inputValue.indexOf('@');
+    
+    if (atIndex !== -1) {
+      const domainPart = inputValue.split('@')[1];
+      if (domainPart) {
+        this.dataForm.patchValue({ domain: domainPart });
+      } else {
+        this.dataForm.patchValue({ domain: '' });
+      }
+    } else {
+      this.dataForm.patchValue({ domain: '' });
+    }
   }
 
   async ngOnInit(): Promise<void> {

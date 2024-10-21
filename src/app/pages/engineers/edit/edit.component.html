@@ -28,6 +28,9 @@
         </ng-template>
     </p-toolbar>
   
+    <!-- <pre>{{ dataForm.value | json }}</pre> -->
+    
+
     <ng-template pTemplate="content">
         <form [formGroup]="dataForm" (ngSubmit)="onSubmit($event)">
             <div class="formgrid grid">

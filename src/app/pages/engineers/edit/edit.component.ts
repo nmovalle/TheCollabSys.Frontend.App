@@ -170,6 +170,8 @@ export class EditComponent implements OnInit {
       return;
     }
 
+    this.dataForm.get('employerId').enable();
+    
     this.loading = true;
     const data = this.dataForm.value;
     data.engineerId = this.id;

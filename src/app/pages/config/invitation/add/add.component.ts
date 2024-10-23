@@ -101,15 +101,21 @@ export class AddComponent implements OnInit {
       next: async (response: any) => {
         const {data} = response;
         let filteredRoles = [];
-  
-        if (this.userRole.toUpperCase() === this.allowedRoles[0]) { //SUPERADMIN
+        
+        const normalizedUserRole = this.userRole.toUpperCase();
+        if (normalizedUserRole === this.allowedRoles[0]) { //SUPERADMIN
           filteredRoles = data.filter(role => this.allowedRoles.includes(role.normalizedName));
         } 
-        else if (this.userRole.toUpperCase() === this.allowedRoles[1] || this.userRole.toUpperCase() === this.allowedRoles[3]) { //MEMBEROWNER or MEMBERSUPERVISOR
+        else if (normalizedUserRole === this.allowedRoles[1]) { //MEMBEROWNER
           filteredRoles = data.filter(role => 
             role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2] || role.normalizedName === this.allowedRoles[3]
           );
         }
+        else if (normalizedUserRole === this.allowedRoles[3]) { //MEMBERSUPERVISOR
+          filteredRoles = data.filter(role => 
+            role.normalizedName === this.allowedRoles[2] || role.normalizedName === this.allowedRoles[3]
+          );
+        } 
   
         this.roles = filteredRoles;
       },

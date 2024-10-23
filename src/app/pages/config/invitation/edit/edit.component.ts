@@ -74,7 +74,7 @@ export class EditComponent implements OnInit {
         if (this.userRole.toUpperCase() === this.allowedRoles[0]) { //SUPERADMIN
           filteredRoles = data.filter(role => this.allowedRoles.includes(role.normalizedName));
         } 
-        else if (this.userRole.toUpperCase() === this.allowedRoles[1]) { //MEMBEROWNER
+        else if (this.userRole.toUpperCase() === this.allowedRoles[1] || this.userRole.toUpperCase() === this.allowedRoles[3]) { //MEMBEROWNER or MEMBERSUPERVISOR
           filteredRoles = data.filter(role => 
             role.normalizedName === this.allowedRoles[1] || role.normalizedName === this.allowedRoles[2] || role.normalizedName === this.allowedRoles[3]
           );

@@ -156,6 +156,15 @@ import { ChangePasswordComponent } from './pages/change-password/change-password
                 }) },
               ]
             },
+            {
+              path: 'companies', component: AppLayoutComponent, canActivate: [authGuard],
+              children: [
+                { path: '', loadChildren: () => import('./pages/company/company.module').then(m => m.CompanyModule).catch(err => {
+                  console.error('Error al cargar el módulo Companies', err);
+                  return Promise.reject(err);
+                }) },
+              ]
+            },
             { path: '**', redirectTo: '/notfound' },
           ], { useHash: false, scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })          
     ],

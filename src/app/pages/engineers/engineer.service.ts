@@ -17,8 +17,14 @@ export class EngineerService {
     return this.http.get<any>(`${environment.apiUrl}/api/Engineers`);
   }
 
-  getEngineersDetail(): Observable<ResponseApi> {
-    return this.http.get<any>(`${environment.apiUrl}/api/Engineers/GetDetail`);
+  getEngineersDetail(username: string | null = null): Observable<ResponseApi> {        
+    let url = `${environment.apiUrl}/api/Engineers/GetDetail`;
+    if (username) {
+      url += `/${username}`;
+    }
+
+    console.log(url)
+    return this.http.get<ResponseApi>(url);
   }
 
   getEngineer(id: number): Observable<ResponseApi> {

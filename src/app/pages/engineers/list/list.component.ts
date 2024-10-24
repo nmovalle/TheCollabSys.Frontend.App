@@ -26,7 +26,8 @@ export class ListComponent implements OnInit {
   isExpanded: boolean = false;
   
   permissions: {};
-
+  userRole: string = null;
+  engineerRole = ['ENGINEER'];
   constructor(
     private engineerService: EngineerService,
     private messageService: MessageService,
@@ -34,6 +35,10 @@ export class ListComponent implements OnInit {
     private authService: AuthService,
     private router: Router
   ) {
+    const user = this.authService.getUserRole();
+    const {roleName} = user;
+    this.userRole = roleName;
+
     this.cols = [
       { field: 'employerName', header: 'Member' },
       { field: 'firstName', header: 'First Name' },
@@ -101,7 +106,13 @@ export class ListComponent implements OnInit {
   }
 
   getEngineers() {
-    this.engineerService.getEngineersDetail().subscribe({
+    const normalizedUserRole = this.userRole.toUpperCase();
+    let username=null;
+    if (normalizedUserRole === this.engineerRole[0]) { //ENGINEER
+      username = this.authService.getUsername();
+    }
+
+    this.engineerService.getEngineersDetail(username).subscribe({
       next: (response: any) => {
         const {data} = response;
         this.engineerSkills = data;

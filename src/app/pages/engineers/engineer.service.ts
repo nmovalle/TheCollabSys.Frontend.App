@@ -20,7 +20,7 @@ export class EngineerService {
   getEngineersDetail(username: string | null = null): Observable<ResponseApi> {        
     let url = `${environment.apiUrl}/api/Engineers/GetDetail`;
     if (username) {
-      url += `/${username}`;
+      url += `/?email=${username}`;
     }
 
     console.log(url)

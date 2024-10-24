@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -28,6 +28,7 @@ export class AddComponent implements OnInit {
   companyId: number = null;
 
   userRole: string = null;
+  private emailInputListener: Function | null = null;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -35,7 +36,8 @@ export class AddComponent implements OnInit {
     private invitationService: InvitationService,
     private roleService: RoleService,
     private domainSerice: RegisterDomainService,
-    private authService: AuthService
+    private authService: AuthService,
+    private renderer: Renderer2
   ) {
     const user = this.authService.getUserRole();
     const {roleName} = user;
@@ -254,6 +256,8 @@ export class AddComponent implements OnInit {
   }
 
   async onSubmit(event): Promise<void> {
+    debugger;
+
     event.preventDefault();
     this.updateFormValidators();
     if (this.dataForm.valid) {
@@ -314,42 +318,63 @@ export class AddComponent implements OnInit {
   onRoleChange(event: any) {
     const selectedRole = event.value;
     const roleName = this.roles.find(role => role.id === selectedRole)?.normalizedName;
+    const emailInputElement = document.getElementById('email');
   
-    if (roleName === this.allowedRoles[1] || roleName === this.allowedRoles[0]) {
+    const currentDomainValue = this.dataForm.get('domain')?.value;
+  
+    if (roleName === this.allowedRoles[1] || roleName === this.allowedRoles[0]) { // SUPERADMIN o MEMBEROWNER
       this.dataForm.patchValue({ domain: '' });
       this.domainMasterId = null;
       this.thereDomain = false;
-    } else {
+  
+      if (this.emailInputListener) {
+        this.emailInputListener();
+      }
+  
+      if (emailInputElement) {
+        this.emailInputListener = this.renderer.listen(emailInputElement, 'input', this.onEmailInput.bind(this));
+      }
+    } else if (this.allowedRoles.slice(2).includes(roleName)) {
+      debugger;
+
       this.getDomain();
+      
+      if (currentDomainValue) {
+        this.dataForm.get('domain').setValue(currentDomainValue);
+      }
+  
+      if (this.emailInputListener) {
+        this.emailInputListener();
+        this.emailInputListener = null;
+      }
     }
   }
   
-
   updateFormValidators(): void {
     if (this.thereDomain) {
       this.dataForm.get('companyId').clearValidators();
       this.dataForm.get('domainmasterId').clearValidators();
       this.dataForm.get('fullName').clearValidators();
-      this.dataForm.get('address').clearValidators();
-      this.dataForm.get('zipCode').clearValidators();
-      this.dataForm.get('phone').clearValidators();
+      // this.dataForm.get('address').clearValidators();
+      // this.dataForm.get('zipCode').clearValidators();
+      // this.dataForm.get('phone').clearValidators();
       this.dataForm.get('active').clearValidators();
     } else {
       this.dataForm.get('companyId').setValidators([Validators.required]);
       this.dataForm.get('domainmasterId').setValidators([Validators.required]);
       this.dataForm.get('fullName').setValidators([Validators.required]);
-      this.dataForm.get('address').setValidators([Validators.required]);
-      this.dataForm.get('zipCode').setValidators([Validators.required]);
-      this.dataForm.get('phone').setValidators([Validators.required, Validators.pattern('[0-9]+')]);
+      // this.dataForm.get('address').setValidators([Validators.required]);
+      // this.dataForm.get('zipCode').setValidators([Validators.required]);
+      // this.dataForm.get('phone').setValidators([Validators.required, Validators.pattern('[0-9]+')]);
       this.dataForm.get('active').setValidators([Validators.required]);
     }
   
     this.dataForm.get('companyId').updateValueAndValidity();
     this.dataForm.get('domainmasterId').updateValueAndValidity();
     this.dataForm.get('fullName').updateValueAndValidity();
-    this.dataForm.get('address').updateValueAndValidity();
-    this.dataForm.get('zipCode').updateValueAndValidity();
-    this.dataForm.get('phone').updateValueAndValidity();
+    // this.dataForm.get('address').updateValueAndValidity();
+    // this.dataForm.get('zipCode').updateValueAndValidity();
+    // this.dataForm.get('phone').updateValueAndValidity();
     this.dataForm.get('active').updateValueAndValidity();
   }
 
@@ -372,7 +397,7 @@ export class AddComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.dataForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      domain: [''],
+      domain: ['', Validators.required],
       roleId: [null, Validators.required],
       isExternal: [false, Validators.required],
       isBlackList: [false, Validators.required],
